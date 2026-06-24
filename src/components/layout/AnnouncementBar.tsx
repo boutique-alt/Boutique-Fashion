@@ -2,7 +2,6 @@ import { brand } from '../../data/navigation'
 
 export default function AnnouncementBar() {
   const messages = [
-    `FREE SHIPPING on all over India – SHOP NOW`,
     `Need Help? Call ${brand.phone}`,
     brand.tagline,
   ]

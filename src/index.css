@@ -86,6 +86,40 @@ body {
   animation: marquee 30s linear infinite;
 }
 
+@keyframes marquee-slow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-slow-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-slow {
+  animation: marquee-slow 90s linear infinite;
+}
+
+.animate-marquee-slow-reverse {
+  animation: marquee-slow-reverse 100s linear infinite;
+}
+
+.animate-marquee-gallery {
+  animation: marquee-slow 55s linear infinite;
+}
+
+.animate-marquee-reviews {
+  animation: marquee-slow 105s linear infinite;
+}
+
+.marquee-pause-hover {
+  cursor: default;
+}
+
+.marquee-pause-hover:hover .marquee-track {
+  animation-play-state: paused;
+}
+
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }

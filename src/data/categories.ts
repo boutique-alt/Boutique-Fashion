@@ -69,6 +69,14 @@ export const allCategories: CategoryConfig[] = [
     parent: { label: 'Collection', href: '/dress' },
   },
   {
+    slug: 'tops-pant-skirt',
+    title: 'Tops with Pant / Skirt',
+    description: 'Stylish tops paired with pants and skirts for versatile everyday and festive looks.',
+    count: 3,
+    products: twoPiece,
+    parent: { label: 'Collection', href: '/dress' },
+  },
+  {
     slug: 'mens',
     title: "Men's",
     description: 'Premium ethnic and contemporary shirts designed for modern men with timeless taste.',
@@ -95,7 +103,7 @@ export const allCategories: CategoryConfig[] = [
 ]
 
 export const dressCategories = allCategories.filter((c) =>
-  c.slug === 'one-piece' || c.slug === 'two-piece',
+  c.slug === 'one-piece' || c.slug === 'two-piece' || c.slug === 'tops-pant-skirt',
 )
 
 export function getCategoryBySlug(slug: string): CategoryConfig | undefined {

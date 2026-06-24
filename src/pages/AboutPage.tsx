@@ -1,4 +1,5 @@
 import PageBanner from '../components/layout/PageBanner'
+import AboutFamilyPhoto from '../components/about/AboutFamilyPhoto'
 import AboutStory from '../components/about/AboutStory'
 import AboutTimeline from '../components/about/AboutTimeline'
 import AboutComfort from '../components/about/AboutComfort'
@@ -16,6 +17,7 @@ export default function AboutPage() {
           { label: 'About Us' },
         ]}
       />
+      <AboutFamilyPhoto />
       <AboutStory />
       <AboutTimeline />
       <AboutComfort />

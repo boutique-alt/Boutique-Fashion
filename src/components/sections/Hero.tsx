@@ -44,13 +44,13 @@ export default function Hero() {
               transition={{ duration: 0.45 }}
               className="order-2 md:order-1"
             >
-              <div className="mb-5 flex items-center gap-3">
-                <span className="h-px w-10 bg-gold/70" />
-                <p className="font-script text-2xl text-gold md:text-3xl lg:text-[2rem]">
+              <div className="mb-6 flex items-center gap-4">
+                <span className="h-px w-12 bg-maroon/50 md:w-16" />
+                <p className="font-script text-[2rem] leading-none text-maroon drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                   {slide.tag}
                 </p>
               </div>
-              <h1 className="font-serif text-[1.75rem] font-medium leading-[1.15] tracking-tight text-charcoal sm:text-4xl lg:text-[2.75rem]">
+              <h1 className="font-serif text-[1.875rem] font-medium leading-[1.12] tracking-tight text-charcoal sm:text-4xl lg:text-[2.875rem]">
                 {slide.title}
                 <span className="mt-1 block font-light text-charcoal/90">{slide.subtitle}</span>
               </h1>

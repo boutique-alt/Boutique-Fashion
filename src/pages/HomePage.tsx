@@ -7,6 +7,8 @@ import ExclusiveCollections from '../components/sections/ExclusiveCollections'
 import OfficeWear from '../components/sections/OfficeWear'
 import ExclusiveSarees from '../components/sections/ExclusiveSarees'
 import CelebsCorner from '../components/sections/CelebsCorner'
+import CustomerReviewGallery from '../components/sections/CustomerReviewGallery'
+import CustomerReviews from '../components/sections/CustomerReviews'
 import InTheNews from '../components/sections/InTheNews'
 
 export default function HomePage() {
@@ -20,6 +22,8 @@ export default function HomePage() {
       <ExclusiveCollections />
       <OfficeWear />
       <ExclusiveSarees />
+      <CustomerReviewGallery />
+      <CustomerReviews />
       <CelebsCorner />
       <InTheNews />
     </main>
