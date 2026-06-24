@@ -2,14 +2,14 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
-import { getShopPageProducts, getShopResultRange, shopTotalPages } from '../data/shop'
+import { getShopPageProducts, getShopResultRange, getShopTotalPages } from '../data/shop'
 import { aboutAssets } from '../data/about'
 
 export default function ShopAllPage() {
   const { page } = useParams<{ page?: string }>()
   const currentPage = page ? parseInt(page, 10) : 1
 
-  if (isNaN(currentPage) || currentPage < 1 || currentPage > shopTotalPages) {
+  if (isNaN(currentPage) || currentPage < 1 || currentPage > getShopTotalPages()) {
     return <Navigate to="/shop/all" replace />
   }
 
@@ -24,7 +24,7 @@ export default function ShopAllPage() {
         image={aboutAssets.banner}
         breadcrumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Shop', href: '/shop' },
+          { label: 'Collection', href: '/dress' },
           { label: 'All Products' },
         ]}
       />
@@ -39,9 +39,9 @@ export default function ShopAllPage() {
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
-          {shopTotalPages > 1 && (
+          {getShopTotalPages() > 1 && (
             <div className="mt-12 flex items-center justify-center gap-2">
-              {Array.from({ length: shopTotalPages }, (_, i) => i + 1).map((p) => (
+              {Array.from({ length: getShopTotalPages() }, (_, i) => i + 1).map((p) => (
                 <Link
                   key={p}
                   to={p === 1 ? '/shop/all' : `/shop/all/page/${p}`}

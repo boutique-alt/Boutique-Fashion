@@ -2,13 +2,6 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import { categoryCards } from '../../data/products'
 
-const routes: Record<string, string> = {
-  'One Piece': '/dress/one-piece',
-  'Two Piece': '/dress/two-piece',
-  Blouse: '/blouse',
-  "Men's": '/mens',
-}
-
 export default function ShopByCategory() {
   return (
     <section className="py-12 md:py-20">
@@ -20,7 +13,7 @@ export default function ShopByCategory() {
           {categoryCards.map((cat) => (
             <Link
               key={cat.label}
-              to={routes[cat.label] ?? '/shop'}
+              to={cat.href}
               className="group relative overflow-hidden bg-[#f4f4f4]"
             >
               <div className="aspect-[3/4] w-full">

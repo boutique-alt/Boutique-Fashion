@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { heroSlides } from '../../data/products'
+import { brandAssets, heroSlides } from '../../data/products'
 
 export default function Hero() {
   const [current, setCurrent] = useState(0)
@@ -18,14 +18,23 @@ export default function Hero() {
 
   return (
     <section
-      className="relative w-full overflow-hidden"
+      className="under-site-header relative w-full overflow-x-hidden"
       style={{ backgroundColor: slide.bgColor }}
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-cream/30 to-transparent opacity-60" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-cream/30 to-transparent opacity-60" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white/20 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white/20 to-transparent" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-10 md:px-6 md:py-14 lg:py-16">
-        <div className="grid items-center gap-8 md:grid-cols-2 md:gap-10 lg:gap-16">
+      <div className="pointer-events-none absolute inset-x-0 top-[var(--site-header-height)] flex justify-center pt-4 md:pt-6">
+        <img
+          src={brandAssets.logo}
+          alt=""
+          aria-hidden
+          className="h-14 w-auto opacity-[0.07] mix-blend-multiply md:h-20 md:opacity-[0.1]"
+        />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-6 md:px-6 md:pb-14 md:pt-10 lg:pb-16 lg:pt-12">
+        <div className="grid items-center gap-10 md:grid-cols-2 md:gap-10 lg:gap-16">
           <AnimatePresence mode="wait">
             <motion.div
               key={`text-${current}`}
@@ -35,30 +44,32 @@ export default function Hero() {
               transition={{ duration: 0.45 }}
               className="order-2 md:order-1"
             >
-              <p className="mb-3 font-script text-2xl text-gold md:text-3xl lg:text-4xl">
-                {slide.tag}
-              </p>
-              <h1 className="font-serif text-3xl font-medium leading-tight text-charcoal sm:text-4xl lg:text-5xl">
+              <div className="mb-5 flex items-center gap-3">
+                <span className="h-px w-10 bg-gold/70" />
+                <p className="font-script text-2xl text-gold md:text-3xl lg:text-[2rem]">
+                  {slide.tag}
+                </p>
+              </div>
+              <h1 className="font-serif text-[1.75rem] font-medium leading-[1.15] tracking-tight text-charcoal sm:text-4xl lg:text-[2.75rem]">
                 {slide.title}
+                <span className="mt-1 block font-light text-charcoal/90">{slide.subtitle}</span>
               </h1>
-              <p className="mt-2 font-serif text-xl font-light text-charcoal/85 md:text-2xl">
-                {slide.subtitle}
-              </p>
+              <div className="mt-5 h-px w-16 bg-maroon/30" />
               {slide.description && (
-                <p className="mt-5 max-w-md text-sm leading-relaxed text-charcoal/60 md:text-base">
+                <p className="mt-5 max-w-md font-accent text-sm font-light leading-[1.8] tracking-wide text-charcoal/65 md:text-[15px]">
                   {slide.description}
                 </p>
               )}
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-9 flex flex-wrap gap-3">
                 <Link
                   to={slide.href}
-                  className="rounded-full bg-gradient-to-r from-[#f0e0d6] via-[#ede8f0] to-[#e8dff5] px-7 py-3 text-xs font-medium tracking-wide text-charcoal shadow-sm transition-all hover:shadow-md md:text-sm"
+                  className="rounded-full bg-maroon px-8 py-3.5 text-[11px] font-medium tracking-[0.2em] text-cream uppercase shadow-md transition-all hover:bg-maroon-light hover:shadow-lg md:text-xs"
                 >
                   {slide.cta}
                 </Link>
                 <Link
-                  to="/shop"
-                  className="rounded-full border border-charcoal/20 bg-cream/60 px-7 py-3 text-xs font-medium tracking-wide text-charcoal backdrop-blur-sm transition-all hover:border-maroon hover:text-maroon md:text-sm"
+                  to="/shop/all"
+                  className="rounded-full border border-charcoal/15 bg-white/40 px-8 py-3.5 text-[11px] font-medium tracking-[0.2em] text-charcoal uppercase backdrop-blur-sm transition-all hover:border-maroon hover:text-maroon md:text-xs"
                 >
                   Shop All
                 </Link>
@@ -67,7 +78,7 @@ export default function Hero() {
           </AnimatePresence>
 
           <div className="relative order-1 md:order-2">
-            <div className="relative mx-auto aspect-[4/5] w-full max-w-md md:aspect-[3/4] md:max-w-none lg:h-[520px] lg:aspect-auto">
+            <div className="relative mx-auto flex min-h-[380px] w-full max-w-md items-center justify-center py-4 md:min-h-[460px] md:max-w-none lg:min-h-[540px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`img-${current}`}
@@ -75,12 +86,13 @@ export default function Hero() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.02 }}
                   transition={{ duration: 0.5 }}
-                  className="absolute inset-0 flex items-center justify-center"
+                  className="flex h-full w-full items-start justify-center pt-2 md:items-center md:pt-0"
                 >
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="max-h-full w-full object-contain object-center"
+                    className="max-h-[min(520px,65vh)] w-full object-contain md:max-h-[560px]"
+                    style={{ objectPosition: slide.objectPosition ?? 'center' }}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -91,7 +103,7 @@ export default function Hero() {
         <div className="mt-8 flex items-center justify-center gap-4 md:mt-10">
           <button
             onClick={() => setCurrent((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-cream/70 text-charcoal transition-colors hover:border-maroon hover:text-maroon"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-white/60 text-charcoal backdrop-blur-sm transition-colors hover:border-maroon hover:text-maroon"
             aria-label="Previous slide"
           >
             <ChevronLeft size={18} />
@@ -110,7 +122,7 @@ export default function Hero() {
           </div>
           <button
             onClick={() => setCurrent((prev) => (prev + 1) % heroSlides.length)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-cream/70 text-charcoal transition-colors hover:border-maroon hover:text-maroon"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-white/60 text-charcoal backdrop-blur-sm transition-colors hover:border-maroon hover:text-maroon"
             aria-label="Next slide"
           >
             <ChevronRight size={18} />

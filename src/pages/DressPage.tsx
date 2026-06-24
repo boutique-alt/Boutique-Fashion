@@ -9,22 +9,21 @@ export default function DressPage() {
   return (
     <main>
       <PageBanner
-        title="Dress"
+        title="Collection"
         image={aboutAssets.banner}
         breadcrumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Dress' },
+          { label: 'Collection' },
         ]}
       />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <SectionHeading
-            title="Our Dress Collections"
-            subtitle="One Piece & Two Piece"
+            title="Our Collections"
+            subtitle="Dresses & Kurta Sets"
           />
           <p className="mx-auto mb-12 max-w-2xl text-center text-sm leading-relaxed text-charcoal/60">
-            Discover premium women&apos;s dresses including handblock cotton midi dresses,
-            kaftaan styles, and elegant coord sets crafted for everyday elegance and special occasions.
+            Discover premium dresses, kurta sets, and coord sets crafted for everyday elegance and special occasions.
           </p>
           <div className="grid gap-6 md:grid-cols-2">
             {dressCategories.map((cat) => (

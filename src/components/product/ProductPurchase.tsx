@@ -4,6 +4,7 @@ import { Minus, Plus, ShoppingBag } from 'lucide-react'
 import type { ProductDetail } from '../../data/productCatalog'
 import { useStore } from '../../context/StoreContext'
 import WishlistButton from '../wishlist/WishlistButton'
+import TrustBadges from '../trust/TrustBadges'
 
 interface ProductPurchaseProps {
   product: ProductDetail
@@ -125,17 +126,8 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         </button>
       </div>
 
-      <div className="mt-10 grid grid-cols-3 gap-4 border-t border-accent pt-8">
-        {[
-          { title: 'Free', sub: 'Shipping' },
-          { title: '100%', sub: 'Guaranteed Satisfaction' },
-          { title: '7 Days', sub: 'Money Back Guarantee' },
-        ].map((item) => (
-          <div key={item.sub} className="text-center">
-            <p className="font-serif text-lg text-maroon">{item.title}</p>
-            <p className="mt-1 text-[10px] leading-snug tracking-wide text-charcoal/60 uppercase">{item.sub}</p>
-          </div>
-        ))}
+      <div className="mt-10">
+        <TrustBadges />
       </div>
 
       <p className="mt-6 text-xs text-charcoal/50">

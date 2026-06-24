@@ -3,29 +3,9 @@ const BF = 'https://boutiquefashion.shop/wp-content/uploads'
 export const aboutAssets = {
   hero: `${BF}/2022/09/bg-about-us.jpg`,
   banner: `${BF}/2022/01/breadcrumbs-woo.jpg`,
-  image1: `${BF}/2026/03/about-1.png`,
+  storyImage: `${BF}/2026/03/about-2-770x462.png`,
   image2: `${BF}/2026/03/about-2-770x462.png`,
-  image3: `${BF}/2026/03/about-3.png`,
 }
-
-export const aboutFeatures = [
-  {
-    title: 'Free Shipping',
-    text: 'Enjoy free delivery on selected orders across India with safe and secure packaging.',
-  },
-  {
-    title: 'Custom Stitching Available',
-    text: 'Get the perfect fit with our custom stitching service designed for weddings, celebrations, and special occasions.',
-  },
-  {
-    title: 'Customer Support',
-    text: 'Our team is always ready to help with styling guidance, order support, and product inquiries.',
-  },
-  {
-    title: 'Flexible & Secure Payments',
-    text: 'Pay safely using multiple payment options including cards, UPI, and online payments.',
-  },
-]
 
 export const aboutPillars = [
   {
@@ -42,30 +22,98 @@ export const aboutPillars = [
   },
 ]
 
-export const aboutQuote =
-  "True fashion isn't about trends. It's about confidence, individuality, and expressing who you truly are."
+export const aboutStory = {
+  title: 'A Family Passion for Fashion',
+  paragraphs: [
+    'Boutique Fashion began as a family dream — to bring together the warmth of home and the elegance of fine craftsmanship under one roof. What started with a small collection of handpicked outfits has grown into a trusted destination for women and men who value quality, comfort, and personal style.',
+    'Every piece we curate carries the care of a family business: attentive stitching, premium fabrics, and designs that celebrate individuality. From everyday wear to wedding and festive collections, we are here to help you look and feel your best.',
+  ],
+}
 
-export const aboutIntro = [
-  'At Boutique Fashion, we believe clothing is more than just style. It is a way to express personality, confidence, and identity. Our collections are thoughtfully curated to bring together elegance, comfort, and modern design for women and men who value both fashion and individuality.',
-  'From everyday outfits to wedding and occasion wear, each piece reflects our commitment to quality craftsmanship, premium fabrics, and timeless aesthetics. With custom stitching and carefully designed collections, we aim to create fashion that feels as perfect as it looks.',
-]
-
-export const aboutMission = [
-  'Fashion is more than clothing — it is a reflection of confidence, personality, and individuality. At Boutique Fashion, we design collections that blend modern trends with timeless elegance for women and men.',
-  'Every outfit is created with attention to detail, premium materials, and thoughtful craftsmanship to ensure both style and comfort. Whether it\'s everyday fashion or a special celebration, our goal is to make every customer feel confident, stylish, and truly themselves.',
-]
-
-export const aboutTestimonials = [
+export const aboutTimeline = [
   {
-    quote:
-      'I absolutely loved the outfit I ordered from Boutique Fashion. The fabric quality was amazing and the custom stitching made the fit perfect. I received so many compliments at the event!',
-    name: 'Priya Sharma',
-    role: 'Verified Customer',
+    year: '2018',
+    title: 'The Beginning',
+    text: 'Boutique Fashion opened its doors with a small curated collection of ethnic and contemporary wear, built on family values and a love for craftsmanship.',
   },
   {
-    quote:
-      'Boutique Fashion has become my go-to store for special occasions. The designs are elegant, and the attention to detail is truly impressive.',
-    name: 'Rahul Mehta',
-    role: 'Customer',
+    year: '2020',
+    title: 'Growing the Family',
+    text: 'We expanded our range to include men\'s fashion, bridal wear, and custom stitching — serving customers across India with care and attention.',
+  },
+  {
+    year: '2022',
+    title: 'Online Store Launch',
+    text: 'Our online boutique launched, making premium fashion accessible nationwide with secure payments and reliable delivery.',
+  },
+  {
+    year: '2024',
+    title: 'Collections & Craft',
+    text: 'New collections — Dresses, Kurta Sets, Suit Sets, and Fabric — joined our lineup, each designed with the same commitment to fit and quality.',
+  },
+  {
+    year: 'Today',
+    title: 'Fashion That Feels Like Home',
+    text: 'We continue to grow as a family-run brand, blending tradition with modern design for every occasion.',
+  },
+]
+
+export const aboutComfort = {
+  title: 'Fashion That Feels Like Home',
+  subtitle: 'Comfort, quality, and confidence — woven into every stitch',
+  paragraphs: [
+    'At Boutique Fashion, we believe the best outfits are the ones you reach for again and again. Soft fabrics, thoughtful fits, and timeless designs mean you never have to choose between looking great and feeling comfortable.',
+    'Whether it is a wedding celebration, a festive gathering, or a quiet day out, our collections are made to move with you — so you can focus on the moment, not the outfit.',
+  ],
+  highlights: [
+    'Premium, breathable fabrics',
+    'Custom stitching for the perfect fit',
+    'Easy returns within 7 days',
+    'Dedicated customer support',
+  ],
+}
+
+export const googleReviewsSummary = {
+  rating: 4.8,
+  totalReviews: 127,
+  source: 'Google',
+}
+
+export const googleReviews = [
+  {
+    name: 'Ananya R.',
+    rating: 5,
+    date: '2 weeks ago',
+    text: 'Beautiful quality and perfect stitching! Ordered a kurta set for a family function and received so many compliments. Will definitely order again.',
+  },
+  {
+    name: 'Meera K.',
+    rating: 5,
+    date: '1 month ago',
+    text: 'Great experience from ordering to delivery. The fabric feels premium and the fit was exactly as described. Highly recommend Boutique Fashion.',
+  },
+  {
+    name: 'Sneha P.',
+    rating: 4,
+    date: '1 month ago',
+    text: 'Loved my bridal lehenga! Slight delay in shipping but the team kept me updated. The final product was absolutely worth the wait.',
+  },
+  {
+    name: 'Divya S.',
+    rating: 5,
+    date: '2 months ago',
+    text: 'Custom stitching service is excellent. They understood exactly what I wanted and the outfit fit like it was made for me.',
+  },
+  {
+    name: 'Kavita M.',
+    rating: 5,
+    date: '2 months ago',
+    text: 'Best online boutique I have found. Good prices, genuine products, and very responsive customer care. Five stars!',
+  },
+  {
+    name: 'Ritu A.',
+    rating: 4,
+    date: '3 months ago',
+    text: 'Ordered a suit set for my husband — great quality and elegant design. Packaging was neat and delivery was on time.',
   },
 ]

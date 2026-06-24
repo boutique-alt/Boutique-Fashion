@@ -54,19 +54,19 @@ const threePiece: Product[] = [
 export const allCategories: CategoryConfig[] = [
   {
     slug: 'one-piece',
-    title: 'One Piece',
-    description: 'Elegant one piece dresses crafted with premium fabrics and artisanal details.',
+    title: 'Dresses',
+    description: 'Elegant dresses crafted with premium fabrics and artisanal details.',
     count: 9,
     products: onePiece,
-    parent: { label: 'Dress', href: '/dress' },
+    parent: { label: 'Collection', href: '/dress' },
   },
   {
     slug: 'two-piece',
-    title: 'Two Piece',
+    title: 'Kurta Set / Coord Set',
     description: 'Coordinated kurta sets and coord sets for effortless ethnic elegance.',
     count: 3,
     products: twoPiece,
-    parent: { label: 'Dress', href: '/dress' },
+    parent: { label: 'Collection', href: '/dress' },
   },
   {
     slug: 'mens',
@@ -74,7 +74,7 @@ export const allCategories: CategoryConfig[] = [
     description: 'Premium ethnic and contemporary shirts designed for modern men with timeless taste.',
     count: 8,
     products: mens,
-    parent: { label: 'Shop', href: '/shop' },
+    parent: { label: 'Collection', href: '/dress' },
   },
   {
     slug: 'blouse',
@@ -82,22 +82,26 @@ export const allCategories: CategoryConfig[] = [
     description: 'Designer blouses crafted in katan silk and brocade for weddings and celebrations.',
     count: 4,
     products: blouse,
-    parent: { label: 'Shop', href: '/shop' },
+    parent: { label: 'Collection', href: '/dress' },
   },
   {
     slug: 'three-piece',
-    title: 'Three Piece',
-    description: 'Elegant three piece sets with artisanal detailing for festive occasions.',
+    title: 'Suit Set',
+    description: 'Elegant suit sets with artisanal detailing for festive occasions.',
     count: 1,
     products: threePiece,
-    parent: { label: 'Shop', href: '/shop' },
+    parent: { label: 'Collection', href: '/dress' },
   },
 ]
 
-export const dressCategories = allCategories.filter((c) => c.parent.href === '/dress')
+export const dressCategories = allCategories.filter((c) =>
+  c.slug === 'one-piece' || c.slug === 'two-piece',
+)
 
 export function getCategoryBySlug(slug: string): CategoryConfig | undefined {
   return allCategories.find((c) => c.slug === slug)
 }
 
-export const shopLandingCategories = allCategories.filter((c) => c.parent.href === '/shop')
+export const collectionLandingCategories = allCategories.filter((c) =>
+  ['mens', 'blouse', 'three-piece'].includes(c.slug),
+)

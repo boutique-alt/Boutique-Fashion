@@ -3,6 +3,7 @@ import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getCategoryBySlug } from '../data/categories'
+import { getAllProductDetails } from '../data/productCatalog'
 import { aboutAssets } from '../data/about'
 
 interface CategoryPageProps {
@@ -13,10 +14,11 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
   const { category } = useParams<{ category: string }>()
   const slug = slugProp ?? category
   const config = slug ? getCategoryBySlug(slug) : undefined
-  const { sorted, setSort } = useSortedProducts(config?.products ?? [])
+  const categoryProducts = getAllProductDetails().filter((p) => p.categorySlug === slug)
+  const { sorted, setSort } = useSortedProducts(categoryProducts)
 
   if (!config) {
-    return <Navigate to="/shop" replace />
+    return <Navigate to="/dress" replace />
   }
 
   return (
@@ -37,7 +39,7 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
       )}
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <CategoryToolbar total={config.count} onSortChange={setSort} />
+          <CategoryToolbar total={categoryProducts.length} onSortChange={setSort} />
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
             {sorted.map((product) => (
               <ProductCard key={product.id} product={product} />

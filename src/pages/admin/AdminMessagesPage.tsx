@@ -1,14 +1,20 @@
-import { useState } from 'react'
-import { getContactMessages, markContactMessageRead } from '../../services/contactService'
+import { useEffect, useState } from 'react'
+import { getContactMessages, loadContactMessages, markContactMessageRead } from '../../services/contactService'
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState(() => getContactMessages())
 
-  const refresh = () => setMessages(getContactMessages())
+  useEffect(() => {
+    loadContactMessages().then(setMessages)
+  }, [])
 
-  const handleMarkRead = (id: string) => {
-    markContactMessageRead(id)
-    refresh()
+  const refresh = async () => {
+    setMessages(await loadContactMessages())
+  }
+
+  const handleMarkRead = async (id: string) => {
+    await markContactMessageRead(id)
+    await refresh()
   }
 
   return (

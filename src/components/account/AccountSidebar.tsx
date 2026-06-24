@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { LogOut, Package, User } from 'lucide-react'
+import { LogOut, Package, RotateCcw, User } from 'lucide-react'
 
 interface AccountSidebarProps {
   name: string
@@ -11,6 +11,7 @@ interface AccountSidebarProps {
 const links = [
   { to: '/account', label: 'Profile', icon: User, exact: true },
   { to: '/account/orders', label: 'My Orders', icon: Package, exact: false },
+  { to: '/account/returns', label: 'My Returns', icon: RotateCcw, exact: false },
 ]
 
 export default function AccountSidebar({ name, email, avatarUrl, onLogout }: AccountSidebarProps) {

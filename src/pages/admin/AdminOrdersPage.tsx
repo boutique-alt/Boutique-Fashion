@@ -1,17 +1,18 @@
-import { useState } from 'react'
-import { getOrders, updateOrderStatus } from '../../services/orderService'
-import type { OrderStatus } from '../../types/order'
-
-const statusOptions: OrderStatus[] = ['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']
+import { useEffect, useState } from 'react'
+import AdminOrderRow from '../../components/admin/AdminOrderRow'
+import { loadOrders, getOrders } from '../../services/orderService'
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState(() => getOrders())
+  const [version, setVersion] = useState(0)
 
-  const refresh = () => setOrders(getOrders())
+  useEffect(() => {
+    loadOrders().then(setOrders)
+  }, [])
 
-  const handleStatusChange = (id: string, status: OrderStatus) => {
-    updateOrderStatus(id, status)
-    refresh()
+  const refresh = async () => {
+    setOrders(await loadOrders())
+    setVersion((v) => v + 1)
   }
 
   return (
@@ -39,41 +40,7 @@ export default function AdminOrdersPage() {
             </thead>
             <tbody>
               {orders.map((order) => (
-                <tr key={order.id} className="border-t border-accent">
-                  <td className="px-4 py-3 font-mono text-xs text-charcoal/70">
-                    {order.id.slice(0, 12)}…
-                  </td>
-                  <td className="px-4 py-3">
-                    <p className="text-charcoal">{order.billing.firstName} {order.billing.lastName}</p>
-                    <p className="text-xs text-charcoal/50">{order.billing.email}</p>
-                  </td>
-                  <td className="px-4 py-3 text-charcoal/70">
-                    {order.items.reduce((s, i) => s + i.quantity, 0)} items
-                  </td>
-                  <td className="px-4 py-3 font-medium text-charcoal">
-                    ₹{order.total.toLocaleString('en-IN')}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-xs uppercase">{order.paymentMethod}</span>
-                    <span className={`ml-2 text-xs ${order.paymentStatus === 'paid' ? 'text-maroon' : 'text-gold'}`}>
-                      {order.paymentStatus}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <select
-                      value={order.status}
-                      onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus)}
-                      className="border border-accent bg-cream px-2 py-1 text-xs outline-none focus:border-maroon"
-                    >
-                      {statusOptions.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="px-4 py-3 text-xs text-charcoal/50">
-                    {new Date(order.createdAt).toLocaleDateString('en-IN')}
-                  </td>
-                </tr>
+                <AdminOrderRow key={`${order.id}-${version}`} order={order} onSaved={refresh} />
               ))}
             </tbody>
           </table>

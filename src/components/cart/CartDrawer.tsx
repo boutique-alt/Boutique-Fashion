@@ -39,7 +39,7 @@ export default function CartDrawer() {
               <ShoppingBag size={40} className="text-charcoal/20" />
               <p className="mt-4 text-sm text-charcoal/60">Your cart is empty</p>
               <Link
-                to="/shop"
+                to="/dress"
                 onClick={close}
                 className="mt-6 bg-maroon px-6 py-2.5 text-xs font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-maroon-light"
               >

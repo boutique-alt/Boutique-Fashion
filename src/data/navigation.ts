@@ -1,27 +1,40 @@
+import type { LucideIcon } from 'lucide-react'
+import { Layers, Sparkles } from 'lucide-react'
+
 export interface NavChild {
   label: string
   href: string
 }
 
+export type NavIcon = 'fabric' | 'bridal'
+
 export interface NavItem {
   label: string
   href?: string
   children?: NavChild[]
+  icon?: NavIcon
+}
+
+export const navIcons: Record<NavIcon, LucideIcon> = {
+  fabric: Layers,
+  bridal: Sparkles,
 }
 
 export const mainNav: NavItem[] = [
   { label: 'HOME', href: '/' },
-  { label: 'SHOP', href: '/shop' },
   {
-    label: 'DRESS',
+    label: 'COLLECTION',
     href: '/dress',
     children: [
-      { label: 'One Piece', href: '/dress/one-piece' },
-      { label: 'Two Piece', href: '/dress/two-piece' },
+      { label: 'Dresses', href: '/dress/one-piece' },
+      { label: 'Kurta Set / Coord Set', href: '/dress/two-piece' },
+      { label: 'Suit Set', href: '/three-piece' },
     ],
   },
   { label: 'MENS', href: '/mens' },
   { label: 'BLOUSE', href: '/blouse' },
+  { label: 'FABRIC', href: '/fabric', icon: 'fabric' },
+  { label: 'BRIDAL', href: '/bridal', icon: 'bridal' },
   { label: 'ABOUT US', href: '/about-us' },
   { label: 'CONTACT US', href: '/contact-us' },
 ]
@@ -36,11 +49,13 @@ export const footerSupport = [
 export const footerQuickLinks = ['My Account', 'Cart', 'Wishlist', 'Checkout']
 
 export const footerCategories = [
-  { label: 'One Piece', href: '/dress/one-piece' },
-  { label: 'Two Piece', href: '/dress/two-piece' },
+  { label: 'Dresses', href: '/dress/one-piece' },
+  { label: 'Kurta Set / Coord Set', href: '/dress/two-piece' },
+  { label: 'Suit Set', href: '/three-piece' },
   { label: 'Blouse', href: '/blouse' },
   { label: "Men's", href: '/mens' },
-  { label: 'Three Piece', href: '/three-piece' },
+  { label: 'Fabric', href: '/fabric' },
+  { label: 'Bridal', href: '/bridal' },
 ]
 
 export const brand = {

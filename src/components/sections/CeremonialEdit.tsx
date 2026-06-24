@@ -21,7 +21,7 @@ export default function CeremonialEdit() {
               Discover Our Signature Styles for Modern Women
             </p>
             <Link
-              to="/shop"
+              to="/dress"
               className="group mt-6 flex items-center gap-2 bg-cream px-8 py-2.5 text-[10px] font-medium tracking-[0.25em] text-charcoal uppercase transition-all hover:bg-maroon hover:text-cream md:mt-8 md:py-3 md:text-xs"
             >
               Shop now

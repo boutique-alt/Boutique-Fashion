@@ -26,7 +26,7 @@ export default function CartPage() {
               <ShoppingBag size={48} className="mx-auto text-charcoal/20" />
               <p className="mt-4 text-charcoal/60">Your cart is empty</p>
               <Link
-                to="/shop"
+                to="/dress"
                 className="mt-6 inline-block bg-maroon px-8 py-3 text-xs font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-maroon-light"
               >
                 Continue Shopping

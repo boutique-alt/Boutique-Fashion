@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import PageBanner from '../components/layout/PageBanner'
 import SectionHeading from '../components/ui/SectionHeading'
-import { shopLandingCategories } from '../data/categories'
+import { collectionLandingCategories } from '../data/categories'
 import { aboutAssets } from '../data/about'
 
 export default function ShopPage() {
@@ -24,7 +24,7 @@ export default function ShopPage() {
             sarees, blouses, and tailored menswear crafted for everyday elegance and special occasions.
           </p>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {shopLandingCategories.map((cat) => (
+            {collectionLandingCategories.map((cat) => (
               <Link
                 key={cat.slug}
                 to={`/${cat.slug}`}

@@ -1,13 +1,26 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Mail, Package, Users } from 'lucide-react'
-import { getContactMessages, getUnreadContactCount } from '../../services/contactService'
-import { getOrders } from '../../services/orderService'
+import { isSupabaseConfigured } from '../../config/env'
+import { getContactMessages, getUnreadContactCount, loadContactMessages } from '../../services/contactService'
+import { getOrders, loadOrders } from '../../services/orderService'
 import { getAllProfiles } from '../../services/profileService'
+import type { UserProfile } from '../../types/user'
 
 export default function AdminDashboardPage() {
+  const [profiles, setProfiles] = useState<UserProfile[]>([])
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    Promise.all([
+      loadOrders(),
+      loadContactMessages(),
+      getAllProfiles().then(setProfiles),
+    ]).finally(() => setReady(true))
+  }, [])
+
   const orders = getOrders()
   const messages = getContactMessages()
-  const profiles = getAllProfiles()
   const unread = getUnreadContactCount()
   const paidOrders = orders.filter((o) => o.paymentStatus === 'paid').length
   const revenue = orders
@@ -20,6 +33,8 @@ export default function AdminDashboardPage() {
     { label: 'Messages', value: messages.length, icon: Mail, href: '/admin/messages', badge: unread },
     { label: 'Customers', value: profiles.length, icon: Users, href: '/admin/orders' },
   ]
+
+  if (!ready) return null
 
   return (
     <div className="p-6 md:p-8">
@@ -56,7 +71,9 @@ export default function AdminDashboardPage() {
           <ul className="mt-4 space-y-2 text-sm text-charcoal/70">
             <li className="flex justify-between">
               <span>Supabase</span>
-              <span className="text-gold">Pending</span>
+              <span className={isSupabaseConfigured() ? 'text-maroon' : 'text-gold'}>
+                {isSupabaseConfigured() ? 'Connected' : 'Not configured'}
+              </span>
             </li>
             <li className="flex justify-between">
               <span>Razorpay Backend</span>
@@ -64,7 +81,9 @@ export default function AdminDashboardPage() {
             </li>
             <li className="flex justify-between">
               <span>Data Storage</span>
-              <span className="text-maroon">localStorage (demo)</span>
+              <span className="text-maroon">
+                {isSupabaseConfigured() ? 'Supabase' : 'localStorage (demo)'}
+              </span>
             </li>
           </ul>
         </div>

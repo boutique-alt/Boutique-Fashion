@@ -1,6 +1,12 @@
 import type { Product } from './products'
 import { allCategories } from './categories'
 import { slugFromHref } from '../utils/productSlug'
+import {
+  getAdminProducts,
+  getDeletedSlugs,
+  getProductOverrides,
+} from '../services/productService'
+import type { AdminProduct } from '../types/adminProduct'
 
 export interface ProductDetail extends Product {
   slug: string
@@ -13,6 +19,8 @@ export interface ProductDetail extends Product {
   categoryPath: string
   fabric?: string
   washCare?: string[]
+  source?: 'static' | 'admin'
+  adminId?: string
 }
 
 const BF = 'https://boutiquefashion.shop/wp-content/uploads'
@@ -88,23 +96,79 @@ function buildCatalog(): ProductDetail[] {
   return catalog
 }
 
-const catalog = buildCatalog()
+function adminToDetail(product: AdminProduct): ProductDetail {
+  return {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    originalPrice: product.originalPrice,
+    image: product.image,
+    onSale: product.onSale,
+    isNew: product.isNew,
+    slug: product.slug,
+    images: [product.image],
+    shortDescription: product.shortDescription,
+    description: product.description,
+    sizes: product.sizes,
+    categorySlug: product.categorySlug,
+    categoryLabel: product.categoryLabel,
+    categoryPath: product.categoryPath,
+    source: 'admin',
+    adminId: product.id,
+  }
+}
+
+function applyOverride(product: ProductDetail, override: ReturnType<typeof getProductOverrides>[string]): ProductDetail {
+  if (!override) return product
+  const merged = { ...product, ...override }
+  if (override.image) {
+    merged.images = [override.image]
+    merged.image = override.image
+  }
+  if (override.categorySlug) {
+    const cat = allCategories.find((c) => c.slug === override.categorySlug)
+    if (cat) {
+      merged.categorySlug = cat.slug
+      merged.categoryLabel = cat.title
+      merged.categoryPath = cat.parent.href === '/dress' ? `/dress/${cat.slug}` : `/${cat.slug}`
+    }
+  }
+  return merged
+}
+
+function getCatalog(): ProductDetail[] {
+  const deleted = new Set(getDeletedSlugs())
+  const overrides = getProductOverrides()
+
+  const staticProducts = buildCatalog()
+    .filter((p) => !deleted.has(p.slug))
+    .map((p) => {
+      const o = overrides[p.slug]
+      if (!o) return { ...p, source: 'static' as const }
+      return applyOverride({ ...p, source: 'static' as const }, o)
+    })
+
+  const adminProducts = getAdminProducts().map(adminToDetail)
+  return [...staticProducts, ...adminProducts]
+}
 
 export function getAllProductDetails(): ProductDetail[] {
-  return catalog
+  return getCatalog()
 }
 
 export function getProductBySlug(slug: string): ProductDetail | undefined {
-  return catalog.find((p) => p.slug === slug)
+  return getCatalog().find((p) => p.slug === slug)
 }
 
 export function getRelatedProducts(product: ProductDetail, limit = 8): ProductDetail[] {
+  const catalog = getCatalog()
   return catalog
     .filter((p) => p.categorySlug === product.categorySlug && p.slug !== product.slug)
     .slice(0, limit)
 }
 
 export function getAdjacentProducts(slug: string): { prev?: ProductDetail; next?: ProductDetail } {
+  const catalog = getCatalog()
   const idx = catalog.findIndex((p) => p.slug === slug)
   if (idx < 0) return {}
   return {
@@ -114,6 +178,7 @@ export function getAdjacentProducts(slug: string): { prev?: ProductDetail; next?
 }
 
 export function searchProducts(query: string): ProductDetail[] {
+  const catalog = getCatalog()
   const q = query.toLowerCase().trim()
   if (!q) return []
   return catalog.filter(
@@ -125,6 +190,7 @@ export function searchProducts(query: string): ProductDetail[] {
 }
 
 export function getProductsBySlugs(slugs: string[]): ProductDetail[] {
+  const catalog = getCatalog()
   return slugs
     .map((slug) => catalog.find((p) => p.slug === slug))
     .filter((p): p is ProductDetail => !!p)

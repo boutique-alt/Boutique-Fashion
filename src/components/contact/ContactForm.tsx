@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CheckCircle } from 'lucide-react'
+import { useStore } from '../../context/StoreContext'
 import { submitContactMessage } from '../../services/contactService'
 import type { ContactFormData } from '../../types/contact'
 
@@ -15,27 +16,36 @@ const emptyForm: ContactFormData = {
 }
 
 export default function ContactForm() {
+  const { user } = useStore()
   const [form, setForm] = useState<ContactFormData>(emptyForm)
   const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleChange = (field: keyof ContactFormData, value: string) => {
+    if (field === 'email' && user) return
     setForm((prev) => ({ ...prev, [field]: value }))
   }
+
+  useEffect(() => {
+    if (!user) return
+    setForm((prev) => ({ ...prev, email: user.email }))
+  }, [user])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
-    if (!form.firstName || !form.email || !form.message) {
+    const payload = user ? { ...form, email: user.email } : form
+
+    if (!payload.firstName || !payload.email || !payload.message) {
       setError('Please fill in all required fields.')
       return
     }
 
     setLoading(true)
     try {
-      submitContactMessage(form)
+      await submitContactMessage(payload)
       setSubmitted(true)
       setForm(emptyForm)
     } catch {
@@ -96,10 +106,11 @@ export default function ContactForm() {
         </label>
         <input
           required
+          readOnly={Boolean(user)}
           type="email"
-          value={form.email}
+          value={user?.email ?? form.email}
           onChange={(e) => handleChange('email', e.target.value)}
-          className={inputClass}
+          className={`${inputClass} ${user ? 'cursor-not-allowed bg-cream-dark text-charcoal/60' : ''}`}
         />
       </div>
       <div>

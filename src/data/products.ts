@@ -92,14 +92,15 @@ export const heroSlides: HeroSlide[] = [
   },
   {
     tag: 'Summer Collections',
-    title: 'Premium Summer Kurtis &',
-    subtitle: 'Indo-Western Collection',
+    title: 'Refined Menswear &',
+    subtitle: 'Handblock Shirts',
     description:
-      'Discover breathable summer kurtis, elegant indo-western outfits, and ready-to-wear sarees designed for modern women.',
+      'Premium cotton shirts with artisanal handblock prints — crafted for comfort, character, and everyday elegance.',
     image: `${M3}/hero-scaled.png`,
-    cta: 'Explore Collection',
-    href: '/dress/one-piece',
+    cta: 'View Collection',
+    href: '/mens',
     bgColor: '#e8d9d0',
+    objectPosition: 'center top',
   },
 ]
 
@@ -120,10 +121,10 @@ export const instagramPosts = [
 ]
 
 export const categoryCards = [
-  { label: 'One Piece', count: 9, image: `${BF}/2026/03/1.png`, href: 'https://boutiquefashion.shop/product-category/one-piece/' },
-  { label: 'Two Piece', count: 3, image: `${BF}/2026/03/3.png`, href: 'https://boutiquefashion.shop/product-category/two-piece/' },
-  { label: 'Blouse', count: 4, image: `${BF}/2026/03/4.png`, href: 'https://boutiquefashion.shop/product-category/blouse/' },
-  { label: "Men's", count: 8, image: `${BF}/2026/03/men.png`, href: 'https://boutiquefashion.shop/product-category/mens/' },
+  { label: 'Dresses', count: 9, image: `${BF}/2026/03/1.png`, href: '/dress/one-piece' },
+  { label: 'Kurta Set / Coord Set', count: 3, image: `${BF}/2026/03/3.png`, href: '/dress/two-piece' },
+  { label: 'Blouse', count: 4, image: `${BF}/2026/03/4.png`, href: '/blouse' },
+  { label: "Men's", count: 8, image: `${BF}/2026/03/men.png`, href: '/mens' },
 ]
 
 export const brandAssets = {

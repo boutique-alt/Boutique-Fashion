@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { CheckCircle } from 'lucide-react'
 import PageBanner from '../components/layout/PageBanner'
@@ -7,11 +7,13 @@ import { useStore } from '../context/StoreContext'
 import { aboutAssets } from '../data/about'
 import { brand } from '../data/navigation'
 import { createOrder } from '../services/orderService'
+import { getOrCreateProfile } from '../services/profileService'
 import { initiateRazorpayPayment } from '../services/razorpay'
 import type { PaymentMethod } from '../types/order'
+import TrustBadges from '../components/trust/TrustBadges'
 
 export default function CheckoutPage() {
-  const { cart, cartTotal, clearCart } = useStore()
+  const { cart, cartTotal, clearCart, user, authReady } = useStore()
   const [placed, setPlaced] = useState(false)
   const [loading, setLoading] = useState(false)
   const [paymentError, setPaymentError] = useState('')
@@ -28,26 +30,57 @@ export default function CheckoutPage() {
     notes: '',
   })
 
+  useEffect(() => {
+    if (!user) return
+    getOrCreateProfile(user).then((profile) => {
+      const nameParts = profile.name.trim().split(/\s+/)
+      setForm((prev) => ({
+        ...prev,
+        email: user.email,
+        firstName: prev.firstName || nameParts[0] || '',
+        lastName: prev.lastName || nameParts.slice(1).join(' ') || '',
+        phone: prev.phone || profile.phone || '',
+        address: prev.address || profile.address?.line1 || '',
+        city: prev.city || profile.address?.city || '',
+        state: prev.state || profile.address?.state || '',
+        pincode: prev.pincode || profile.address?.pincode || '',
+      }))
+    })
+  }, [user])
+
+  if (!authReady) {
+    return null
+  }
+
   if (cart.length === 0 && !placed) {
     return <Navigate to="/cart" replace />
   }
 
+  if (!user && !placed) {
+    return <Navigate to="/account?redirect=/checkout" replace />
+  }
+
+  const accountEmail = user!.email
+
   const handleChange = (field: string, value: string) => {
+    if (field === 'email') return
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  const placeOrder = (
+  const placeOrder = async (
     paymentStatus: 'paid' | 'pending',
     razorpayIds?: { paymentId?: string; orderId?: string },
   ) => {
-    createOrder({
+    const billing = { ...form, email: accountEmail }
+    await createOrder({
       items: [...cart],
-      billing: form,
+      billing,
       subtotal: cartTotal,
       paymentMethod,
       paymentStatus,
       razorpayPaymentId: razorpayIds?.paymentId,
       razorpayOrderId: razorpayIds?.orderId,
+      accountEmail,
     })
     clearCart()
     setPlaced(true)
@@ -60,7 +93,7 @@ export default function CheckoutPage() {
 
     try {
       if (paymentMethod === 'cod') {
-        placeOrder('pending')
+        await placeOrder('pending')
         return
       }
 
@@ -70,7 +103,7 @@ export default function CheckoutPage() {
         description: `Order — ${cart.length} item(s)`,
         prefill: {
           name: `${form.firstName} ${form.lastName}`,
-          email: form.email,
+          email: accountEmail,
           contact: form.phone,
         },
       })
@@ -80,7 +113,9 @@ export default function CheckoutPage() {
         return
       }
 
-      placeOrder('paid', { paymentId: result.paymentId, orderId: result.orderId })
+      await placeOrder('paid', { paymentId: result.paymentId, orderId: result.orderId })
+    } catch (err) {
+      setPaymentError(err instanceof Error ? err.message : 'Failed to place order. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -89,7 +124,7 @@ export default function CheckoutPage() {
   if (placed) {
     return (
       <main>
-        <section className="flex min-h-[60vh] items-center justify-center py-20">
+        <section className="flex min-h-[60vh] items-center justify-center py-20 pt-[var(--site-header-height)]">
           <div className="px-4 text-center">
             <CheckCircle size={56} className="mx-auto text-maroon" />
             <h1 className="mt-6 font-serif text-3xl text-charcoal">Order Placed!</h1>
@@ -97,8 +132,14 @@ export default function CheckoutPage() {
               Thank you for shopping with {brand.name}. We&apos;ll contact you shortly to confirm your order.
             </p>
             <Link
-              to="/shop"
-              className="mt-8 inline-block bg-maroon px-8 py-3 text-xs font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-maroon-light"
+              to="/account/orders"
+              className="mt-6 inline-block text-xs font-medium tracking-[0.15em] text-maroon uppercase hover:text-maroon-light"
+            >
+              View Order History
+            </Link>
+            <Link
+              to="/dress"
+              className="mt-4 block text-xs text-charcoal/50 hover:text-maroon"
             >
               Continue Shopping
             </Link>
@@ -151,15 +192,17 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
-                  Email *
+                  Account Email
                 </label>
                 <input
-                  required
+                  readOnly
                   type="email"
-                  value={form.email}
-                  onChange={(e) => handleChange('email', e.target.value)}
-                  className="w-full border border-accent px-4 py-3 text-sm outline-none focus:border-maroon"
+                  value={accountEmail}
+                  className="w-full cursor-not-allowed border border-accent bg-cream-dark px-4 py-3 text-sm text-charcoal/60 outline-none"
                 />
+                <p className="mt-1.5 text-[10px] text-charcoal/40">
+                  Your registered email is used for all orders and status updates.
+                </p>
               </div>
               <div>
                 <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
@@ -279,9 +322,9 @@ export default function CheckoutPage() {
                   <span className="font-serif text-lg">₹{cartTotal.toLocaleString('en-IN')}.00</span>
                 </div>
               </div>
-              <p className="mt-6 text-center text-[10px] tracking-wide text-charcoal/50 uppercase">
-                Free shipping on all over India
-              </p>
+              <div className="mt-6">
+                <TrustBadges />
+              </div>
             </div>
           </div>
         </div>

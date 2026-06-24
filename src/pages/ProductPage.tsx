@@ -14,7 +14,7 @@ export default function ProductPage() {
   const product = slug ? getProductBySlug(slug) : undefined
 
   if (!product) {
-    return <Navigate to="/shop" replace />
+    return <Navigate to="/dress" replace />
   }
 
   const related = getRelatedProducts(product)

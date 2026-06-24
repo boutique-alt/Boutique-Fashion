@@ -1,25 +1,60 @@
+import { useEffect, useState } from 'react'
 import { NavLink, Outlet, Navigate } from 'react-router-dom'
-import { LayoutDashboard, LogOut, Mail, Package, Store } from 'lucide-react'
-import { adminLogout, isAdminLoggedIn } from '../../services/adminService'
-import { getUnreadContactCount } from '../../services/contactService'
-import { getOrders } from '../../services/orderService'
+import { BarChart3, LayoutDashboard, LogOut, Mail, Package, RotateCcw, Shirt, Store } from 'lucide-react'
+import { isSupabaseConfigured } from '../../config/env'
+import { adminLogout, verifyAdminSession } from '../../services/adminService'
+import { getUnreadContactCount, loadContactMessages } from '../../services/contactService'
+import { getOrders, loadOrders } from '../../services/orderService'
+import { getReturns, loadReturns } from '../../services/returnService'
+import { getPageVisits, loadPageVisits } from '../../services/analyticsService'
+import { getAllProductDetails } from '../../data/productCatalog'
+import { hydrateProductStore } from '../../services/productService'
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/products', label: 'Products', icon: Shirt, end: false },
   { to: '/admin/orders', label: 'Orders', icon: Package, end: false },
   { to: '/admin/messages', label: 'Messages', icon: Mail, end: false },
+  { to: '/admin/returns', label: 'Returns', icon: RotateCcw, end: false },
+  { to: '/admin/analytics', label: 'Analytics', icon: BarChart3, end: false },
 ]
 
 export default function AdminLayout() {
-  if (!isAdminLoggedIn()) {
+  const [checked, setChecked] = useState(false)
+  const [authed, setAuthed] = useState(false)
+  const [, setTick] = useState(0)
+
+  useEffect(() => {
+    verifyAdminSession().then(async (ok) => {
+      if (ok && isSupabaseConfigured()) {
+        await Promise.all([
+          loadOrders(),
+          loadReturns(),
+          loadContactMessages(),
+          loadPageVisits(),
+          hydrateProductStore(),
+        ])
+        setTick((t) => t + 1)
+      }
+      setAuthed(ok)
+      setChecked(true)
+    })
+  }, [])
+
+  if (!checked) return null
+
+  if (!authed) {
     return <Navigate to="/admin/login" replace />
   }
 
   const unreadCount = getUnreadContactCount()
   const orderCount = getOrders().length
+  const productCount = getAllProductDetails().length
+  const returnCount = getReturns().length
+  const visitCount = getPageVisits().length
 
-  const handleLogout = () => {
-    adminLogout()
+  const handleLogout = async () => {
+    await adminLogout()
     window.location.href = '/admin/login'
   }
 
@@ -40,6 +75,7 @@ export default function AdminLayout() {
               key={to}
               to={to}
               end={end}
+              onClick={() => setTick((t) => t + 1)}
               className={({ isActive }) =>
                 `flex items-center justify-between rounded px-3 py-2.5 text-xs font-medium tracking-[0.08em] uppercase transition-colors ${
                   isActive
@@ -59,6 +95,15 @@ export default function AdminLayout() {
               )}
               {label === 'Orders' && orderCount > 0 && (
                 <span className="text-[10px] opacity-70">{orderCount}</span>
+              )}
+              {label === 'Products' && productCount > 0 && (
+                <span className="text-[10px] opacity-70">{productCount}</span>
+              )}
+              {label === 'Returns' && returnCount > 0 && (
+                <span className="text-[10px] opacity-70">{returnCount}</span>
+              )}
+              {label === 'Analytics' && visitCount > 0 && (
+                <span className="text-[10px] opacity-70">{visitCount}</span>
               )}
             </NavLink>
           ))}

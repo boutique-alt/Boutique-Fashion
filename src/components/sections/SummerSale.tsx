@@ -16,7 +16,7 @@ export default function SummerSale() {
         />
         <div className="mt-10 text-center">
           <Link
-            to="/shop"
+            to="/dress"
             className="inline-block border border-charcoal px-10 py-3 text-[10px] font-medium tracking-[0.25em] text-charcoal uppercase transition-all hover:bg-charcoal hover:text-cream md:text-xs"
           >
             Shop Now

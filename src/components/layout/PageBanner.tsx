@@ -14,7 +14,7 @@ interface PageBannerProps {
 
 export default function PageBanner({ title, breadcrumbs, image }: PageBannerProps) {
   return (
-    <section className="relative flex h-48 items-center justify-center overflow-hidden bg-charcoal md:h-56">
+    <section className="under-site-header relative flex h-48 items-center justify-center overflow-hidden bg-charcoal md:h-56">
       {image && (
         <>
           <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />

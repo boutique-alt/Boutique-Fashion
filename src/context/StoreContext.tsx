@@ -1,4 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { isSupabaseConfigured } from '../config/env'
+import { supabase } from '../lib/supabase'
+import { customerSignOut, getCustomerSession } from '../services/authService'
 
 export interface CartItem {
   key: string
@@ -25,6 +28,7 @@ interface StoreContextValue {
   toggleWishlist: (slug: string) => void
   isInWishlist: (slug: string) => boolean
   user: User | null
+  authReady: boolean
   login: (user: User) => void
   logout: () => void
   register: (user: User) => void
@@ -53,15 +57,40 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>(() => loadJson(CART_KEY, []))
   const [wishlist, setWishlist] = useState<string[]>(() => loadJson(WISHLIST_KEY, []))
   const [user, setUser] = useState<User | null>(() => loadJson(USER_KEY, null))
+  const [authReady, setAuthReady] = useState(!isSupabaseConfigured())
   const [searchOpen, setSearchOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
 
   useEffect(() => { localStorage.setItem(CART_KEY, JSON.stringify(cart)) }, [cart])
   useEffect(() => { localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist)) }, [wishlist])
+
   useEffect(() => {
     if (user) localStorage.setItem(USER_KEY, JSON.stringify(user))
     else localStorage.removeItem(USER_KEY)
   }, [user])
+
+  useEffect(() => {
+    if (!isSupabaseConfigured() || !supabase) {
+      setAuthReady(true)
+      return
+    }
+
+    getCustomerSession().then((session) => {
+      if (session) setUser(session)
+      setAuthReady(true)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const email = session.user.email ?? ''
+        const name = (session.user.user_metadata?.name as string) || email.split('@')[0]
+        setUser({ name, email })
+      }
+      setAuthReady(true)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   const addToCart = useCallback((item: Omit<CartItem, 'key'>) => {
     const key = `${item.slug}-${item.size}`
@@ -100,7 +129,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const isInWishlist = useCallback((slug: string) => wishlist.includes(slug), [wishlist])
 
   const login = useCallback((u: User) => setUser(u), [])
-  const logout = useCallback(() => setUser(null), [])
+  const logout = useCallback(async () => {
+    await customerSignOut()
+    localStorage.removeItem(USER_KEY)
+    setUser(null)
+  }, [])
   const register = useCallback((u: User) => setUser(u), [])
 
   const cartCount = useMemo(() => cart.reduce((sum, i) => sum + i.quantity, 0), [cart])
@@ -121,6 +154,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       toggleWishlist,
       isInWishlist,
       user,
+      authReady,
       login,
       logout,
       register,
@@ -132,7 +166,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [
       cart, cartCount, cartTotal, addToCart, updateCartQty, removeFromCart, clearCart,
       wishlist, wishlistCount, toggleWishlist, isInWishlist,
-      user, login, logout, register,
+      user, authReady, login, logout, register,
       searchOpen, cartOpen,
     ],
   )
