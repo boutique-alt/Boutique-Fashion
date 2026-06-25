@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom'
 import { CheckCircle } from 'lucide-react'
 import PageBanner from '../components/layout/PageBanner'
 import PaymentMethodSelect from '../components/checkout/PaymentMethodSelect'
+import UpiPaymentPanel from '../components/checkout/UpiPaymentPanel'
 import { useStore } from '../context/StoreContext'
 import { aboutAssets } from '../data/about'
 import { brand } from '../data/navigation'
@@ -15,6 +16,7 @@ import TrustBadges from '../components/trust/TrustBadges'
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart, user, authReady } = useStore()
   const [placed, setPlaced] = useState(false)
+  const [placedViaUpi, setPlacedViaUpi] = useState(false)
   const [loading, setLoading] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('razorpay')
@@ -83,6 +85,7 @@ export default function CheckoutPage() {
       accountEmail,
     })
     clearCart()
+    setPlacedViaUpi(paymentMethod === 'upi')
     setPlaced(true)
   }
 
@@ -92,7 +95,7 @@ export default function CheckoutPage() {
     setLoading(true)
 
     try {
-      if (paymentMethod === 'cod') {
+      if (paymentMethod === 'cod' || paymentMethod === 'upi') {
         await placeOrder('pending')
         return
       }
@@ -129,7 +132,9 @@ export default function CheckoutPage() {
             <CheckCircle size={56} className="mx-auto text-maroon" />
             <h1 className="mt-6 font-serif text-3xl text-charcoal">Order Placed!</h1>
             <p className="mt-3 max-w-md text-sm text-charcoal/60">
-              Thank you for shopping with {brand.name}. We&apos;ll contact you shortly to confirm your order.
+              {placedViaUpi
+                ? 'Thank you! We received your order and will verify your UPI payment shortly.'
+                : `Thank you for shopping with ${brand.name}. We'll contact you shortly to confirm your order.`}
             </p>
             <Link
               to="/account/orders"
@@ -277,6 +282,8 @@ export default function CheckoutPage() {
 
             <PaymentMethodSelect value={paymentMethod} onChange={setPaymentMethod} />
 
+            {paymentMethod === 'upi' && <UpiPaymentPanel amount={cartTotal} />}
+
             {paymentError && <p className="text-sm text-gold">{paymentError}</p>}
 
             <button
@@ -288,7 +295,9 @@ export default function CheckoutPage() {
                 ? 'Processing...'
                 : paymentMethod === 'razorpay'
                   ? 'Pay & Place Order'
-                  : 'Place Order'}
+                  : paymentMethod === 'upi'
+                    ? 'I Have Paid — Place Order'
+                    : 'Place Order'}
             </button>
           </form>
 

@@ -1,4 +1,4 @@
-import { CreditCard, Wallet } from 'lucide-react'
+import { CreditCard, Wallet, Smartphone } from 'lucide-react'
 import { isRazorpayConfigured } from '../../config/env'
 import type { PaymentMethod } from '../../types/order'
 
@@ -19,6 +19,12 @@ const methods: { id: PaymentMethod; label: string; description: string; icon: ty
     label: 'Cash on Delivery',
     description: 'Pay when your order arrives',
     icon: Wallet,
+  },
+  {
+    id: 'upi',
+    label: 'UPI / QR Pay',
+    description: 'Scan QR or pay to our UPI ID',
+    icon: Smartphone,
   },
 ]
 

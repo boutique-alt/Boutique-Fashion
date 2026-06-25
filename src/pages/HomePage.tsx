@@ -3,6 +3,7 @@ import SummerSale from '../components/sections/SummerSale'
 import CeremonialEdit from '../components/sections/CeremonialEdit'
 import ShopByCategory from '../components/sections/ShopByCategory'
 import CelebrateWithUs from '../components/sections/CelebrateWithUs'
+import WatchAndBuy from '../components/sections/WatchAndBuy'
 import ExclusiveCollections from '../components/sections/ExclusiveCollections'
 import OfficeWear from '../components/sections/OfficeWear'
 import ExclusiveSarees from '../components/sections/ExclusiveSarees'
@@ -18,6 +19,7 @@ export default function HomePage() {
       <SummerSale />
       <CeremonialEdit />
       <ShopByCategory />
+      <WatchAndBuy />
       <CelebrateWithUs />
       <ExclusiveCollections />
       <OfficeWear />

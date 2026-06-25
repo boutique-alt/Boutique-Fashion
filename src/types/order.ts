@@ -16,7 +16,7 @@ export const LOCKED_ORDER_STATUSES: OrderStatus[] = ['delivered', 'cancelled']
 export function isOrderStatusLocked(status: OrderStatus): boolean {
   return LOCKED_ORDER_STATUSES.includes(status)
 }
-export type PaymentMethod = 'razorpay' | 'cod'
+export type PaymentMethod = 'razorpay' | 'cod' | 'upi'
 export type PaymentStatus = 'pending' | 'paid' | 'failed'
 
 export interface OrderBilling {
