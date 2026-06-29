@@ -39,7 +39,7 @@ function galleryImages(image: string): string[] {
   return [primary, alt]
 }
 
-const extraDetails: Record<string, Partial<Omit<ProductDetail, keyof Product | 'slug'>>> = {}
+const extraDetails: Record<string, Partial<Omit<ProductDetail, 'slug' | 'id' | 'name' | 'price' | 'originalPrice' | 'image' | 'href' | 'isNew' | 'onSale'>>> = {}
 
 function defaultDescription(name: string): string {
   return `${name} from Boutique Fashion is thoughtfully crafted with premium fabrics and artisanal detailing. Designed for comfort and elegance, this piece blends modern style with timeless Indian craftsmanship — perfect for everyday wear and special occasions alike.`
