@@ -2,13 +2,14 @@ import { Sparkles } from 'lucide-react'
 import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
-import { getAllProductDetails } from '../data/productCatalog'
+import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets } from '../data/about'
 
 const bridalSlugs = new Set(['blouse', 'three-piece'])
 
 export default function BridalPage() {
-  const bridalProducts = getAllProductDetails().filter((p) => bridalSlugs.has(p.categorySlug))
+  const { products: catalog } = useProductCatalog()
+  const bridalProducts = catalog.filter((p) => bridalSlugs.has(p.categorySlug))
   const { sorted, setSort } = useSortedProducts(bridalProducts)
 
   return (

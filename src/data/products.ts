@@ -11,6 +11,7 @@ export interface Product {
   price: number
   originalPrice?: number
   image: string
+  images?: string[]
   href?: string
   isNew?: boolean
   onSale?: boolean

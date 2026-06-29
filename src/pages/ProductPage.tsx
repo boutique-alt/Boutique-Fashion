@@ -6,11 +6,13 @@ import ProductPurchase from '../components/product/ProductPurchase'
 import ProductTabs from '../components/product/ProductTabs'
 import ProductCard from '../components/ui/ProductCard'
 import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
+import { useProductCatalog } from '../hooks/useProductCatalog'
 import { productPath } from '../utils/productSlug'
 import { aboutAssets } from '../data/about'
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>()
+  useProductCatalog()
   const product = slug ? getProductBySlug(slug) : undefined
 
   if (!product) {

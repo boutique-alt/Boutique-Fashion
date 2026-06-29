@@ -24,6 +24,11 @@ export default function AdminLoginPage() {
     setLoading(false)
 
     if (result.ok) {
+      if (result.syncWarning) {
+        setError(result.syncWarning)
+        setTimeout(() => { window.location.href = '/admin' }, 2500)
+        return
+      }
       window.location.href = '/admin'
       return
     }

@@ -79,6 +79,7 @@ export const kurtaCoordProducts: Product[] = [
     originalPrice: 2100,
     onSale: true,
     image: IMG(10),
+    images: ["/images/kurtaCoord/teal-green-handpainted-inner-shrug-chanderi-silk-1.png","/images/kurtaCoord/teal-green-handpainted-inner-shrug-chanderi-silk-2.png"],
     href: 'https://boutiquefashion.shop/product/teal-green-handpainted-inner-shrug-chanderi-silk/',
   },
   {
@@ -86,6 +87,7 @@ export const kurtaCoordProducts: Product[] = [
     name: 'Pink Floral Embroidered Kurta with Teal Trousers',
     price: 1200,
     image: IMG(11),
+    images: ["/images/kurtaCoord/cotton-handblock-braided-sleeve-kurti-set-1.png","/images/kurtaCoord/cotton-handblock-braided-sleeve-kurti-set-2.png"],
     href: 'https://boutiquefashion.shop/product/cotton-handblock-braided-sleeve-kurti-set/',
   },
   {

@@ -4,8 +4,38 @@ import { getSupabase } from '../lib/supabase'
 import { getSupabaseAdmin } from '../lib/supabaseAdmin'
 import { mapOverrides, mapProduct, productToDb, type DbProduct } from '../lib/supabaseMappers'
 import type { AdminProduct, AdminProductInput, ProductOverride } from '../types/adminProduct'
-import { hasSupabaseAdminSession } from './adminService'
+import { syncSupabaseAdminSession } from './adminService'
 import { createId, loadStore, saveStore } from './storage'
+
+const catalogListeners = new Set<() => void>()
+let catalogVersion = 0
+
+export function getCatalogVersion(): number {
+  return catalogVersion
+}
+
+export function subscribeProductCatalog(listener: () => void): () => void {
+  catalogListeners.add(listener)
+  return () => catalogListeners.delete(listener)
+}
+
+function notifyCatalogChanged(): void {
+  catalogVersion += 1
+  catalogListeners.forEach((listener) => listener())
+  try {
+    // Triggers `storage` event in other tabs to refresh storefront catalog.
+    localStorage.setItem('bf-catalog-bump', String(Date.now()))
+  } catch {
+    // ignore
+  }
+}
+
+async function requireAdminCloudSession(): Promise<void> {
+  const sync = await syncSupabaseAdminSession()
+  if (!sync.ok) {
+    throw new Error(sync.error ?? 'Could not sign in to Supabase as admin. Changes were not saved.')
+  }
+}
 
 const PRODUCTS_KEY = 'admin-products'
 const DELETED_KEY = 'deleted-product-slugs'
@@ -50,16 +80,12 @@ function mergeAdminProducts(remote: AdminProduct[], local: AdminProduct[]): Admi
   return [...remote, ...localOnly]
 }
 
-function saveAdminProductLocal(product: AdminProduct): void {
-  const local = getAdminProductsLocal().filter((p) => p.id !== product.id)
-  saveStore(PRODUCTS_KEY, [product, ...local])
-}
-
 export async function hydrateProductStore(): Promise<void> {
   if (!isSupabaseConfigured()) {
     productsCache = getAdminProductsLocal()
     deletedCache = getDeletedSlugsLocal()
     overridesCache = getProductOverridesLocal()
+    notifyCatalogChanged()
     return
   }
 
@@ -76,6 +102,7 @@ export async function hydrateProductStore(): Promise<void> {
   overridesCache = overridesRes.data
     ? mapOverrides(overridesRes.data as { slug: string; override_data: ProductOverride }[])
     : {}
+  notifyCatalogChanged()
 }
 
 export function getAdminProducts(): AdminProduct[] {
@@ -127,6 +154,7 @@ export async function createAdminProduct(input: AdminProductInput): Promise<Admi
     }
     saveStore(PRODUCTS_KEY, [...getAdminProductsLocal(), product])
     productsCache = [...(productsCache ?? getAdminProductsLocal()), product]
+    notifyCatalogChanged()
     return product
   }
 
@@ -141,21 +169,17 @@ export async function createAdminProduct(input: AdminProductInput): Promise<Admi
     updatedAt: now,
   }
 
-  if (await hasSupabaseAdminSession()) {
-    const { error } = await getSupabaseAdmin().from('products').insert({
-      ...row,
-      id,
-      created_at: now,
-      updated_at: now,
-    })
-    if (!error) {
-      productsCache = [product, ...(productsCache ?? [])]
-      return product
-    }
-  }
+  await requireAdminCloudSession()
+  const { error } = await getSupabaseAdmin().from('products').insert({
+    ...row,
+    id,
+    created_at: now,
+    updated_at: now,
+  })
+  if (error) throw new Error(error.message)
 
-  saveAdminProductLocal(product)
-  productsCache = [product, ...(productsCache ?? getAdminProductsLocal())]
+  productsCache = [product, ...(productsCache ?? [])]
+  notifyCatalogChanged()
   return product
 }
 
@@ -177,25 +201,22 @@ export async function updateAdminProduct(id: string, input: AdminProductInput): 
     local[index] = updated
     saveStore(PRODUCTS_KEY, local)
     productsCache = local
+    notifyCatalogChanged()
     return updated
   }
 
   const updated: AdminProduct = { ...existing, ...input, ...meta, slug, updatedAt: now }
 
-  if (await hasSupabaseAdminSession()) {
-    const row = {
-      ...productToDb({ ...existing, ...input, ...meta, slug }),
-      updated_at: now,
-    }
-    const { error } = await getSupabaseAdmin().from('products').update(row).eq('id', id)
-    if (!error) {
-      productsCache = (productsCache ?? []).map((p) => (p.id === id ? updated : p))
-      return updated
-    }
+  await requireAdminCloudSession()
+  const row = {
+    ...productToDb({ ...existing, ...input, ...meta, slug }),
+    updated_at: now,
   }
+  const { error } = await getSupabaseAdmin().from('products').update(row).eq('id', id)
+  if (error) throw new Error(error.message)
 
-  saveAdminProductLocal(updated)
-  productsCache = (productsCache ?? getAdminProductsLocal()).map((p) => (p.id === id ? updated : p))
+  productsCache = (productsCache ?? []).map((p) => (p.id === id ? updated : p))
+  notifyCatalogChanged()
   return updated
 }
 
@@ -204,16 +225,16 @@ export async function deleteAdminProduct(id: string): Promise<void> {
     const filtered = getAdminProductsLocal().filter((p) => p.id !== id)
     saveStore(PRODUCTS_KEY, filtered)
     productsCache = filtered
+    notifyCatalogChanged()
     return
   }
 
-  if (await hasSupabaseAdminSession()) {
-    await getSupabaseAdmin().from('products').delete().eq('id', id)
-  }
+  await requireAdminCloudSession()
+  const { error } = await getSupabaseAdmin().from('products').delete().eq('id', id)
+  if (error) throw new Error(error.message)
 
-  const filtered = getAdminProductsLocal().filter((p) => p.id !== id)
-  saveStore(PRODUCTS_KEY, filtered)
   productsCache = (productsCache ?? []).filter((p) => p.id !== id)
+  notifyCatalogChanged()
 }
 
 export async function deleteStaticProduct(slug: string): Promise<void> {
@@ -223,11 +244,16 @@ export async function deleteStaticProduct(slug: string): Promise<void> {
       saveStore(DELETED_KEY, [...deleted, slug])
     }
     deletedCache = [...(deletedCache ?? deleted), slug]
+    notifyCatalogChanged()
     return
   }
 
-  await getSupabase().from('catalog_hidden_slugs').upsert({ slug })
+  await requireAdminCloudSession()
+  const { error } = await getSupabaseAdmin().from('catalog_hidden_slugs').upsert({ slug })
+  if (error) throw new Error(error.message)
+
   deletedCache = deletedCache?.includes(slug) ? deletedCache : [...(deletedCache ?? []), slug]
+  notifyCatalogChanged()
 }
 
 export async function saveStaticProductOverride(slug: string, input: AdminProductInput): Promise<void> {
@@ -238,15 +264,20 @@ export async function saveStaticProductOverride(slug: string, input: AdminProduc
     overrides[slug] = override
     saveStore(OVERRIDES_KEY, overrides)
     overridesCache = overrides
+    notifyCatalogChanged()
     return
   }
 
-  await getSupabase().from('catalog_overrides').upsert({
+  await requireAdminCloudSession()
+  const { error } = await getSupabaseAdmin().from('catalog_overrides').upsert({
     slug,
     override_data: override,
     updated_at: new Date().toISOString(),
   })
+  if (error) throw new Error(error.message)
+
   overridesCache = { ...(overridesCache ?? {}), [slug]: override }
+  notifyCatalogChanged()
 }
 
 export async function restoreStaticProduct(slug: string): Promise<void> {
@@ -259,17 +290,23 @@ export async function restoreStaticProduct(slug: string): Promise<void> {
     const next = { ...(overridesCache ?? {}) }
     delete next[slug]
     overridesCache = next
+    notifyCatalogChanged()
     return
   }
 
-  await Promise.all([
-    getSupabase().from('catalog_hidden_slugs').delete().eq('slug', slug),
-    getSupabase().from('catalog_overrides').delete().eq('slug', slug),
+  await requireAdminCloudSession()
+  const [hiddenRes, overridesRes] = await Promise.all([
+    getSupabaseAdmin().from('catalog_hidden_slugs').delete().eq('slug', slug),
+    getSupabaseAdmin().from('catalog_overrides').delete().eq('slug', slug),
   ])
+  if (hiddenRes.error) throw new Error(hiddenRes.error.message)
+  if (overridesRes.error) throw new Error(overridesRes.error.message)
+
   deletedCache = (deletedCache ?? []).filter((s) => s !== slug)
   const next = { ...(overridesCache ?? {}) }
   delete next[slug]
   overridesCache = next
+  notifyCatalogChanged()
 }
 
 export const adminCategoryOptions = allCategories.map((c) => ({

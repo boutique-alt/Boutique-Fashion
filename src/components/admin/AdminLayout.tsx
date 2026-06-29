@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { NavLink, Outlet, Navigate } from 'react-router-dom'
 import { BarChart3, LayoutDashboard, LogOut, Mail, Package, RotateCcw, Shirt, Store } from 'lucide-react'
 import { isSupabaseConfigured } from '../../config/env'
-import { adminLogout, verifyAdminSession } from '../../services/adminService'
+import { adminLogout, getLastAdminSyncError, verifyAdminSession } from '../../services/adminService'
 import { getUnreadContactCount, loadContactMessages } from '../../services/contactService'
 import { getOrders, loadOrders } from '../../services/orderService'
 import { getReturns, loadReturns } from '../../services/returnService'
@@ -48,6 +48,7 @@ export default function AdminLayout() {
   }
 
   const unreadCount = getUnreadContactCount()
+  const syncError = getLastAdminSyncError()
   const orderCount = getOrders().length
   const productCount = getAllProductDetails().length
   const returnCount = getReturns().length
@@ -121,6 +122,11 @@ export default function AdminLayout() {
       </aside>
 
       <main className="flex-1 overflow-auto">
+        {syncError && (
+          <div className="border-b border-gold/40 bg-gold/10 px-6 py-3 text-sm text-charcoal">
+            <strong>Cloud sync issue:</strong> {syncError}
+          </div>
+        )}
         <Outlet />
       </main>
     </div>

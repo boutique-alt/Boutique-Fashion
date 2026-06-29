@@ -3,11 +3,13 @@ import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getShopPageProducts, getShopResultRange, getShopTotalPages } from '../data/shop'
+import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets } from '../data/about'
 
 export default function ShopAllPage() {
   const { page } = useParams<{ page?: string }>()
   const currentPage = page ? parseInt(page, 10) : 1
+  useProductCatalog()
 
   if (isNaN(currentPage) || currentPage < 1 || currentPage > getShopTotalPages()) {
     return <Navigate to="/shop/all" replace />

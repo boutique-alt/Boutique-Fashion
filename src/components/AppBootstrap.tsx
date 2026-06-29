@@ -19,6 +19,25 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
       loadContactMessages(),
       loadPageVisits(),
     ]).finally(() => setReady(true))
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        void hydrateProductStore()
+      }
+    }
+    document.addEventListener('visibilitychange', onVisible)
+
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'bf-catalog-bump') {
+        void hydrateProductStore()
+      }
+    }
+    window.addEventListener('storage', onStorage)
+
+    return () => {
+      document.removeEventListener('visibilitychange', onVisible)
+      window.removeEventListener('storage', onStorage)
+    }
   }, [])
 
   if (!ready) return null

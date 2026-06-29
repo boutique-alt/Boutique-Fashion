@@ -3,7 +3,7 @@ import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getCategoryBySlug } from '../data/categories'
-import { getAllProductDetails } from '../data/productCatalog'
+import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets } from '../data/about'
 
 interface CategoryPageProps {
@@ -14,7 +14,8 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
   const { category } = useParams<{ category: string }>()
   const slug = slugProp ?? category
   const config = slug ? getCategoryBySlug(slug) : undefined
-  const categoryProducts = getAllProductDetails().filter((p) => p.categorySlug === slug)
+  const { products: catalog } = useProductCatalog()
+  const categoryProducts = catalog.filter((p) => p.categorySlug === slug)
   const { sorted, setSort } = useSortedProducts(categoryProducts)
 
   if (!config) {

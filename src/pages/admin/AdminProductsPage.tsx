@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import AdminProductCard from '../../components/admin/AdminProductCard'
 import ProductForm from '../../components/admin/ProductForm'
 import CategoryToolbar, { useSortedProducts } from '../../components/shop/CategoryToolbar'
-import { getAllProductDetails, type ProductDetail } from '../../data/productCatalog'
+import { type ProductDetail } from '../../data/productCatalog'
+import { useProductCatalog } from '../../hooks/useProductCatalog'
 import {
   createAdminProduct,
   deleteAdminProduct,
@@ -14,17 +15,11 @@ import {
 import type { AdminProductInput } from '../../types/adminProduct'
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState(() => getAllProductDetails())
+  const { products } = useProductCatalog()
   const [editing, setEditing] = useState<ProductDetail | null>(null)
   const [adding, setAdding] = useState(false)
   const [saveError, setSaveError] = useState('')
   const { sorted, setSort } = useSortedProducts(products as ProductDetail[])
-
-  const refresh = () => setProducts(getAllProductDetails())
-
-  useEffect(() => {
-    refresh()
-  }, [])
 
   const handleSave = async (input: AdminProductInput) => {
     try {
@@ -40,7 +35,6 @@ export default function AdminProductsPage() {
       }
       setEditing(null)
       setAdding(false)
-      refresh()
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : 'Failed to save product')
     }
@@ -54,7 +48,6 @@ export default function AdminProductsPage() {
       await deleteStaticProduct(product.slug)
     }
     if (editing?.slug === product.slug) setEditing(null)
-    refresh()
   }
 
   const showForm = adding || editing

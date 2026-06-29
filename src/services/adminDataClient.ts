@@ -1,13 +1,13 @@
 import { isSupabaseConfigured } from '../config/env'
 import { getSupabase } from '../lib/supabase'
 import { getSupabaseAdmin } from '../lib/supabaseAdmin'
-import { hasSupabaseAdminSession, isAdminLoggedIn, syncSupabaseAdminSession } from './adminService'
+import { isAdminLoggedIn, syncSupabaseAdminSession } from './adminService'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export async function getSupabaseForAdminData(): Promise<SupabaseClient | null> {
   if (!isSupabaseConfigured() || !isAdminLoggedIn()) return null
-  await syncSupabaseAdminSession()
-  if (!(await hasSupabaseAdminSession())) return null
+  const sync = await syncSupabaseAdminSession()
+  if (!sync.ok) return null
   return getSupabaseAdmin()
 }
 

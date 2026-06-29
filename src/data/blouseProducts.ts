@@ -33,6 +33,7 @@ export const blouseProducts: Product[] = [
     name: 'Green Kalamkari Square Neck Blouse',
     price: 2400,
     image: IMG(4),
+    images: ["/images/blouse/peach-sea-waves-designer-blouse-1.png","/images/blouse/peach-sea-waves-designer-blouse-2.png","/images/blouse/peach-sea-waves-designer-blouse-3.png","/images/blouse/peach-sea-waves-designer-blouse-4.png","/images/blouse/peach-sea-waves-designer-blouse-5.png","/images/blouse/peach-sea-waves-designer-blouse-6.png","/images/blouse/peach-sea-waves-designer-blouse-7.png","/images/blouse/peach-sea-waves-designer-blouse-8.png","/images/blouse/peach-sea-waves-designer-blouse-9.png","/images/blouse/peach-sea-waves-designer-blouse-10.png"],
     href: 'https://boutiquefashion.shop/product/peach-sea-waves-designer-blouse/',
   },
   {

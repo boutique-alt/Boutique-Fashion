@@ -61,6 +61,7 @@ export const suitSetProducts: Product[] = [
     originalPrice: 3200,
     onSale: true,
     image: IMG(8),
+    images: ["/images/suitSet/olive-green-mul-chanderi-boolean-work-three-piece-set-1.png","/images/suitSet/olive-green-mul-chanderi-boolean-work-three-piece-set-2.png"],
     href: 'https://boutiquefashion.shop/product/olive-green-mul-chanderi-boolean-work-three-piece-set/',
   },
   {

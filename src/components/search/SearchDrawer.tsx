@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import { Search, X } from 'lucide-react'
 import { useStore } from '../../context/StoreContext'
 import { searchProducts } from '../../data/productCatalog'
+import { useProductCatalog } from '../../hooks/useProductCatalog'
 import { productPath } from '../../utils/productSlug'
 
 export default function SearchDrawer() {
   const { searchOpen, setSearchOpen } = useStore()
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+  useProductCatalog()
   const results = searchProducts(query)
 
   useEffect(() => {
