@@ -33,6 +33,7 @@ export interface DbOrder {
   status: OrderStatus
   razorpay_payment_id: string | null
   razorpay_order_id: string | null
+  payment_screenshot_url: string | null
   status_updated_at: string | null
   created_at: string
 }
@@ -81,6 +82,8 @@ export interface DbProduct {
   description: string
   on_sale: boolean
   is_new: boolean
+  is_best_seller: boolean
+  new_arrival_video: string | null
   fabric: string | null
   wash_care: string[] | null
   product_details: Record<string, string> | null
@@ -119,6 +122,7 @@ export function mapOrder(row: DbOrder): Order {
     status: row.status,
     razorpayPaymentId: row.razorpay_payment_id ?? undefined,
     razorpayOrderId: row.razorpay_order_id ?? undefined,
+    paymentScreenshotUrl: row.payment_screenshot_url ?? undefined,
     statusUpdatedAt: row.status_updated_at ?? undefined,
     createdAt: row.created_at,
   }
@@ -174,6 +178,8 @@ export function mapProduct(row: DbProduct): AdminProduct {
     description: row.description,
     onSale: row.on_sale,
     isNew: row.is_new,
+    isBestSeller: row.is_best_seller,
+    newArrivalVideo: row.new_arrival_video ?? undefined,
     fabric: row.fabric ?? undefined,
     washCare: row.wash_care ?? undefined,
     productDetails: row.product_details ?? undefined,
@@ -200,6 +206,8 @@ export function productToDb(input: Omit<AdminProduct, 'id' | 'createdAt' | 'upda
     description: input.description,
     on_sale: input.onSale ?? false,
     is_new: input.isNew ?? false,
+    is_best_seller: input.isBestSeller ?? false,
+    new_arrival_video: input.newArrivalVideo ?? null,
     fabric: input.fabric ?? null,
     wash_care: input.washCare ?? null,
     product_details: input.productDetails ?? null,

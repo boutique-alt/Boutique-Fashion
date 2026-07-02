@@ -12,6 +12,7 @@ import {
   saveStaticProductOverride,
   updateAdminProduct,
 } from '../../services/productService'
+import { applyShopCategorySelectionFromProduct } from '../../services/shopCategoryService'
 import type { AdminProductInput } from '../../types/adminProduct'
 
 export default function AdminProductsPage() {
@@ -33,6 +34,7 @@ export default function AdminProductsPage() {
       } else {
         await createAdminProduct(input)
       }
+      await applyShopCategorySelectionFromProduct(input.image, input.shopCategorySelections ?? [])
       setEditing(null)
       setAdding(false)
     } catch (err) {

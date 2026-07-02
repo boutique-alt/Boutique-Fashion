@@ -4,8 +4,8 @@ export const env = {
   adminPassword: (import.meta.env.VITE_ADMIN_PASSWORD as string | undefined) ?? 'admin123',
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL as string | undefined,
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined,
-  upiId: (import.meta.env.VITE_UPI_ID as string | undefined) ?? 'boutique@upi',
-  upiPayeeName: (import.meta.env.VITE_UPI_PAYEE_NAME as string | undefined) ?? 'Boutique Fashion',
+  upiId: (import.meta.env.VITE_UPI_ID as string | undefined) ?? '2470709a@bandhan',
+  upiPayeeName: (import.meta.env.VITE_UPI_PAYEE_NAME as string | undefined) ?? 'PIXEL SOLUTION',
 }
 
 export const isRazorpayConfigured = () => Boolean(env.razorpayKeyId)

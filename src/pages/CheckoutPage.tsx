@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('razorpay')
+  const [upiScreenshotUrl, setUpiScreenshotUrl] = useState<string | null>(null)
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -72,6 +73,7 @@ export default function CheckoutPage() {
   const placeOrder = async (
     paymentStatus: 'paid' | 'pending',
     razorpayIds?: { paymentId?: string; orderId?: string },
+    paymentScreenshotUrl?: string,
   ) => {
     const billing = { ...form, email: accountEmail }
     await createOrder({
@@ -82,6 +84,7 @@ export default function CheckoutPage() {
       paymentStatus,
       razorpayPaymentId: razorpayIds?.paymentId,
       razorpayOrderId: razorpayIds?.orderId,
+      paymentScreenshotUrl,
       accountEmail,
     })
     clearCart()
@@ -95,7 +98,16 @@ export default function CheckoutPage() {
     setLoading(true)
 
     try {
-      if (paymentMethod === 'cod' || paymentMethod === 'upi') {
+      if (paymentMethod === 'upi') {
+        if (!upiScreenshotUrl) {
+          setPaymentError('Please upload your UPI payment screenshot before placing the order.')
+          return
+        }
+        await placeOrder('pending', undefined, upiScreenshotUrl)
+        return
+      }
+
+      if (paymentMethod === 'cod') {
         await placeOrder('pending')
         return
       }
@@ -280,15 +292,27 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <PaymentMethodSelect value={paymentMethod} onChange={setPaymentMethod} />
+            <PaymentMethodSelect
+              value={paymentMethod}
+              onChange={(method) => {
+                setPaymentMethod(method)
+                if (method !== 'upi') setUpiScreenshotUrl(null)
+              }}
+            />
 
-            {paymentMethod === 'upi' && <UpiPaymentPanel amount={cartTotal} />}
+            {paymentMethod === 'upi' && (
+              <UpiPaymentPanel
+                amount={cartTotal}
+                screenshotUrl={upiScreenshotUrl}
+                onScreenshotChange={setUpiScreenshotUrl}
+              />
+            )}
 
             {paymentError && <p className="text-sm text-gold">{paymentError}</p>}
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || (paymentMethod === 'upi' && !upiScreenshotUrl)}
               className="w-full bg-maroon py-4 text-xs font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-maroon-light disabled:opacity-60 sm:w-auto sm:px-12"
             >
               {loading

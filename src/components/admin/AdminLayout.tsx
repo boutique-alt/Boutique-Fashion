@@ -9,6 +9,7 @@ import { getReturns, loadReturns } from '../../services/returnService'
 import { getPageVisits, loadPageVisits } from '../../services/analyticsService'
 import { getAllProductDetails } from '../../data/productCatalog'
 import { hydrateProductStore } from '../../services/productService'
+import { hydrateShopCategoryStore } from '../../services/shopCategoryService'
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -33,6 +34,7 @@ export default function AdminLayout() {
           loadContactMessages(),
           loadPageVisits(),
           hydrateProductStore(),
+          hydrateShopCategoryStore(),
         ])
         setTick((t) => t + 1)
       }

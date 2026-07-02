@@ -32,6 +32,8 @@ export default function App() {
           <Route path="contact-us" element={<ContactPage />} />
           <Route path="fabric" element={<FabricPage />} />
           <Route path="bridal" element={<BridalPage />} />
+          <Route path="bridal/women" element={<CategoryPage slug="blouse" />} />
+          <Route path="bridal/groom" element={<CategoryPage slug="mens" />} />
           <Route path="dress" element={<DressPage />} />
           <Route path="dress/:category" element={<CategoryPage />} />
           <Route path="shop" element={<Navigate to="/dress" replace />} />

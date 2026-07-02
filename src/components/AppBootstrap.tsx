@@ -4,6 +4,7 @@ import { loadContactMessages } from '../services/contactService'
 import { loadOrders } from '../services/orderService'
 import { loadPageVisits } from '../services/analyticsService'
 import { hydrateProductStore } from '../services/productService'
+import { hydrateShopCategoryStore } from '../services/shopCategoryService'
 import { loadReturns } from '../services/returnService'
 
 export default function AppBootstrap({ children }: { children: ReactNode }) {
@@ -14,6 +15,7 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
 
     Promise.all([
       hydrateProductStore(),
+      hydrateShopCategoryStore(),
       loadOrders(),
       loadReturns(),
       loadContactMessages(),
@@ -30,6 +32,9 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
     const onStorage = (e: StorageEvent) => {
       if (e.key === 'bf-catalog-bump') {
         void hydrateProductStore()
+      }
+      if (e.key === 'bf-shop-categories-bump') {
+        void hydrateShopCategoryStore()
       }
     }
     window.addEventListener('storage', onStorage)

@@ -1,20 +1,26 @@
 import { useMemo, useState } from 'react'
 import { Copy, Check } from 'lucide-react'
 import { env } from '../../config/env'
+import { upiPaymentDetails } from '../../data/payment'
 import { buildUpiPaymentLink, buildUpiQrUrl } from '../../utils/upi'
+import UpiScreenshotUpload from './UpiScreenshotUpload'
+
+const QR_SIZE = 300
 
 interface UpiPaymentPanelProps {
   amount: number
+  screenshotUrl: string | null
+  onScreenshotChange: (url: string | null) => void
 }
 
-export default function UpiPaymentPanel({ amount }: UpiPaymentPanelProps) {
+export default function UpiPaymentPanel({ amount, screenshotUrl, onScreenshotChange }: UpiPaymentPanelProps) {
   const [copied, setCopied] = useState(false)
 
   const upiLink = useMemo(
     () => buildUpiPaymentLink(env.upiId, env.upiPayeeName, amount),
     [amount],
   )
-  const qrUrl = useMemo(() => buildUpiQrUrl(upiLink), [upiLink])
+  const qrUrl = useMemo(() => buildUpiQrUrl(upiLink, QR_SIZE), [upiLink])
 
   const handleCopy = async () => {
     try {
@@ -31,7 +37,7 @@ export default function UpiPaymentPanel({ amount }: UpiPaymentPanelProps) {
       <div>
         <h3 className="font-serif text-lg text-charcoal">Pay via UPI</h3>
         <p className="mt-1 text-xs text-charcoal/60">
-          Scan the QR code or copy the UPI ID. After paying, click the button below to place your order.
+          Scan the QR code — the order amount will be filled automatically. After paying, upload your payment screenshot and place the order.
         </p>
       </div>
 
@@ -40,9 +46,9 @@ export default function UpiPaymentPanel({ amount }: UpiPaymentPanelProps) {
           <img
             src={qrUrl}
             alt="UPI payment QR code"
-            width={220}
-            height={220}
-            className="h-[220px] w-[220px] object-contain"
+            width={QR_SIZE}
+            height={QR_SIZE}
+            className="h-[300px] w-[300px] object-contain"
           />
         </div>
 
@@ -68,6 +74,10 @@ export default function UpiPaymentPanel({ amount }: UpiPaymentPanelProps) {
             </div>
           </div>
           <div>
+            <p className="text-[10px] font-medium tracking-[0.15em] text-charcoal/50 uppercase">Mobile</p>
+            <p className="mt-1 text-charcoal/80">{upiPaymentDetails.mobile}</p>
+          </div>
+          <div>
             <p className="text-[10px] font-medium tracking-[0.15em] text-charcoal/50 uppercase">Payee</p>
             <p className="mt-1 text-charcoal/80">{env.upiPayeeName}</p>
           </div>
@@ -79,6 +89,8 @@ export default function UpiPaymentPanel({ amount }: UpiPaymentPanelProps) {
           </a>
         </div>
       </div>
+
+      <UpiScreenshotUpload value={screenshotUrl} onChange={onScreenshotChange} />
 
       <p className="text-[10px] text-charcoal/40">
         Payment verification is manual. Your order will be confirmed after we verify the UPI payment.

@@ -5,10 +5,11 @@ import { slugFromHref, productPath } from '../../utils/productSlug'
 import WishlistButton from '../wishlist/WishlistButton'
 
 interface ProductCardProps {
-  product: Product & { slug?: string }
+  product: Product & { slug?: string; newArrivalVideo?: string }
+  showVideo?: boolean
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, showVideo }: ProductCardProps) {
   const slug = product.slug ?? slugFromHref(product.href)
   const to = slug ? productPath(slug) : '#'
 
@@ -17,16 +18,29 @@ export default function ProductCard({ product }: ProductCardProps) {
       ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
       : null
 
+  const videoSrc = showVideo ? product.newArrivalVideo : undefined
+
   return (
     <div className="group relative">
       <Link to={to} className="block">
         <div className="relative aspect-[480/638] overflow-hidden bg-[#f4f4f4]">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-            loading="lazy"
-          />
+          {videoSrc ? (
+            <video
+              src={videoSrc}
+              className="h-full w-full object-contain object-center"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+          ) : (
+            <img
+              src={product.image}
+              alt={product.name}
+              className="h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              loading="lazy"
+            />
+          )}
           {product.isNew && (
             <span className="absolute left-2 top-2 bg-charcoal px-2 py-0.5 text-[9px] font-medium tracking-widest text-cream uppercase">
               New

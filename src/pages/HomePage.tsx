@@ -1,5 +1,6 @@
 import Hero from '../components/sections/Hero'
 import SummerSale from '../components/sections/SummerSale'
+import NewArrival from '../components/sections/NewArrival'
 import CeremonialEdit from '../components/sections/CeremonialEdit'
 import ShopByCategory from '../components/sections/ShopByCategory'
 import CelebrateWithUs from '../components/sections/CelebrateWithUs'
@@ -16,6 +17,7 @@ export default function HomePage() {
     <main>
       <Hero />
       <SummerSale />
+      <NewArrival />
       <CeremonialEdit />
       <ShopByCategory />
       <CelebrateWithUs />

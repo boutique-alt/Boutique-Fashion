@@ -42,6 +42,7 @@ export interface Order {
   paymentStatus: PaymentStatus
   razorpayPaymentId?: string
   razorpayOrderId?: string
+  paymentScreenshotUrl?: string
   status: OrderStatus
   statusUpdatedAt?: string
   createdAt: string

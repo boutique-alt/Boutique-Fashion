@@ -3,7 +3,10 @@ import { Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
 import type { ProductDetail } from '../../data/productCatalog'
 import type { AdminProductInput, ProductAddon } from '../../types/adminProduct'
 import { adminCategoryOptions } from '../../services/productService'
+import { shopCategoryCheckboxOptions } from '../../data/shopCategories'
+import { getShopCategoryConfig } from '../../services/shopCategoryService'
 import ProductImageUpload from './ProductImageUpload'
+import ProductVideoUpload from './ProductVideoUpload'
 
 interface ProductFormProps {
   product?: ProductDetail
@@ -46,6 +49,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
   const [form, setForm] = useState<AdminProductInput>(emptyForm)
   const [sizesText, setSizesText] = useState('M, L, XL, 2XL')
   const [addons, setAddons] = useState<ProductAddon[]>([])
+  const [shopCategoryChecks, setShopCategoryChecks] = useState<Record<string, boolean>>({})
 
   // Predefined Product Details state
   const [details, setDetails] = useState<Record<string, string>>({
@@ -63,6 +67,11 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
 
   useEffect(() => {
     if (product) {
+      const config = getShopCategoryConfig()
+      const checks = Object.fromEntries(
+        shopCategoryCheckboxOptions.map((c) => [c.id, config[c.id]?.image === product.image]),
+      )
+      setShopCategoryChecks(checks)
       setForm({
         name: product.name,
         price: product.price,
@@ -75,6 +84,8 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
         description: product.description,
         onSale: product.onSale,
         isNew: product.isNew,
+        isBestSeller: product.isBestSeller,
+        newArrivalVideo: product.newArrivalVideo,
         fabric: product.fabric ?? '',
         productDetails: product.productDetails ?? {},
         addons: product.addons ?? [],
@@ -89,6 +100,9 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
       })
       setDetails(initialDetails)
     } else {
+      setShopCategoryChecks(
+        Object.fromEntries(shopCategoryCheckboxOptions.map((c) => [c.id, false])),
+      )
       setForm(emptyForm)
       setSizesText('M, L, XL, 2XL')
       setAddons([])
@@ -104,7 +118,13 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
   }, [product])
 
   const handleChange = (field: keyof AdminProductInput, value: string | number | boolean) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
+    setForm((prev) => {
+      const next = { ...prev, [field]: value }
+      if (field === 'isNew' && !value) {
+        next.newArrivalVideo = undefined
+      }
+      return next
+    })
   }
 
   /* ── Addon helpers ── */
@@ -147,8 +167,12 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
       sizes: sizes.length ? sizes : ['M', 'L', 'XL', '2XL'],
       originalPrice: form.originalPrice || undefined,
       fabric: form.fabric?.trim() || undefined,
+      newArrivalVideo: form.newArrivalVideo?.trim() || undefined,
       productDetails: Object.keys(productDetails).length ? productDetails : undefined,
       addons: addons.length ? addons : undefined,
+      shopCategorySelections: shopCategoryCheckboxOptions
+        .map((c) => c.id)
+        .filter((id) => shopCategoryChecks[id]),
     })
   }
 
@@ -200,9 +224,34 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
           On Sale
         </label>
         <label className="flex items-center gap-2 text-sm text-charcoal/70">
+          <input type="checkbox" checked={Boolean(form.isBestSeller)} onChange={(e) => handleChange('isBestSeller', e.target.checked)} className="accent-maroon" />
+          Best Seller
+        </label>
+        <label className="flex items-center gap-2 text-sm text-charcoal/70">
           <input type="checkbox" checked={Boolean(form.isNew)} onChange={(e) => handleChange('isNew', e.target.checked)} className="accent-maroon" />
           New Arrival
         </label>
+        {shopCategoryCheckboxOptions.map((option) => (
+          <label key={option.id} className="flex items-center gap-2 text-sm text-charcoal/70">
+            <input
+              type="checkbox"
+              checked={Boolean(shopCategoryChecks[option.id])}
+              onChange={(e) =>
+                setShopCategoryChecks((prev) => ({ ...prev, [option.id]: e.target.checked }))
+              }
+              className="accent-maroon"
+            />
+            {option.label}
+          </label>
+        ))}
+        {form.isNew && (
+          <div className="sm:col-span-2">
+            <ProductVideoUpload
+              value={form.newArrivalVideo ?? ''}
+              onChange={(url) => handleChange('newArrivalVideo', url)}
+            />
+          </div>
+        )}
       </div>
 
       {/* ── Product Details (Predefined fields) ── */}

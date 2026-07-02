@@ -1,7 +1,7 @@
-import { blouseCategoryImage, blouseProducts } from './blouseProducts'
+import { blouseProducts } from './blouseProducts'
 import { dressCategoryImage, dressProducts } from './dressProducts'
 import { kurtaCoordCategoryImage, kurtaCoordProducts } from './kurtaCoordProducts'
-import { mensCategoryImage, mensExclusiveBanner, mensProducts } from './mensProducts'
+import { mensExclusiveBanner, mensProducts } from './mensProducts'
 
 const BF = 'https://boutiquefashion.shop/wp-content/uploads'
 
@@ -15,6 +15,8 @@ export interface Product {
   href?: string
   isNew?: boolean
   onSale?: boolean
+  isBestSeller?: boolean
+  newArrivalVideo?: string
 }
 
 const onePiece: Product[] = dressProducts
@@ -104,13 +106,6 @@ export const instagramPosts = [
   { id: 4, caption: 'Elegance in Every Thread', image: `${BF}/2026/03/4.png` },
   { id: 5, caption: 'Sunshine, style, and timeless elegance', image: `${BF}/2026/03/home-ban-2.png` },
   { id: 6, caption: 'Heritage meets contemporary', image: dressCategoryImage },
-]
-
-export const categoryCards = [
-  { label: 'Dresses', count: dressProducts.length, image: dressCategoryImage, href: '/dress/one-piece' },
-  { label: 'Kurta Set / Coord Set', count: kurtaCoordProducts.length, image: kurtaCoordCategoryImage, href: '/dress/two-piece' },
-  { label: 'Blouse', count: blouseProducts.length, image: blouseCategoryImage, href: '/blouse' },
-  { label: "Men's", count: mensProducts.length, image: mensCategoryImage, href: '/mens' },
 ]
 
 export const brandAssets = {

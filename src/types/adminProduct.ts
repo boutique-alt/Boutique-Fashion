@@ -17,11 +17,14 @@ export interface AdminProductInput {
   description: string
   onSale?: boolean
   isNew?: boolean
+  isBestSeller?: boolean
+  newArrivalVideo?: string
   fabric?: string
   washCare?: string[]
   productDetails?: Record<string, string>   // e.g. { Material: 'Chanderi', Craft: 'Embroidered' }
   addons?: ProductAddon[]
   sku?: string
+  shopCategorySelections?: string[]
 }
 
 export interface AdminProduct extends AdminProductInput {

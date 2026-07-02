@@ -55,6 +55,16 @@ export default function AdminOrderRow({ order, onSaved }: AdminOrderRowProps) {
         <span className={`ml-2 text-xs ${order.paymentStatus === 'paid' ? 'text-maroon' : 'text-gold'}`}>
           {order.paymentStatus}
         </span>
+        {order.paymentScreenshotUrl && (
+          <a
+            href={order.paymentScreenshotUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 block text-[10px] text-maroon hover:underline"
+          >
+            View screenshot
+          </a>
+        )}
       </td>
       <td className="px-4 py-3">
         {locked ? (

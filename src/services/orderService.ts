@@ -208,6 +208,7 @@ export async function createOrder(params: {
   paymentStatus: PaymentStatus
   razorpayPaymentId?: string
   razorpayOrderId?: string
+  paymentScreenshotUrl?: string
   accountEmail: string
 }): Promise<Order> {
   const status = params.paymentStatus === 'paid' ? 'processing' : 'pending'
@@ -232,6 +233,7 @@ export async function createOrder(params: {
       paymentStatus: params.paymentStatus,
       razorpayPaymentId: params.razorpayPaymentId,
       razorpayOrderId: params.razorpayOrderId,
+      paymentScreenshotUrl: params.paymentScreenshotUrl,
       status,
       createdAt: new Date().toISOString(),
     }
@@ -261,6 +263,7 @@ export async function createOrder(params: {
     status,
     razorpay_payment_id: params.razorpayPaymentId ?? null,
     razorpay_order_id: params.razorpayOrderId ?? null,
+    payment_screenshot_url: params.paymentScreenshotUrl ?? null,
     created_at: createdAt,
   }
 

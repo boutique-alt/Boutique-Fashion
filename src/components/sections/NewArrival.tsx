@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom'
 import SectionProductGrid from '../ui/SectionProductGrid'
 import { useProductCatalog } from '../../hooks/useProductCatalog'
 
-export default function SummerSale() {
+export default function NewArrival() {
   const { products } = useProductCatalog()
 
-  const bestSellers = useMemo(
-    () => products.filter((p) => p.isBestSeller),
+  const newArrivals = useMemo(
+    () => products.filter((p) => p.isNew),
     [products],
   )
 
   return (
     <section className="py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionProductGrid title="Best Seller Products" products={bestSellers} limit={4} />
+        <SectionProductGrid title="New Arrival" products={newArrivals} limit={4} showVideo />
         <div className="mt-10 text-center">
           <Link
             to="/shop/all"
