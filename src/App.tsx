@@ -14,6 +14,7 @@ import CartPage from './pages/CartPage'
 import WishlistPage from './pages/WishlistPage'
 import AccountPage, { AccountOrdersPage, AccountReturnsPage } from './pages/AccountPage'
 import CheckoutPage from './pages/CheckoutPage'
+import LegalDocumentPage from './pages/LegalDocumentPage'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
 import AdminOrdersPage from './pages/admin/AdminOrdersPage'
@@ -30,6 +31,8 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path="about-us" element={<AboutPage />} />
           <Route path="contact-us" element={<ContactPage />} />
+          <Route path="terms-and-conditions" element={<LegalDocumentPage variant="terms" />} />
+          <Route path="privacy-policy" element={<LegalDocumentPage variant="privacy" />} />
           <Route path="fabric" element={<FabricPage />} />
           <Route path="bridal" element={<BridalPage />} />
           <Route path="bridal/women" element={<CategoryPage slug="blouse" />} />

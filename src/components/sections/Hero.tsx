@@ -18,13 +18,13 @@ export default function Hero() {
 
   return (
     <section
-      className="under-site-header relative w-full overflow-x-hidden"
+      className="relative w-full overflow-x-hidden"
       style={{ backgroundColor: slide.bgColor }}
     >
       <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white/20 to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white/20 to-transparent" />
 
-      <div className="pointer-events-none absolute inset-x-0 top-[var(--site-header-height)] flex justify-center pt-4 md:pt-6">
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center pt-4 md:pt-6">
         <img
           src={brandAssets.logo}
           alt=""

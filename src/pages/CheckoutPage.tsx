@@ -139,7 +139,7 @@ export default function CheckoutPage() {
   if (placed) {
     return (
       <main>
-        <section className="flex min-h-[60vh] items-center justify-center py-20 pt-[var(--site-header-height)]">
+        <section className="flex min-h-[60vh] items-center justify-center py-20">
           <div className="px-4 text-center">
             <CheckCircle size={56} className="mx-auto text-maroon" />
             <h1 className="mt-6 font-serif text-3xl text-charcoal">Order Placed!</h1>

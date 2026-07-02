@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import PageBanner from '../components/layout/PageBanner'
@@ -15,6 +16,10 @@ export default function ProductPage() {
   useProductCatalog()
   const product = slug ? getProductBySlug(slug) : undefined
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [slug])
+
   if (!product) {
     return <Navigate to="/dress" replace />
   }
@@ -23,7 +28,7 @@ export default function ProductPage() {
   const { prev, next } = getAdjacentProducts(slug!)
 
   return (
-    <main>
+    <main key={slug}>
       <PageBanner
         title={product.name}
         image={aboutAssets.banner}

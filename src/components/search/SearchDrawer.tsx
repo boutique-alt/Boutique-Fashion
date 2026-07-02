@@ -40,7 +40,7 @@ export default function SearchDrawer() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search products..."
+              placeholder="Search dresses, fabrics, bridal & more"
               className="flex-1 bg-transparent text-sm text-charcoal outline-none placeholder:text-charcoal/40"
             />
             <button onClick={close} className="text-charcoal/60 transition-colors hover:text-maroon" aria-label="Close search">

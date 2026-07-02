@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { isSupabaseConfigured } from '../config/env'
 import { loadContactMessages } from '../services/contactService'
 import { loadOrders } from '../services/orderService'
@@ -12,19 +12,17 @@ const catalogChannel = typeof BroadcastChannel !== 'undefined'
   : null
 
 export default function AppBootstrap({ children }: { children: ReactNode }) {
-  const [ready, setReady] = useState(!isSupabaseConfigured())
-
   useEffect(() => {
     if (!isSupabaseConfigured()) return
 
-    Promise.all([
+    void Promise.all([
       hydrateProductStore(),
       hydrateShopCategoryStore(),
       loadOrders(),
       loadReturns(),
       loadContactMessages(),
       loadPageVisits(),
-    ]).finally(() => setReady(true))
+    ])
 
     const onVisible = () => {
       if (document.visibilityState === 'visible') {
@@ -44,6 +42,5 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  if (!ready) return null
   return children
 }

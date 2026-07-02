@@ -13,6 +13,8 @@ import { fetchReturnsByEmail } from '../services/returnService'
 import ReturnStatusBadge from '../components/return/ReturnStatusBadge'
 import ReturnStatusStepper from '../components/return/ReturnStatusStepper'
 import { getOrCreateProfile, updateProfile } from '../services/profileService'
+import PasswordInput from '../components/ui/PasswordInput'
+import RegisterConsentCheckboxes from '../components/account/RegisterConsentCheckboxes'
 import { customerSignIn, customerSignUp } from '../services/authService'
 import { adminLogin, isAdminCredentials } from '../services/adminService'
 import { env, isSupabaseConfigured } from '../config/env'
@@ -29,6 +31,9 @@ export default function AccountPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [message, setMessage] = useState('')
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [saved, setSaved] = useState(false)
@@ -62,6 +67,9 @@ export default function AccountPage() {
   const finishAuth = (session: UserSession) => {
     login(session)
     setPassword('')
+    setConfirmPassword('')
+    setAcceptedTerms(false)
+    setAcceptedPrivacy(false)
     setAuthLoading(false)
     setMessage('')
     if (redirectTo?.startsWith('/') && redirectTo.split('?')[0] !== '/account') {
@@ -77,6 +85,18 @@ export default function AccountPage() {
     }
     if (mode === 'register' && !name) {
       setMessage('Please enter your name.')
+      return
+    }
+    if (mode === 'register' && password !== confirmPassword) {
+      setMessage('Passwords do not match.')
+      return
+    }
+    if (mode === 'register' && !acceptedTerms) {
+      setMessage('Please accept the Terms & Conditions.')
+      return
+    }
+    if (mode === 'register' && !acceptedPrivacy) {
+      setMessage('Please accept the Privacy Policy.')
       return
     }
 
@@ -187,7 +207,7 @@ export default function AccountPage() {
         <div className="mx-auto max-w-md px-4 md:px-6">
           <div className="mb-6 flex border-b border-accent">
             <button
-              onClick={() => { setMode('login'); setMessage('') }}
+              onClick={() => { setMode('login'); setMessage(''); setConfirmPassword(''); setAcceptedTerms(false); setAcceptedPrivacy(false) }}
               className={`flex-1 pb-3 text-xs font-medium tracking-[0.15em] uppercase transition-colors ${
                 mode === 'login' ? 'border-b-2 border-maroon text-maroon' : 'text-charcoal/50 hover:text-charcoal'
               }`}
@@ -195,7 +215,7 @@ export default function AccountPage() {
               Log In
             </button>
             <button
-              onClick={() => { setMode('register'); setMessage('') }}
+              onClick={() => { setMode('register'); setMessage(''); setConfirmPassword(''); setAcceptedTerms(false); setAcceptedPrivacy(false) }}
               className={`flex-1 pb-3 text-xs font-medium tracking-[0.15em] uppercase transition-colors ${
                 mode === 'register' ? 'border-b-2 border-maroon text-maroon' : 'text-charcoal/50 hover:text-charcoal'
               }`}
@@ -239,13 +259,32 @@ export default function AccountPage() {
               <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                 Password *
               </label>
-              <input
-                type="password"
+              <PasswordInput
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-accent px-4 py-3 text-sm text-charcoal outline-none transition-colors focus:border-maroon"
+                onChange={setPassword}
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               />
             </div>
+            {mode === 'register' && (
+              <div>
+                <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                  Confirm Password *
+                </label>
+                <PasswordInput
+                  value={confirmPassword}
+                  onChange={setConfirmPassword}
+                  autoComplete="new-password"
+                />
+              </div>
+            )}
+            {mode === 'register' && (
+              <RegisterConsentCheckboxes
+                termsAccepted={acceptedTerms}
+                privacyAccepted={acceptedPrivacy}
+                onTermsChange={setAcceptedTerms}
+                onPrivacyChange={setAcceptedPrivacy}
+              />
+            )}
             {message && <p className="text-sm text-gold">{message}</p>}
             <button
               type="submit"
