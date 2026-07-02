@@ -6,7 +6,7 @@ import {
   getDeletedSlugs,
   getProductOverrides,
 } from '../services/productService'
-import type { AdminProduct } from '../types/adminProduct'
+import type { AdminProduct, ProductAddon } from '../types/adminProduct'
 
 export interface ProductDetail extends Product {
   slug: string
@@ -19,6 +19,9 @@ export interface ProductDetail extends Product {
   categoryPath: string
   fabric?: string
   washCare?: string[]
+  productDetails?: Record<string, string>
+  addons?: ProductAddon[]
+  sku?: string
   source?: 'static' | 'admin'
   adminId?: string
 }
@@ -91,6 +94,11 @@ function adminToDetail(product: AdminProduct): ProductDetail {
     categorySlug: product.categorySlug,
     categoryLabel: product.categoryLabel,
     categoryPath: product.categoryPath,
+    fabric: product.fabric,
+    washCare: product.washCare,
+    productDetails: product.productDetails,
+    addons: product.addons,
+    sku: product.sku,
     source: 'admin',
     adminId: product.id,
   }

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Layers } from 'lucide-react'
 import PageBanner from '../components/layout/PageBanner'
+import ProductCard from '../components/ui/ProductCard'
+import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets, aboutPillars } from '../data/about'
 
 const fabrics = [
@@ -12,6 +14,9 @@ const fabrics = [
 ]
 
 export default function FabricPage() {
+  const { products: catalog } = useProductCatalog()
+  const fabricProducts = catalog.filter((p) => p.categorySlug === 'fabric')
+
   return (
     <main>
       <PageBanner
@@ -70,6 +75,20 @@ export default function FabricPage() {
           </div>
         </div>
       </section>
+
+      {/* Fabric products list if there are any */}
+      {fabricProducts.length > 0 && (
+        <section className="py-16 border-t border-accent bg-[#FCFAFA]">
+          <div className="mx-auto max-w-7xl px-4 md:px-6">
+            <h3 className="font-serif text-2xl text-center text-charcoal mb-10">Shop Our Premium Fabrics</h3>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+              {fabricProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   )
 }

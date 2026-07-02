@@ -19,7 +19,14 @@ export interface Product {
 
 const onePiece: Product[] = dressProducts
 
-const twoPiece: Product[] = kurtaCoordProducts
+const coordSets: Product[] = kurtaCoordProducts.filter(
+  (p) =>
+    p.name.toLowerCase().includes('coord') ||
+    p.name.toLowerCase().includes('skirt') ||
+    p.name.toLowerCase().includes('pant'),
+)
+
+const kurtaSets: Product[] = kurtaCoordProducts.filter((p) => !coordSets.includes(p))
 
 const blouse: Product[] = blouseProducts
 
@@ -27,17 +34,18 @@ const mens: Product[] = mensProducts
 
 export const bestSellerProducts: Record<string, Product[]> = {
   'ONE PIECE': onePiece,
-  'TWO PIECE': twoPiece,
+  'KURTA SET': kurtaSets,
+  'COORD SET': coordSets,
   BLOUSE: blouse,
 }
 
 export const exclusiveCollectionProducts: Product[] = [
   onePiece[0],
-  twoPiece[0],
+  kurtaCoordProducts[0],
   onePiece[1],
-  twoPiece[9],
+  kurtaCoordProducts[9],
   blouse[0],
-  twoPiece[10],
+  kurtaCoordProducts[10],
 ]
 
 export const mensCollectionProducts: Product[] = mens

@@ -17,7 +17,14 @@ export interface CategoryConfig {
 
 const onePiece: Product[] = dressProducts
 
-const twoPiece: Product[] = kurtaCoordProducts
+const coordSets: Product[] = kurtaCoordProducts.filter(
+  (p) =>
+    p.name.toLowerCase().includes('coord') ||
+    p.name.toLowerCase().includes('skirt') ||
+    p.name.toLowerCase().includes('pant'),
+)
+
+const kurtaSets: Product[] = kurtaCoordProducts.filter((p) => !coordSets.includes(p))
 
 const mens: Product[] = mensProducts
 
@@ -35,11 +42,19 @@ export const allCategories: CategoryConfig[] = [
     parent: { label: 'Collection', href: '/dress' },
   },
   {
-    slug: 'two-piece',
-    title: 'Kurta Set / Coord Set',
-    description: 'Coordinated kurta sets and coord sets for effortless ethnic elegance.',
-    count: kurtaCoordProducts.length,
-    products: twoPiece,
+    slug: 'kurta-set',
+    title: 'Kurta Set',
+    description: 'Elegant kurta sets for effortless ethnic style.',
+    count: kurtaSets.length,
+    products: kurtaSets,
+    parent: { label: 'Collection', href: '/dress' },
+  },
+  {
+    slug: 'coord-set',
+    title: 'Coord Set',
+    description: 'Coordinated crop tops, skirts and pants sets for contemporary style.',
+    count: coordSets.length,
+    products: coordSets,
     parent: { label: 'Collection', href: '/dress' },
   },
   {
@@ -74,10 +89,26 @@ export const allCategories: CategoryConfig[] = [
     products: threePiece,
     parent: { label: 'Collection', href: '/dress' },
   },
+  {
+    slug: 'fabric',
+    title: 'Fabric',
+    description: 'Premium fabrics, handloom cottons, chanderi silks and modal textiles.',
+    count: 0,
+    products: [],
+    parent: { label: 'Collection', href: '/fabric' },
+  },
+  {
+    slug: 'bridal',
+    title: 'Bridal',
+    description: 'Designer bridal wear and luxury occasion sets.',
+    count: 0,
+    products: [],
+    parent: { label: 'Collection', href: '/bridal' },
+  },
 ]
 
 export const dressCategories = allCategories.filter((c) =>
-  c.slug === 'one-piece' || c.slug === 'two-piece' || c.slug === 'tops-pant-skirt',
+  c.slug === 'one-piece' || c.slug === 'kurta-set' || c.slug === 'coord-set' || c.slug === 'tops-pant-skirt',
 )
 
 export function getCategoryBySlug(slug: string): CategoryConfig | undefined {

@@ -1,33 +1,114 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { brandAssets } from '../../data/products'
+
+const col1Images = [
+  '/images/dresses/olive-green-mul-chanderi-boolean-work-three-piece-set-main.png',
+  '/images/dresses/maroon-heritage-handblock-cotton-midi-dress-main.png',
+  '/images/dresses/white-khadi-embroidery-dress-main.png',
+  '/images/dresses/pure-modal-kaftaan-purple-dress-main.png',
+]
+
+const col2Images = [
+  '/images/dresses/cotton-handblock-braided-sleeve-kurti-set-main.png',
+  '/images/dresses/blue-halter-neck-cotton-dress-main.png',
+  '/images/dresses/white-begumpuri-long-a-line-dress-main.png',
+  '/images/dresses/teal-green-handpainted-inner-shrug-chanderi-silk-main.png',
+]
+
+const col3Images = [
+  '/images/dresses/forest-inspired-tiger-handblock-print-shirt-main.png',
+  '/images/dresses/classic-maroon-square-motif-cotton-shirt-main.png',
+  '/images/dresses/brown-bagru-handblock-shirt-main.png',
+  '/images/dresses/elephant-motif-white-handblock-shirt-main.png',
+]
 
 export default function CeremonialEdit() {
   return (
-    <section className="w-full bg-[#e8e8e8] py-10 md:py-14">
-      <div className="relative mx-auto max-w-7xl px-4 md:px-6">
-        <div className="relative flex items-center justify-center">
-          <img
-            src={brandAssets.newArrivalsBanner}
-            alt="New Arrivals"
-            className="w-full max-h-[520px] object-contain object-center"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
-            <p className="mb-2 font-script text-2xl text-gold md:text-3xl">New Arrivals</p>
-            <h2 className="font-serif text-3xl font-medium text-cream md:text-4xl lg:text-5xl">
-              New Arrivals
+    <section className="w-full bg-[#FAF1F1] py-12 md:py-20 overflow-hidden relative">
+      {/* Dynamic Keyframes injected locally */}
+      <style>{`
+        @keyframes scroll-up {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+        @keyframes scroll-down {
+          0% { transform: translateY(-50%); }
+          100% { transform: translateY(0); }
+        }
+        .animate-scroll-up {
+          animation: scroll-up 25s linear infinite;
+        }
+        .animate-scroll-down {
+          animation: scroll-down 30s linear infinite;
+        }
+        .animate-scroll-up-fast {
+          animation: scroll-up 20s linear infinite;
+        }
+        .marquee-col:hover .animate-scroll-up,
+        .marquee-col:hover .animate-scroll-down,
+        .marquee-col:hover .animate-scroll-up-fast {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          
+          {/* Left Column: 3-column infinite scrolling gallery */}
+          <div className="lg:col-span-7 h-[450px] md:h-[550px] overflow-hidden relative grid grid-cols-3 gap-3 md:gap-4 mask-gradient rounded-lg shadow-sm">
+            
+            {/* Column 1 */}
+            <div className="marquee-col relative flex flex-col gap-3 md:gap-4 overflow-hidden">
+              <div className="flex flex-col gap-3 md:gap-4 animate-scroll-up">
+                {[...col1Images, ...col1Images].map((img, idx) => (
+                  <div key={idx} className="w-full aspect-[3/4] overflow-hidden rounded bg-cream-dark/20 border border-accent/20">
+                    <img src={img} alt="Ceremonial detail" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Column 2 */}
+            <div className="marquee-col relative flex flex-col gap-3 md:gap-4 overflow-hidden">
+              <div className="flex flex-col gap-3 md:gap-4 animate-scroll-down">
+                {[...col2Images, ...col2Images].map((img, idx) => (
+                  <div key={idx} className="w-full aspect-[3/4] overflow-hidden rounded bg-cream-dark/20 border border-accent/20">
+                    <img src={img} alt="Ceremonial detail" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Column 3 */}
+            <div className="marquee-col relative flex flex-col gap-3 md:gap-4 overflow-hidden">
+              <div className="flex flex-col gap-3 md:gap-4 animate-scroll-up-fast">
+                {[...col3Images, ...col3Images].map((img, idx) => (
+                  <div key={idx} className="w-full aspect-[3/4] overflow-hidden rounded bg-cream-dark/20 border border-accent/20">
+                    <img src={img} alt="Ceremonial detail" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Right Column: Title, Subtitle, and Explore Button */}
+          <div className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left px-4">
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-wide text-maroon font-light uppercase mb-4 leading-tight">
+              Ceremonial Edit
             </h2>
-            <p className="mt-2 max-w-md text-sm tracking-wide text-cream/90">
-              Discover Our Signature Styles for Modern Women
+            <p className="text-sm md:text-base text-charcoal/70 font-light tracking-wide max-w-md mb-8">
+              Timeless craft for moments that matter
             </p>
             <Link
               to="/dress"
-              className="group mt-6 flex items-center gap-2 bg-cream px-8 py-2.5 text-[10px] font-medium tracking-[0.25em] text-charcoal uppercase transition-all hover:bg-maroon hover:text-cream md:mt-8 md:py-3 md:text-xs"
+              className="group inline-flex items-center justify-center gap-3 border border-maroon text-maroon hover:bg-maroon hover:text-cream px-10 py-3 rounded-full text-xs font-semibold uppercase tracking-[0.2em] transition-all duration-300 shadow-sm"
             >
-              Shop now
+              Explore
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
+
         </div>
       </div>
     </section>

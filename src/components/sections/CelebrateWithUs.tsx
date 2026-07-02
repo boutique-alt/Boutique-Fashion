@@ -1,6 +1,6 @@
 export default function CelebrateWithUs() {
   return (
-    <section className="border-y border-accent bg-[#fafafa] py-10 md:py-14">
+    <section className="border-t border-accent bg-[#fafafa] py-10 md:py-14">
       <div className="mx-auto max-w-7xl px-4 text-center md:px-6">
         <h2 className="font-serif text-2xl font-medium tracking-wide text-charcoal md:text-3xl">
           Women&apos;s Collection

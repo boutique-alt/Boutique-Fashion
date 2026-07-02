@@ -32,9 +32,9 @@ export const aboutStory = {
 
 export const aboutTimeline = [
   {
-    year: '2018',
-    title: 'The Beginning',
-    text: 'Boutique Fashion opened its doors with a small curated collection of ethnic and contemporary wear, built on family values and a love for craftsmanship.',
+    year: '1978',
+    title: 'Real State Development',
+    text: 'Started real state development.',
   },
   {
     year: '2020',
@@ -52,9 +52,9 @@ export const aboutTimeline = [
     text: 'New collections — Dresses, Kurta Sets, Suit Sets, and Fabric — joined our lineup, each designed with the same commitment to fit and quality.',
   },
   {
-    year: 'Today',
-    title: 'Fashion That Feels Like Home',
-    text: 'We continue to grow as a family-run brand, blending tradition with modern design for every occasion.',
+    year: '2026',
+    title: 'As a Secretary',
+    text: 'Started as a secretary.',
   },
 ]
 

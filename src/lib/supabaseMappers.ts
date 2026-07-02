@@ -81,6 +81,11 @@ export interface DbProduct {
   description: string
   on_sale: boolean
   is_new: boolean
+  fabric: string | null
+  wash_care: string[] | null
+  product_details: Record<string, string> | null
+  addons: any[] | null
+  sku: string | null
   created_at: string
   updated_at: string
 }
@@ -169,6 +174,11 @@ export function mapProduct(row: DbProduct): AdminProduct {
     description: row.description,
     onSale: row.on_sale,
     isNew: row.is_new,
+    fabric: row.fabric ?? undefined,
+    washCare: row.wash_care ?? undefined,
+    productDetails: row.product_details ?? undefined,
+    addons: row.addons ?? undefined,
+    sku: row.sku ?? undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   }
@@ -190,6 +200,11 @@ export function productToDb(input: Omit<AdminProduct, 'id' | 'createdAt' | 'upda
     description: input.description,
     on_sale: input.onSale ?? false,
     is_new: input.isNew ?? false,
+    fabric: input.fabric ?? null,
+    wash_care: input.washCare ?? null,
+    product_details: input.productDetails ?? null,
+    addons: input.addons ?? null,
+    sku: input.sku ?? null,
   }
 }
 

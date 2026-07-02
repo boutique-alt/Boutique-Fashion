@@ -27,7 +27,8 @@ export const mainNav: NavItem[] = [
     href: '/dress',
     children: [
       { label: 'Dresses', href: '/dress/one-piece' },
-      { label: 'Kurta Set / Coord Set', href: '/dress/two-piece' },
+      { label: 'Kurta Set', href: '/dress/kurta-set' },
+      { label: 'Coord Set', href: '/dress/coord-set' },
       { label: 'Tops with Pant / Skirt', href: '/dress/tops-pant-skirt' },
       { label: 'Suit Set', href: '/three-piece' },
     ],
@@ -51,7 +52,8 @@ export const footerQuickLinks = ['My Account', 'Cart', 'Wishlist', 'Checkout']
 
 export const footerCategories = [
   { label: 'Dresses', href: '/dress/one-piece' },
-  { label: 'Kurta Set / Coord Set', href: '/dress/two-piece' },
+  { label: 'Kurta Set', href: '/dress/kurta-set' },
+  { label: 'Coord Set', href: '/dress/coord-set' },
   { label: 'Tops with Pant / Skirt', href: '/dress/tops-pant-skirt' },
   { label: 'Suit Set', href: '/three-piece' },
   { label: 'Blouse', href: '/blouse' },

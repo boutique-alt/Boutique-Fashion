@@ -8,12 +8,28 @@ interface TabbedProductGridProps {
   productsByTab: Record<string, Product[]>
   title?: string
   subtitle?: string
+  limit?: number
+  activeTab?: string
+  onTabChange?: (tab: string) => void
 }
 
-export default function TabbedProductGrid({ tabs, productsByTab, title, subtitle }: TabbedProductGridProps) {
-  const [activeTab, setActiveTab] = useState(tabs[0])
+export default function TabbedProductGrid({ 
+  tabs, 
+  productsByTab, 
+  title, 
+  subtitle, 
+  limit,
+  activeTab: controlledActiveTab,
+  onTabChange
+}: TabbedProductGridProps) {
+  const [localActiveTab, setLocalActiveTab] = useState(tabs[0])
+  const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : localActiveTab
+  const setActiveTab = onTabChange !== undefined ? onTabChange : setLocalActiveTab
 
-  const products = productsByTab[activeTab] ?? productsByTab[tabs[0]] ?? []
+  let products = productsByTab[activeTab] ?? productsByTab[tabs[0]] ?? []
+  if (limit) {
+    products = products.slice(0, limit)
+  }
 
   return (
     <div>

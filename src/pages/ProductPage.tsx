@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import PageBanner from '../components/layout/PageBanner'
 import ProductGallery from '../components/product/ProductGallery'
 import ProductPurchase from '../components/product/ProductPurchase'
-import ProductTabs from '../components/product/ProductTabs'
+
 import ProductCard from '../components/ui/ProductCard'
 import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
 import { useProductCatalog } from '../hooks/useProductCatalog'
@@ -57,11 +57,12 @@ export default function ProductPage() {
 
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-            <ProductGallery images={product.images} name={product.name} />
+          <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="sticky top-24">
+              <ProductGallery images={product.images} name={product.name} />
+            </div>
             <ProductPurchase product={product} />
           </div>
-          <ProductTabs product={product} />
         </div>
       </section>
 

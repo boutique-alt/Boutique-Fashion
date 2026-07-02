@@ -5,7 +5,7 @@ import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryT
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets } from '../data/about'
 
-const bridalSlugs = new Set(['blouse', 'three-piece'])
+const bridalSlugs = new Set(['blouse', 'three-piece', 'bridal'])
 
 export default function BridalPage() {
   const { products: catalog } = useProductCatalog()
