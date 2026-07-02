@@ -82,7 +82,7 @@ export default function AdminDashboardPage() {
             <li className="flex justify-between">
               <span>Data Storage</span>
               <span className="text-maroon">
-                {isSupabaseConfigured() ? 'Supabase' : 'localStorage (demo)'}
+                Supabase
               </span>
             </li>
           </ul>

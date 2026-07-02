@@ -1,13 +1,5 @@
 import { env, isSupabaseConfigured } from '../config/env'
 import { getSupabaseAdmin } from '../lib/supabaseAdmin'
-import { loadStore, saveStore } from './storage'
-
-const KEY = 'admin-session'
-
-interface AdminSession {
-  loggedIn: boolean
-  loggedInAt: string
-}
 
 export interface AdminSyncResult {
   ok: boolean
@@ -16,11 +8,6 @@ export interface AdminSyncResult {
 
 let adminVerified = false
 let lastSyncError: string | undefined
-
-function isAdminLoggedInLocal(): boolean {
-  const session = loadStore<AdminSession | null>(KEY, null)
-  return Boolean(session?.loggedIn)
-}
 
 function matchesEnvAdmin(email: string, password: string): boolean {
   return (
@@ -100,7 +87,7 @@ export async function hasSupabaseAdminSession(): Promise<boolean> {
 }
 
 export async function syncSupabaseAdminSession(): Promise<AdminSyncResult> {
-  if (!isSupabaseConfigured() || !isAdminLoggedInLocal()) {
+  if (!isSupabaseConfigured()) {
     lastSyncError = undefined
     return { ok: false }
   }
@@ -109,6 +96,10 @@ export async function syncSupabaseAdminSession(): Promise<AdminSyncResult> {
     await ensureAdminUserRow()
     lastSyncError = undefined
     return { ok: true }
+  }
+
+  if (!adminVerified) {
+    return { ok: false, error: 'Admin not signed in' }
   }
 
   const result = await signInOrCreateAdminUser()
@@ -123,18 +114,21 @@ export async function syncSupabaseAdminSession(): Promise<AdminSyncResult> {
 }
 
 export function isAdminLoggedIn(): boolean {
-  return isAdminLoggedInLocal() || adminVerified
+  return adminVerified
 }
 
 export async function verifyAdminSession(): Promise<boolean> {
-  if (!isAdminLoggedInLocal()) {
+  if (!isSupabaseConfigured()) {
     adminVerified = false
     return false
   }
 
-  adminVerified = true
-  await syncSupabaseAdminSession()
-  return true
+  const ok = await hasSupabaseAdminSession()
+  adminVerified = ok
+  if (ok) {
+    await ensureAdminUserRow()
+  }
+  return ok
 }
 
 export async function adminLogin(
@@ -145,17 +139,18 @@ export async function adminLogin(
     return { ok: false, error: 'Invalid email or password' }
   }
 
-  saveStore(KEY, { loggedIn: true, loggedInAt: new Date().toISOString() })
-  adminVerified = true
-
-  const sync = await syncSupabaseAdminSession()
-  if (isSupabaseConfigured() && !sync.ok) {
-    return {
-      ok: true,
-      syncWarning: sync.error ?? 'Logged in locally, but cloud sync failed. Product saves may not appear on the storefront.',
-    }
+  if (!isSupabaseConfigured()) {
+    return { ok: false, error: 'Supabase is required for admin login' }
   }
 
+  const sync = await signInOrCreateAdminUser()
+  if (!sync.ok) {
+    return { ok: false, error: sync.error ?? 'Admin login failed' }
+  }
+
+  await ensureAdminUserRow()
+  adminVerified = true
+  lastSyncError = undefined
   return { ok: true }
 }
 
@@ -165,7 +160,6 @@ export async function adminLogout(): Promise<void> {
   if (isSupabaseConfigured()) {
     await getSupabaseAdmin().auth.signOut()
   }
-  localStorage.removeItem('bf-admin-session')
 }
 
 export function usesSupabaseAdmin(): boolean {

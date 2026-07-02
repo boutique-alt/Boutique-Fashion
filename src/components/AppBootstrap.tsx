@@ -7,6 +7,10 @@ import { hydrateProductStore } from '../services/productService'
 import { hydrateShopCategoryStore } from '../services/shopCategoryService'
 import { loadReturns } from '../services/returnService'
 
+const catalogChannel = typeof BroadcastChannel !== 'undefined'
+  ? new BroadcastChannel('bf-catalog')
+  : null
+
 export default function AppBootstrap({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(!isSupabaseConfigured())
 
@@ -29,19 +33,14 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
     }
     document.addEventListener('visibilitychange', onVisible)
 
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === 'bf-catalog-bump') {
-        void hydrateProductStore()
-      }
-      if (e.key === 'bf-shop-categories-bump') {
-        void hydrateShopCategoryStore()
-      }
+    const onCatalogMessage = () => {
+      void hydrateProductStore()
     }
-    window.addEventListener('storage', onStorage)
+    catalogChannel?.addEventListener('message', onCatalogMessage)
 
     return () => {
       document.removeEventListener('visibilitychange', onVisible)
-      window.removeEventListener('storage', onStorage)
+      catalogChannel?.removeEventListener('message', onCatalogMessage)
     }
   }, [])
 

@@ -10,54 +10,32 @@ import { getProductBySlug } from '../data/productCatalog'
 import { getSupabase } from '../lib/supabase'
 import { mapPageVisit, type DbPageVisit } from '../lib/supabaseMappers'
 import { getSupabaseForAdminData } from './adminDataClient'
-import { isAdminLoggedIn } from './adminService'
-import { loadStore, saveStore } from './storage'
-
-const KEY = 'page-visits'
 
 let visitsCache: PageVisit[] | null = null
 
-function getVisitsLocal(): PageVisit[] {
-  return loadStore<PageVisit[]>(KEY, [])
-}
-
-function mergeVisits(remote: PageVisit[], local: PageVisit[]): PageVisit[] {
-  const key = (v: PageVisit) => `${v.path}|${v.timestamp}|${v.productSlug ?? ''}`
-  const map = new Map<string, PageVisit>()
-  for (const v of local) map.set(key(v), v)
-  for (const v of remote) map.set(key(v), v)
-  return [...map.values()].sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-  )
-}
-
 export async function loadPageVisits(): Promise<PageVisit[]> {
-  const local = getVisitsLocal()
-
   if (!isSupabaseConfigured()) {
-    visitsCache = local
-    return local
+    visitsCache = []
+    return []
   }
 
-  let remote: PageVisit[] = []
   const adminClient = await getSupabaseForAdminData()
-  if (adminClient) {
-    const { data } = await adminClient
-      .from('page_visits')
-      .select('*')
-      .order('created_at', { ascending: false })
-    remote = data ? (data as DbPageVisit[]).map(mapPageVisit) : []
+  if (!adminClient) {
+    visitsCache = []
+    return []
   }
 
-  visitsCache = mergeVisits(remote, local)
+  const { data } = await adminClient
+    .from('page_visits')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  visitsCache = data ? (data as DbPageVisit[]).map(mapPageVisit) : []
   return visitsCache
 }
 
 export function getPageVisits(): PageVisit[] {
-  if (visitsCache) return visitsCache
-  if (!isSupabaseConfigured()) return getVisitsLocal()
-  if (isAdminLoggedIn()) return getVisitsLocal()
-  return []
+  return visitsCache ?? []
 }
 
 export function trackPageVisit(
@@ -71,16 +49,9 @@ export function trackPageVisit(
     productName: meta?.productName,
   }
 
-  if (!isSupabaseConfigured()) {
-    const visits = getVisitsLocal()
-    saveStore(KEY, [...visits, visit])
-    visitsCache = [...(visitsCache ?? visits), visit]
-    return
-  }
+  visitsCache = [...(visitsCache ?? []), visit]
 
-  visitsCache = [...(visitsCache ?? getVisitsLocal()), visit]
-  const visits = getVisitsLocal()
-  saveStore(KEY, [...visits, visit])
+  if (!isSupabaseConfigured()) return
 
   void getSupabase()
     .from('page_visits')
@@ -358,7 +329,6 @@ export function getTopPages(limit = 5): { path: string; count: number }[] {
     .slice(0, limit)
 }
 
-// backwards compat
 export function getVisitsByDay(days = 7): { date: string; count: number }[] {
   const period: AnalyticsPeriod =
     days <= 7 ? '7d' : days <= 15 ? '15d' : days <= 30 ? '30d' : days <= 180 ? '6m' : '1y'

@@ -8,8 +8,8 @@ import AccountRecentOrders from '../components/account/AccountRecentOrders'
 import AccountOrderCard from '../components/account/AccountOrderCard'
 import { useStore } from '../context/StoreContext'
 import { aboutAssets } from '../data/about'
-import { getOrdersByEmail, fetchOrdersByEmail } from '../services/orderService'
-import { getReturnsByEmail, fetchReturnsByEmail } from '../services/returnService'
+import { fetchOrdersByEmail } from '../services/orderService'
+import { fetchReturnsByEmail } from '../services/returnService'
 import ReturnStatusBadge from '../components/return/ReturnStatusBadge'
 import ReturnStatusStepper from '../components/return/ReturnStatusStepper'
 import { getOrCreateProfile, updateProfile } from '../services/profileService'
@@ -21,7 +21,7 @@ import type { Order } from '../types/order'
 import type { ReturnRequest } from '../types/return'
 
 export default function AccountPage() {
-  const { user, login, logout, register } = useStore()
+  const { user, login, logout } = useStore()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirect')
@@ -37,11 +37,7 @@ export default function AccountPage() {
 
   const loadOrders = async () => {
     if (!user) return
-    if (isSupabaseConfigured()) {
-      setOrders(await fetchOrdersByEmail(user.email))
-    } else {
-      setOrders(getOrdersByEmail(user.email))
-    }
+    setOrders(await fetchOrdersByEmail(user.email))
   }
 
   useEffect(() => {
@@ -121,10 +117,6 @@ export default function AccountPage() {
           setAuthLoading(false)
           return
         }
-        if (signUp.local) {
-          finishAuth({ name, email })
-          return
-        }
 
         const signIn = await customerSignIn(email, password)
         if (!signIn.ok || !signIn.session) {
@@ -137,12 +129,8 @@ export default function AccountPage() {
       return
     }
 
-    if (mode === 'login') {
-      finishAuth({ name: name || email.split('@')[0], email })
-    } else {
-      register({ name, email })
-      finishAuth({ name, email })
-    }
+    setMessage('Supabase is not configured. Please check your environment.')
+    setAuthLoading(false)
   }
 
   const handleProfileSave = async (updates: Partial<UserProfile>) => {
@@ -285,11 +273,7 @@ export function AccountOrdersPage() {
 
   const loadOrders = async () => {
     if (!user) return
-    if (isSupabaseConfigured()) {
-      setOrders(await fetchOrdersByEmail(user.email))
-    } else {
-      setOrders(getOrdersByEmail(user.email))
-    }
+    setOrders(await fetchOrdersByEmail(user.email))
   }
 
   useEffect(() => {
@@ -368,17 +352,12 @@ export function AccountReturnsPage() {
 
   const loadReturns = async () => {
     if (!user) return
-    if (isSupabaseConfigured()) {
-      const [nextReturns, nextOrders] = await Promise.all([
-        fetchReturnsByEmail(user.email),
-        fetchOrdersByEmail(user.email),
-      ])
-      setReturns(nextReturns)
-      setOrders(nextOrders)
-    } else {
-      setReturns(getReturnsByEmail(user.email))
-      setOrders(getOrdersByEmail(user.email))
-    }
+    const [nextReturns, nextOrders] = await Promise.all([
+      fetchReturnsByEmail(user.email),
+      fetchOrdersByEmail(user.email),
+    ])
+    setReturns(nextReturns)
+    setOrders(nextOrders)
   }
 
   useEffect(() => {

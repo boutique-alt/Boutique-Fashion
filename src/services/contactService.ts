@@ -2,57 +2,44 @@ import { isSupabaseConfigured } from '../config/env'
 import { getSupabase } from '../lib/supabase'
 import { mapContact, type DbContactMessage } from '../lib/supabaseMappers'
 import type { ContactFormData, ContactMessage } from '../types/contact'
-import { getSupabaseForAdminData, mergeById } from './adminDataClient'
-import { isAdminLoggedIn } from './adminService'
-import { loadStore, saveStore } from './storage'
-
-const KEY = 'contact-messages'
+import { getSupabaseForAdminData } from './adminDataClient'
 
 let messagesCache: ContactMessage[] | null = null
-
-function getMessagesLocal(): ContactMessage[] {
-  return loadStore<ContactMessage[]>(KEY, [])
-}
-
-function saveMessageLocal(message: ContactMessage): void {
-  const messages = getMessagesLocal().filter((m) => m.id !== message.id)
-  saveStore(KEY, [message, ...messages])
-}
 
 function sortMessagesNewest(a: ContactMessage, b: ContactMessage): number {
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 }
 
 export async function loadContactMessages(): Promise<ContactMessage[]> {
-  const local = getMessagesLocal()
-
   if (!isSupabaseConfigured()) {
-    messagesCache = local
-    return local
+    messagesCache = []
+    return []
   }
 
-  let remote: ContactMessage[] = []
   const adminClient = await getSupabaseForAdminData()
-  if (adminClient) {
-    const { data } = await adminClient
-      .from('contact_messages')
-      .select('*')
-      .order('created_at', { ascending: false })
-    remote = data ? (data as DbContactMessage[]).map(mapContact) : []
+  if (!adminClient) {
+    messagesCache = []
+    return []
   }
 
-  messagesCache = mergeById(remote, local, sortMessagesNewest)
+  const { data } = await adminClient
+    .from('contact_messages')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  messagesCache = data ? (data as DbContactMessage[]).map(mapContact).sort(sortMessagesNewest) : []
   return messagesCache
 }
 
 export function getContactMessages(): ContactMessage[] {
-  if (messagesCache) return messagesCache
-  if (!isSupabaseConfigured()) return getMessagesLocal()
-  if (isAdminLoggedIn()) return getMessagesLocal()
-  return []
+  return messagesCache ?? []
 }
 
 export async function submitContactMessage(data: ContactFormData): Promise<ContactMessage> {
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase is not configured')
+  }
+
   const id = crypto.randomUUID()
   const createdAt = new Date().toISOString()
   const message: ContactMessage = {
@@ -60,12 +47,6 @@ export async function submitContactMessage(data: ContactFormData): Promise<Conta
     ...data,
     createdAt,
     read: false,
-  }
-
-  if (!isSupabaseConfigured()) {
-    saveMessageLocal(message)
-    messagesCache = [message, ...(messagesCache ?? getMessagesLocal())]
-    return message
   }
 
   const { error } = await getSupabase()
@@ -83,7 +64,6 @@ export async function submitContactMessage(data: ContactFormData): Promise<Conta
 
   if (error) throw new Error(error.message ?? 'Failed to send message')
 
-  saveMessageLocal(message)
   messagesCache = [message, ...(messagesCache ?? [])]
   return message
 }
@@ -94,19 +74,14 @@ export async function markContactMessageRead(id: string): Promise<void> {
   if (!found) return
 
   const updated = { ...found, read: true }
-  saveMessageLocal(updated)
+  messagesCache = messages.map((m) => (m.id === id ? updated : m))
 
-  if (!isSupabaseConfigured()) {
-    messagesCache = messages.map((m) => (m.id === id ? updated : m))
-    return
-  }
+  if (!isSupabaseConfigured()) return
 
   const adminClient = await getSupabaseForAdminData()
   if (adminClient) {
     await adminClient.from('contact_messages').update({ read: true }).eq('id', id)
   }
-
-  messagesCache = messages.map((m) => (m.id === id ? updated : m))
 }
 
 export function getUnreadContactCount(): number {

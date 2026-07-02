@@ -6,10 +6,19 @@ import { getSupabaseAdmin } from '../lib/supabaseAdmin'
 import { mapOverrides, mapProduct, productToDb, type DbProduct } from '../lib/supabaseMappers'
 import type { AdminProduct, AdminProductInput, ProductOverride } from '../types/adminProduct'
 import { syncSupabaseAdminSession } from './adminService'
-import { createId, loadStore, saveStore } from './storage'
 
 const catalogListeners = new Set<() => void>()
 let catalogVersion = 0
+
+const catalogChannel = typeof BroadcastChannel !== 'undefined'
+  ? new BroadcastChannel('bf-catalog')
+  : null
+
+if (catalogChannel) {
+  catalogChannel.onmessage = () => {
+    void hydrateProductStore()
+  }
+}
 
 export function getCatalogVersion(): number {
   return catalogVersion
@@ -23,12 +32,7 @@ export function subscribeProductCatalog(listener: () => void): () => void {
 function notifyCatalogChanged(): void {
   catalogVersion += 1
   catalogListeners.forEach((listener) => listener())
-  try {
-    // Triggers `storage` event in other tabs to refresh storefront catalog.
-    localStorage.setItem('bf-catalog-bump', String(Date.now()))
-  } catch {
-    // ignore
-  }
+  catalogChannel?.postMessage(catalogVersion)
 }
 
 async function requireAdminCloudSession(): Promise<void> {
@@ -37,10 +41,6 @@ async function requireAdminCloudSession(): Promise<void> {
     throw new Error(sync.error ?? 'Could not sign in to Supabase as admin. Changes were not saved.')
   }
 }
-
-const PRODUCTS_KEY = 'admin-products'
-const DELETED_KEY = 'deleted-product-slugs'
-const OVERRIDES_KEY = 'product-overrides'
 
 let productsCache: AdminProduct[] | null = null
 let deletedCache: string[] | null = null
@@ -72,6 +72,8 @@ export async function stripShopCategoriesFromOthers(
   owner: ShopCategoryOwner,
   selectedIds: string[],
 ): Promise<void> {
+  if (!isSupabaseConfigured()) return
+
   const selected = new Set(selectedIds.map(normalizeShopCategoryId))
   if (selected.size === 0) return
 
@@ -84,18 +86,6 @@ export async function stripShopCategoriesFromOthers(
     if (next.length === current.length) continue
 
     const updated: AdminProduct = { ...product, shopCategorySelections: next, updatedAt: now }
-
-    if (!isSupabaseConfigured()) {
-      const local = getAdminProductsLocal()
-      const index = local.findIndex((p) => p.id === product.id)
-      if (index >= 0) {
-        local[index] = updated
-        saveStore(PRODUCTS_KEY, local)
-        productsCache = local
-      }
-      notifyCatalogChanged()
-      continue
-    }
 
     await requireAdminCloudSession()
     const row = {
@@ -116,15 +106,6 @@ export async function stripShopCategoriesFromOthers(
     if (next.length === current.length) continue
 
     const merged: ProductOverride = { ...override, shopCategorySelections: next }
-
-    if (!isSupabaseConfigured()) {
-      const localOverrides = getProductOverridesLocal()
-      localOverrides[slug] = merged
-      saveStore(OVERRIDES_KEY, localOverrides)
-      overridesCache = localOverrides
-      notifyCatalogChanged()
-      continue
-    }
 
     await requireAdminCloudSession()
     const { error } = await getSupabaseAdmin().from('catalog_overrides').upsert({
@@ -147,29 +128,11 @@ function categoryMeta(categorySlug: string) {
   return { categoryLabel: cat.title, categoryPath }
 }
 
-function getAdminProductsLocal(): AdminProduct[] {
-  return loadStore<AdminProduct[]>(PRODUCTS_KEY, [])
-}
-
-function getDeletedSlugsLocal(): string[] {
-  return loadStore<string[]>(DELETED_KEY, [])
-}
-
-function getProductOverridesLocal(): Record<string, ProductOverride> {
-  return loadStore<Record<string, ProductOverride>>(OVERRIDES_KEY, {})
-}
-
-function mergeAdminProducts(remote: AdminProduct[], local: AdminProduct[]): AdminProduct[] {
-  const remoteIds = new Set(remote.map((p) => p.id))
-  const localOnly = local.filter((p) => !remoteIds.has(p.id))
-  return [...remote, ...localOnly]
-}
-
 export async function hydrateProductStore(): Promise<void> {
   if (!isSupabaseConfigured()) {
-    productsCache = getAdminProductsLocal()
-    deletedCache = getDeletedSlugsLocal()
-    overridesCache = getProductOverridesLocal()
+    productsCache = []
+    deletedCache = []
+    overridesCache = {}
     notifyCatalogChanged()
     return
   }
@@ -181,8 +144,7 @@ export async function hydrateProductStore(): Promise<void> {
     client.from('catalog_overrides').select('slug, override_data'),
   ])
 
-  const remote = productsRes.data ? (productsRes.data as DbProduct[]).map(mapProduct) : []
-  productsCache = mergeAdminProducts(remote, getAdminProductsLocal())
+  productsCache = productsRes.data ? (productsRes.data as DbProduct[]).map(mapProduct) : []
   deletedCache = hiddenRes.data ? hiddenRes.data.map((r: { slug: string }) => r.slug) : []
   overridesCache = overridesRes.data
     ? mapOverrides(overridesRes.data as { slug: string; override_data: ProductOverride }[])
@@ -191,21 +153,15 @@ export async function hydrateProductStore(): Promise<void> {
 }
 
 export function getAdminProducts(): AdminProduct[] {
-  if (productsCache) return productsCache
-  if (!isSupabaseConfigured()) return getAdminProductsLocal()
-  return getAdminProductsLocal()
+  return productsCache ?? []
 }
 
 export function getDeletedSlugs(): string[] {
-  if (deletedCache) return deletedCache
-  if (!isSupabaseConfigured()) return getDeletedSlugsLocal()
-  return []
+  return deletedCache ?? []
 }
 
 export function getProductOverrides(): Record<string, ProductOverride> {
-  if (overridesCache) return overridesCache
-  if (!isSupabaseConfigured()) return getProductOverridesLocal()
-  return {}
+  return overridesCache ?? {}
 }
 
 function uniqueSlug(base: string, excludeId?: string): string {
@@ -223,25 +179,14 @@ function uniqueSlug(base: string, excludeId?: string): string {
 }
 
 export async function createAdminProduct(input: AdminProductInput): Promise<AdminProduct> {
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase is not configured')
+  }
+
   const baseSlug = slugify(input.name) || 'product'
   const slug = uniqueSlug(baseSlug)
   const meta = categoryMeta(input.categorySlug)
   const now = new Date().toISOString()
-
-  if (!isSupabaseConfigured()) {
-    const product: AdminProduct = {
-      id: createId(),
-      slug,
-      ...input,
-      ...meta,
-      createdAt: now,
-      updatedAt: now,
-    }
-    saveStore(PRODUCTS_KEY, [...getAdminProductsLocal(), product])
-    productsCache = [...(productsCache ?? getAdminProductsLocal()), product]
-    notifyCatalogChanged()
-    return product
-  }
 
   const row = productToDb({ slug, ...input, ...meta })
   const id = crypto.randomUUID()
@@ -269,6 +214,10 @@ export async function createAdminProduct(input: AdminProductInput): Promise<Admi
 }
 
 export async function updateAdminProduct(id: string, input: AdminProductInput): Promise<AdminProduct | null> {
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase is not configured')
+  }
+
   const products = getAdminProducts()
   const existing = products.find((p) => p.id === id)
   if (!existing) return null
@@ -277,19 +226,6 @@ export async function updateAdminProduct(id: string, input: AdminProductInput): 
   const slug = input.name !== existing.name ? uniqueSlug(baseSlug, id) : existing.slug
   const meta = categoryMeta(input.categorySlug)
   const now = new Date().toISOString()
-
-  if (!isSupabaseConfigured()) {
-    const local = getAdminProductsLocal()
-    const index = local.findIndex((p) => p.id === id)
-    if (index < 0) return null
-    const updated: AdminProduct = { ...existing, ...input, ...meta, slug, updatedAt: now }
-    local[index] = updated
-    saveStore(PRODUCTS_KEY, local)
-    productsCache = local
-    notifyCatalogChanged()
-    return updated
-  }
-
   const updated: AdminProduct = { ...existing, ...input, ...meta, slug, updatedAt: now }
 
   await requireAdminCloudSession()
@@ -307,11 +243,7 @@ export async function updateAdminProduct(id: string, input: AdminProductInput): 
 
 export async function deleteAdminProduct(id: string): Promise<void> {
   if (!isSupabaseConfigured()) {
-    const filtered = getAdminProductsLocal().filter((p) => p.id !== id)
-    saveStore(PRODUCTS_KEY, filtered)
-    productsCache = filtered
-    notifyCatalogChanged()
-    return
+    throw new Error('Supabase is not configured')
   }
 
   await requireAdminCloudSession()
@@ -324,13 +256,7 @@ export async function deleteAdminProduct(id: string): Promise<void> {
 
 export async function deleteStaticProduct(slug: string): Promise<void> {
   if (!isSupabaseConfigured()) {
-    const deleted = getDeletedSlugsLocal()
-    if (!deleted.includes(slug)) {
-      saveStore(DELETED_KEY, [...deleted, slug])
-    }
-    deletedCache = [...(deletedCache ?? deleted), slug]
-    notifyCatalogChanged()
-    return
+    throw new Error('Supabase is not configured')
   }
 
   await requireAdminCloudSession()
@@ -342,16 +268,11 @@ export async function deleteStaticProduct(slug: string): Promise<void> {
 }
 
 export async function saveStaticProductOverride(slug: string, input: AdminProductInput): Promise<void> {
-  const override: ProductOverride = { ...input }
-
   if (!isSupabaseConfigured()) {
-    const overrides = getProductOverridesLocal()
-    overrides[slug] = override
-    saveStore(OVERRIDES_KEY, overrides)
-    overridesCache = overrides
-    notifyCatalogChanged()
-    return
+    throw new Error('Supabase is not configured')
   }
+
+  const override: ProductOverride = { ...input }
 
   await requireAdminCloudSession()
   const { error } = await getSupabaseAdmin().from('catalog_overrides').upsert({
@@ -367,16 +288,7 @@ export async function saveStaticProductOverride(slug: string, input: AdminProduc
 
 export async function restoreStaticProduct(slug: string): Promise<void> {
   if (!isSupabaseConfigured()) {
-    saveStore(DELETED_KEY, getDeletedSlugsLocal().filter((s) => s !== slug))
-    const overrides = getProductOverridesLocal()
-    delete overrides[slug]
-    saveStore(OVERRIDES_KEY, overrides)
-    deletedCache = (deletedCache ?? []).filter((s) => s !== slug)
-    const next = { ...(overridesCache ?? {}) }
-    delete next[slug]
-    overridesCache = next
-    notifyCatalogChanged()
-    return
+    throw new Error('Supabase is not configured')
   }
 
   await requireAdminCloudSession()

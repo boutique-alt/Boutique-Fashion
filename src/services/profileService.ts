@@ -1,76 +1,31 @@
 import { isSupabaseConfigured } from '../config/env'
 import { getSupabase } from '../lib/supabase'
-import { getSupabaseForAdminData } from './adminDataClient'
-import { isLocalCustomerEmail } from './authService'
 import { mapProfile, type DbProfile } from '../lib/supabaseMappers'
 import type { UserAddress, UserProfile, UserSession } from '../types/user'
-import { createId, loadStore, saveStore } from './storage'
-
-const KEY = 'profiles'
-
-function getProfiles(): Record<string, UserProfile> {
-  return loadStore<Record<string, UserProfile>>(KEY, {})
-}
-
-function saveProfiles(profiles: Record<string, UserProfile>): void {
-  saveStore(KEY, profiles)
-}
-
-function createLocalProfile(session: UserSession): UserProfile {
-  const key = session.email.toLowerCase()
-  const profiles = getProfiles()
-  if (profiles[key]) return profiles[key]
-
-  const now = new Date().toISOString()
-  const profile: UserProfile = {
-    id: createId(),
-    name: session.name,
-    email: session.email,
-    role: 'user',
-    createdAt: now,
-    updatedAt: now,
-  }
-  profiles[key] = profile
-  saveProfiles(profiles)
-  return profile
-}
-
-function usesLocalProfile(email: string): boolean {
-  if (!isSupabaseConfigured()) return true
-  return isLocalCustomerEmail(email)
-}
-
-export function getProfileByEmail(email: string): UserProfile | null {
-  const profiles = getProfiles()
-  return profiles[email.toLowerCase()] ?? null
-}
+import { getSupabaseForAdminData } from './adminDataClient'
 
 export async function fetchProfileByEmail(email: string): Promise<UserProfile | null> {
-  if (!isSupabaseConfigured() || usesLocalProfile(email)) {
-    return getProfileByEmail(email)
-  }
+  if (!isSupabaseConfigured()) return null
 
   const { data, error } = await getSupabase()
     .from('profiles')
     .select('*')
     .eq('email', email.toLowerCase())
     .maybeSingle()
-  if (error || !data) return getProfileByEmail(email)
+
+  if (error || !data) return null
   return mapProfile(data as DbProfile)
 }
 
 export async function getOrCreateProfile(session: UserSession): Promise<UserProfile> {
-  const local = getProfileByEmail(session.email)
-  if (local) return local
-
-  if (!isSupabaseConfigured() || usesLocalProfile(session.email)) {
-    return createLocalProfile(session)
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase is not configured')
   }
 
   const client = getSupabase()
   const { data: { session: authSession } } = await client.auth.getSession()
   if (!authSession?.user) {
-    return createLocalProfile(session)
+    throw new Error('Not authenticated')
   }
 
   const existing = await fetchProfileByEmail(session.email)
@@ -88,7 +43,7 @@ export async function getOrCreateProfile(session: UserSession): Promise<UserProf
     .select('*')
     .single()
 
-  if (error || !data) return createLocalProfile(session)
+  if (error || !data) throw new Error(error?.message ?? 'Failed to create profile')
   return mapProfile(data as DbProfile)
 }
 
@@ -96,22 +51,11 @@ export async function updateProfile(
   email: string,
   updates: Partial<Omit<UserProfile, 'id' | 'email' | 'createdAt'>>,
 ): Promise<UserProfile> {
-  const key = email.toLowerCase()
-
-  if (!isSupabaseConfigured() || usesLocalProfile(email)) {
-    const profiles = getProfiles()
-    const existing = profiles[key] ?? createLocalProfile({ name: updates.name ?? email.split('@')[0], email })
-    const updated: UserProfile = {
-      ...existing,
-      ...updates,
-      email: existing.email,
-      updatedAt: new Date().toISOString(),
-    }
-    profiles[key] = updated
-    saveProfiles(profiles)
-    return updated
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase is not configured')
   }
 
+  const key = email.toLowerCase()
   const payload: Record<string, unknown> = { updated_at: new Date().toISOString() }
   if (updates.name !== undefined) payload.name = updates.name
   if (updates.phone !== undefined) payload.phone = updates.phone
@@ -127,21 +71,7 @@ export async function updateProfile(
     .select('*')
     .single()
 
-  if (error || !data) {
-    const profiles = getProfiles()
-    const existing = profiles[key]
-    if (!existing) throw new Error('Profile not found')
-    const updated: UserProfile = {
-      ...existing,
-      ...updates,
-      email: existing.email,
-      updatedAt: new Date().toISOString(),
-    }
-    profiles[key] = updated
-    saveProfiles(profiles)
-    return updated
-  }
-
+  if (error || !data) throw new Error(error?.message ?? 'Profile not found')
   return mapProfile(data as DbProfile)
 }
 
@@ -154,19 +84,11 @@ export function updateProfileAddress(email: string, address: UserAddress): Promi
 }
 
 export async function getAllProfiles(): Promise<UserProfile[]> {
-  const local = Object.values(getProfiles())
+  if (!isSupabaseConfigured()) return []
 
-  if (!isSupabaseConfigured()) return local
-
-  let remote: UserProfile[] = []
   const adminClient = await getSupabaseForAdminData()
-  if (adminClient) {
-    const { data } = await adminClient.from('profiles').select('*')
-    remote = data ? (data as DbProfile[]).map(mapProfile) : []
-  }
+  if (!adminClient) return []
 
-  const byEmail = new Map<string, UserProfile>()
-  for (const p of local) byEmail.set(p.email.toLowerCase(), p)
-  for (const p of remote) byEmail.set(p.email.toLowerCase(), p)
-  return [...byEmail.values()]
+  const { data } = await adminClient.from('profiles').select('*')
+  return data ? (data as DbProfile[]).map(mapProfile) : []
 }

@@ -1,7 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { isSupabaseConfigured } from '../config/env'
 import { supabase } from '../lib/supabase'
 import { customerSignOut, getCustomerSession } from '../services/authService'
+import { fetchUserCart, saveUserCart } from '../services/cartService'
+import { fetchUserWishlist, saveUserWishlist } from '../services/wishlistService'
 
 export interface CartItem {
   key: string
@@ -40,34 +42,24 @@ interface StoreContextValue {
 
 const StoreContext = createContext<StoreContextValue | null>(null)
 
-const CART_KEY = 'bf-cart'
-const WISHLIST_KEY = 'bf-wishlist'
-const USER_KEY = 'bf-user'
-
-function loadJson<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key)
-    return raw ? (JSON.parse(raw) as T) : fallback
-  } catch {
-    return fallback
-  }
+async function loadUserData(userId: string): Promise<{ cart: CartItem[]; wishlist: string[] }> {
+  const [cart, wishlist] = await Promise.all([
+    fetchUserCart(userId),
+    fetchUserWishlist(userId),
+  ])
+  return { cart, wishlist }
 }
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>(() => loadJson(CART_KEY, []))
-  const [wishlist, setWishlist] = useState<string[]>(() => loadJson(WISHLIST_KEY, []))
-  const [user, setUser] = useState<User | null>(() => loadJson(USER_KEY, null))
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [wishlist, setWishlist] = useState<string[]>([])
+  const [user, setUser] = useState<User | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
   const [authReady, setAuthReady] = useState(!isSupabaseConfigured())
   const [searchOpen, setSearchOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
-
-  useEffect(() => { localStorage.setItem(CART_KEY, JSON.stringify(cart)) }, [cart])
-  useEffect(() => { localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist)) }, [wishlist])
-
-  useEffect(() => {
-    if (user) localStorage.setItem(USER_KEY, JSON.stringify(user))
-    else localStorage.removeItem(USER_KEY)
-  }, [user])
+  const skipNextCartSave = useRef(false)
+  const skipNextWishlistSave = useRef(false)
 
   useEffect(() => {
     if (!isSupabaseConfigured() || !supabase) {
@@ -75,22 +67,65 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       return
     }
 
-    getCustomerSession().then((session) => {
-      if (session) setUser(session)
-      setAuthReady(true)
-    })
+    const applySession = async (sessionUserId: string | null, session: User | null) => {
+      setUserId(sessionUserId)
+      setUser(session)
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        const email = session.user.email ?? ''
-        const name = (session.user.user_metadata?.name as string) || email.split('@')[0]
-        setUser({ name, email })
+      if (sessionUserId) {
+        skipNextCartSave.current = true
+        skipNextWishlistSave.current = true
+        const data = await loadUserData(sessionUserId)
+        setCart(data.cart)
+        setWishlist(data.wishlist)
+      } else {
+        setCart([])
+        setWishlist([])
       }
       setAuthReady(true)
+    }
+
+    getCustomerSession().then(async (session) => {
+      if (!supabase) return
+      const { data: { session: authSession } } = await supabase.auth.getSession()
+      await applySession(authSession?.user?.id ?? null, session)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, authSession) => {
+      if (authSession?.user) {
+        const email = authSession.user.email ?? ''
+        const name = (authSession.user.user_metadata?.name as string) || email.split('@')[0]
+        await applySession(authSession.user.id, { name, email })
+      } else {
+        await applySession(null, null)
+      }
     })
 
     return () => subscription.unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (!userId || !isSupabaseConfigured()) return
+    if (skipNextCartSave.current) {
+      skipNextCartSave.current = false
+      return
+    }
+    const timer = setTimeout(() => {
+      void saveUserCart(userId, cart).catch(() => {})
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [cart, userId])
+
+  useEffect(() => {
+    if (!userId || !isSupabaseConfigured()) return
+    if (skipNextWishlistSave.current) {
+      skipNextWishlistSave.current = false
+      return
+    }
+    const timer = setTimeout(() => {
+      void saveUserWishlist(userId, wishlist).catch(() => {})
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [wishlist, userId])
 
   const addToCart = useCallback((item: Omit<CartItem, 'key'>) => {
     const key = `${item.slug}-${item.size}`
@@ -131,8 +166,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const login = useCallback((u: User) => setUser(u), [])
   const logout = useCallback(async () => {
     await customerSignOut()
-    localStorage.removeItem(USER_KEY)
     setUser(null)
+    setUserId(null)
+    setCart([])
+    setWishlist([])
   }, [])
   const register = useCallback((u: User) => setUser(u), [])
 
