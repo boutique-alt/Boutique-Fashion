@@ -1,4 +1,5 @@
 import { allCategories } from '../data/categories'
+import { LEGACY_SHOP_CATEGORY_IDS } from '../data/shopCategories'
 import { isSupabaseConfigured } from '../config/env'
 import { getSupabase } from '../lib/supabase'
 import { getSupabaseAdmin } from '../lib/supabaseAdmin'
@@ -51,6 +52,90 @@ function slugify(name: string): string {
     .trim()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
+}
+
+function normalizeShopCategoryId(id: string): string {
+  return LEGACY_SHOP_CATEGORY_IDS[id] ?? id
+}
+
+type ShopCategoryOwner = { slug: string; adminId?: string }
+
+function isShopCategoryOwner(
+  slug: string,
+  adminId: string | undefined,
+  owner: ShopCategoryOwner,
+): boolean {
+  return slug === owner.slug || (!!owner.adminId && adminId === owner.adminId)
+}
+
+export async function stripShopCategoriesFromOthers(
+  owner: ShopCategoryOwner,
+  selectedIds: string[],
+): Promise<void> {
+  const selected = new Set(selectedIds.map(normalizeShopCategoryId))
+  if (selected.size === 0) return
+
+  const now = new Date().toISOString()
+
+  for (const product of getAdminProducts()) {
+    if (isShopCategoryOwner(product.slug, product.id, owner)) continue
+    const current = product.shopCategorySelections ?? []
+    const next = current.filter((id) => !selected.has(normalizeShopCategoryId(id)))
+    if (next.length === current.length) continue
+
+    const updated: AdminProduct = { ...product, shopCategorySelections: next, updatedAt: now }
+
+    if (!isSupabaseConfigured()) {
+      const local = getAdminProductsLocal()
+      const index = local.findIndex((p) => p.id === product.id)
+      if (index >= 0) {
+        local[index] = updated
+        saveStore(PRODUCTS_KEY, local)
+        productsCache = local
+      }
+      notifyCatalogChanged()
+      continue
+    }
+
+    await requireAdminCloudSession()
+    const row = {
+      ...productToDb({ ...updated }),
+      updated_at: now,
+    }
+    const { error } = await getSupabaseAdmin().from('products').update(row).eq('id', product.id)
+    if (error) throw new Error(error.message)
+    productsCache = (productsCache ?? []).map((p) => (p.id === product.id ? updated : p))
+    notifyCatalogChanged()
+  }
+
+  const overrides = getProductOverrides()
+  for (const [slug, override] of Object.entries(overrides)) {
+    if (isShopCategoryOwner(slug, undefined, owner)) continue
+    const current = override.shopCategorySelections ?? []
+    const next = current.filter((id) => !selected.has(normalizeShopCategoryId(id)))
+    if (next.length === current.length) continue
+
+    const merged: ProductOverride = { ...override, shopCategorySelections: next }
+
+    if (!isSupabaseConfigured()) {
+      const localOverrides = getProductOverridesLocal()
+      localOverrides[slug] = merged
+      saveStore(OVERRIDES_KEY, localOverrides)
+      overridesCache = localOverrides
+      notifyCatalogChanged()
+      continue
+    }
+
+    await requireAdminCloudSession()
+    const { error } = await getSupabaseAdmin().from('catalog_overrides').upsert({
+      slug,
+      override_data: merged,
+      updated_at: now,
+    })
+    if (error) throw new Error(error.message)
+    overridesCache = { ...(overridesCache ?? {}), [slug]: merged }
+    notifyCatalogChanged()
+  }
 }
 
 function categoryMeta(categorySlug: string) {
@@ -315,8 +400,8 @@ export const adminCategoryOptions = [
   { slug: 'coord-set', label: 'Coord Set' },
   { slug: 'tops-pant-skirt', label: 'Tops with Pant' },
   { slug: 'tops-pant-skirt', label: 'Tops with Skirt' },
-  { slug: 'mens', label: 'Groom' },
-  { slug: 'blouse', label: 'Bridal' },
+  { slug: 'mens', label: 'Grooms' },
+  { slug: 'blouse', label: 'Brides' },
   { slug: 'three-piece', label: 'Suit Set' },
   { slug: 'fabric', label: 'Fabric' },
 ]

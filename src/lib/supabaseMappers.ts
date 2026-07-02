@@ -89,6 +89,7 @@ export interface DbProduct {
   product_details: Record<string, string> | null
   addons: any[] | null
   sku: string | null
+  shop_category_selections: string[] | null
   created_at: string
   updated_at: string
 }
@@ -185,6 +186,7 @@ export function mapProduct(row: DbProduct): AdminProduct {
     productDetails: row.product_details ?? undefined,
     addons: row.addons ?? undefined,
     sku: row.sku ?? undefined,
+    shopCategorySelections: row.shop_category_selections ?? undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   }
@@ -213,6 +215,7 @@ export function productToDb(input: Omit<AdminProduct, 'id' | 'createdAt' | 'upda
     product_details: input.productDetails ?? null,
     addons: input.addons ?? null,
     sku: input.sku ?? null,
+    shop_category_selections: input.shopCategorySelections ?? [],
   }
 }
 

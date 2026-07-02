@@ -36,12 +36,37 @@ export function isLocalCustomerEmail(email: string): boolean {
   )
 }
 
+function sessionFromSupabaseUser(user: { email?: string | null; user_metadata?: Record<string, unknown> }, fallbackEmail: string): UserSession {
+  const email = user.email ?? fallbackEmail
+  const name = (user.user_metadata?.name as string) || email.split('@')[0]
+  return { name, email }
+}
+
+async function upsertCustomerProfile(userId: string, email: string, name: string): Promise<void> {
+  await getSupabase().from('profiles').upsert({
+    id: userId,
+    email: email.toLowerCase(),
+    name,
+    updated_at: new Date().toISOString(),
+  })
+}
+
+function isAlreadyRegisteredError(message: string): boolean {
+  const lower = message.toLowerCase()
+  return lower.includes('already registered') || lower.includes('already been registered')
+}
+
+function isEmailNotConfirmedError(message: string): boolean {
+  return message.toLowerCase().includes('email not confirmed')
+}
+
 export async function customerSignUp(
   name: string,
   email: string,
   password: string,
 ): Promise<{ ok: boolean; error?: string; local?: boolean }> {
-  saveLocalAccount({ email, name, password })
+  const normalizedEmail = email.trim().toLowerCase()
+  saveLocalAccount({ email: normalizedEmail, name, password })
 
   if (!isSupabaseConfigured()) {
     return { ok: true, local: true }
@@ -49,58 +74,100 @@ export async function customerSignUp(
 
   const client = getSupabase()
   const { data, error } = await client.auth.signUp({
-    email,
+    email: normalizedEmail,
     password,
     options: { data: { name } },
   })
 
-  if (error || !data.user || !data.session) {
-    return { ok: true, local: true }
+  if (error) {
+    if (isAlreadyRegisteredError(error.message)) {
+      const signIn = await client.auth.signInWithPassword({ email: normalizedEmail, password })
+      if (!signIn.error && signIn.data.user) {
+        await upsertCustomerProfile(signIn.data.user.id, normalizedEmail, name)
+        return { ok: true }
+      }
+      return { ok: false, error: signIn.error?.message ?? 'Account already exists. Please log in.' }
+    }
+    return { ok: false, error: error.message }
   }
 
-  await client.from('profiles').upsert({
-    id: data.user.id,
-    email: email.toLowerCase(),
-    name,
-    updated_at: new Date().toISOString(),
-  })
+  if (data.user) {
+    await upsertCustomerProfile(data.user.id, normalizedEmail, name)
+  }
 
-  return { ok: true }
+  if (data.session) {
+    return { ok: true }
+  }
+
+  const signIn = await client.auth.signInWithPassword({ email: normalizedEmail, password })
+  if (!signIn.error && signIn.data.user) {
+    return { ok: true }
+  }
+
+  if (signIn.error && isEmailNotConfirmedError(signIn.error.message)) {
+    return {
+      ok: false,
+      error: 'Account created. Please check your email to confirm, then log in.',
+    }
+  }
+
+  return { ok: true, local: true }
 }
 
 export async function customerSignIn(
   email: string,
   password: string,
 ): Promise<{ ok: boolean; error?: string; session?: UserSession }> {
-  const local = findLocalAccount(email, password)
+  const normalizedEmail = email.trim().toLowerCase()
+
+  if (isSupabaseConfigured()) {
+    const client = getSupabase()
+    const { data, error } = await client.auth.signInWithPassword({
+      email: normalizedEmail,
+      password,
+    })
+
+    if (!error && data.user) {
+      const { data: admin } = await client
+        .from('admin_users')
+        .select('id')
+        .eq('id', data.user.id)
+        .eq('is_active', true)
+        .maybeSingle()
+      if (admin) {
+        await client.auth.signOut()
+        return { ok: false, error: 'Please use admin login for this account' }
+      }
+
+      return {
+        ok: true,
+        session: sessionFromSupabaseUser(data.user, normalizedEmail),
+      }
+    }
+
+    if (error && !isEmailNotConfirmedError(error.message)) {
+      const local = findLocalAccount(normalizedEmail, password)
+      if (local) {
+        return { ok: true, session: { name: local.name, email: local.email } }
+      }
+      return { ok: false, error: error.message }
+    }
+
+    if (error && isEmailNotConfirmedError(error.message)) {
+      return { ok: false, error: 'Please confirm your email before logging in.' }
+    }
+  }
+
+  const local = findLocalAccount(normalizedEmail, password)
   if (local) {
     return { ok: true, session: { name: local.name, email: local.email } }
   }
 
   if (!isSupabaseConfigured()) {
-    return { ok: true, session: { name: email.split('@')[0], email } }
+    return { ok: true, session: { name: normalizedEmail.split('@')[0], email: normalizedEmail } }
   }
 
-  const client = getSupabase()
-  const { data, error } = await client.auth.signInWithPassword({ email, password })
-
-  if (!error && data.user) {
-    const { data: admin } = await client
-      .from('admin_users')
-      .select('id')
-      .eq('id', data.user.id)
-      .eq('is_active', true)
-      .maybeSingle()
-    if (admin) {
-      await client.auth.signOut()
-      return { ok: false, error: 'Please use admin login for this account' }
-    }
-
-    const name = (data.user.user_metadata?.name as string) || email.split('@')[0]
-    return { ok: true, session: { name, email: data.user.email ?? email } }
-  }
-
-  return { ok: false, error: error?.message ?? 'Login failed' }
+  return { ok: false, error: 'Login failed' }
 }
 
 export async function customerSignOut(): Promise<void> {
@@ -115,7 +182,5 @@ export async function getCustomerSession(): Promise<UserSession | null> {
   const { data: { session } } = await client.auth.getSession()
   if (!session?.user) return null
 
-  const email = session.user.email ?? ''
-  const name = (session.user.user_metadata?.name as string) || email.split('@')[0]
-  return { name, email }
+  return sessionFromSupabaseUser(session.user, session.user.email ?? '')
 }

@@ -5,9 +5,10 @@ import { uploadProductVideo } from '../../services/productVideoService'
 interface ProductVideoUploadProps {
   value: string
   onChange: (url: string) => void
+  required?: boolean
 }
 
-export default function ProductVideoUpload({ value, onChange }: ProductVideoUploadProps) {
+export default function ProductVideoUpload({ value, onChange, required }: ProductVideoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
@@ -28,7 +29,7 @@ export default function ProductVideoUpload({ value, onChange }: ProductVideoUplo
   return (
     <div>
       <label className="mb-1.5 block text-xs tracking-wide text-charcoal/70 uppercase">
-        New Arrival Video (optional)
+        New Arrival Video{required ? ' *' : ' (optional)'}
       </label>
       <div className="flex items-center gap-3">
         {value ? (

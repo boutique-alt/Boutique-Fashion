@@ -4,7 +4,6 @@ import type { ProductDetail } from '../../data/productCatalog'
 import type { AdminProductInput, ProductAddon } from '../../types/adminProduct'
 import { adminCategoryOptions } from '../../services/productService'
 import { shopCategoryCheckboxOptions } from '../../data/shopCategories'
-import { getShopCategoryConfig } from '../../services/shopCategoryService'
 import ProductImageUpload from './ProductImageUpload'
 import ProductVideoUpload from './ProductVideoUpload'
 
@@ -64,12 +63,15 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
   // Section collapse states
   const [showDetails, setShowDetails] = useState(false)
   const [showAddons, setShowAddons] = useState(false)
+  const [validationError, setValidationError] = useState('')
 
   useEffect(() => {
     if (product) {
-      const config = getShopCategoryConfig()
       const checks = Object.fromEntries(
-        shopCategoryCheckboxOptions.map((c) => [c.id, config[c.id]?.image === product.image]),
+        shopCategoryCheckboxOptions.map((c) => [
+          c.id,
+          product.shopCategorySelections?.includes(c.id) ?? false,
+        ]),
       )
       setShopCategoryChecks(checks)
       setForm({
@@ -118,6 +120,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
   }, [product])
 
   const handleChange = (field: keyof AdminProductInput, value: string | number | boolean) => {
+    setValidationError('')
     setForm((prev) => {
       const next = { ...prev, [field]: value }
       if (field === 'isNew' && !value) {
@@ -153,6 +156,12 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
     e.preventDefault()
     if (!form.image) return
 
+    if (form.isNew && !form.newArrivalVideo?.trim()) {
+      setValidationError('New Arrival video is required when New Arrival is selected.')
+      return
+    }
+
+    setValidationError('')
     const sizes = sizesText.split(',').map((s) => s.trim()).filter(Boolean)
     const productDetails: Record<string, string> = {}
     defaultDetailKeys.forEach((key) => {
@@ -247,6 +256,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
         {form.isNew && (
           <div className="sm:col-span-2">
             <ProductVideoUpload
+              required
               value={form.newArrivalVideo ?? ''}
               onChange={(url) => handleChange('newArrivalVideo', url)}
             />
@@ -325,10 +335,16 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
         )}
       </div>
 
-      {error && <p className="mt-4 text-sm text-gold">{error}</p>}
+      {(validationError || error) && (
+        <p className="mt-4 text-sm text-gold">{validationError || error}</p>
+      )}
 
       <div className="mt-6 flex gap-3">
-        <button type="submit" disabled={!form.image} className="bg-maroon px-6 py-2.5 text-xs font-medium tracking-[0.15em] text-cream uppercase hover:bg-maroon-light disabled:opacity-60">
+        <button
+          type="submit"
+          disabled={!form.image || (Boolean(form.isNew) && !form.newArrivalVideo?.trim())}
+          className="bg-maroon px-6 py-2.5 text-xs font-medium tracking-[0.15em] text-cream uppercase hover:bg-maroon-light disabled:opacity-60"
+        >
           Save
         </button>
         <button type="button" onClick={onCancel} className="border border-accent px-6 py-2.5 text-xs font-medium tracking-[0.15em] text-charcoal uppercase hover:border-maroon hover:text-maroon">

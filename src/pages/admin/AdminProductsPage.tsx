@@ -10,9 +10,9 @@ import {
   deleteAdminProduct,
   deleteStaticProduct,
   saveStaticProductOverride,
+  stripShopCategoriesFromOthers,
   updateAdminProduct,
 } from '../../services/productService'
-import { applyShopCategorySelectionFromProduct } from '../../services/shopCategoryService'
 import type { AdminProductInput } from '../../types/adminProduct'
 
 export default function AdminProductsPage() {
@@ -25,6 +25,15 @@ export default function AdminProductsPage() {
   const handleSave = async (input: AdminProductInput) => {
     try {
       setSaveError('')
+      const selections = input.shopCategorySelections ?? []
+      const owner = editing
+        ? { slug: editing.slug, adminId: editing.adminId }
+        : { slug: '', adminId: undefined }
+
+      if (selections.length > 0) {
+        await stripShopCategoriesFromOthers(owner, selections)
+      }
+
       if (editing) {
         if (editing.source === 'admin' && editing.adminId) {
           await updateAdminProduct(editing.adminId, input)
@@ -34,7 +43,6 @@ export default function AdminProductsPage() {
       } else {
         await createAdminProduct(input)
       }
-      await applyShopCategorySelectionFromProduct(input.image, input.shopCategorySelections ?? [])
       setEditing(null)
       setAdding(false)
     } catch (err) {

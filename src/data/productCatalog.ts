@@ -22,6 +22,7 @@ export interface ProductDetail extends Product {
   productDetails?: Record<string, string>
   addons?: ProductAddon[]
   sku?: string
+  shopCategorySelections?: string[]
   source?: 'static' | 'admin'
   adminId?: string
 }
@@ -101,6 +102,7 @@ function adminToDetail(product: AdminProduct): ProductDetail {
     productDetails: product.productDetails,
     addons: product.addons,
     sku: product.sku,
+    shopCategorySelections: product.shopCategorySelections,
     source: 'admin',
     adminId: product.id,
   }

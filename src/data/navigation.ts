@@ -42,8 +42,8 @@ export const mainNav: NavItem[] = [
     href: '/bridal',
     icon: 'bridal',
     children: [
-      { label: 'Bridal', href: '/bridal/women' },
-      { label: 'Groom', href: '/bridal/groom' },
+      { label: 'Brides', href: '/bridal/women' },
+      { label: 'Grooms', href: '/bridal/groom' },
     ],
   },
   { label: 'ABOUT US', href: '/about-us' },
