@@ -1,14 +1,23 @@
+import { aboutStory } from '../../data/about'
+
 export default function AboutFamilyPhoto() {
   return (
-    <section className="bg-cream px-4 py-10 md:px-6 md:py-14">
-      <div className="mx-auto w-[90%] max-w-6xl overflow-hidden shadow-md md:w-[85%]">
-        <img
-          src="/images/about/team-hero.png"
-          alt="The Boutique Fashion family — generations of craftsmanship and style"
-          className="h-auto min-h-[260px] w-full object-cover object-[center_35%] md:min-h-[440px] lg:min-h-[520px]"
-          loading="eager"
-          fetchPriority="high"
-        />
+    <section className="w-full">
+      <div className=" bg-cream px-4 py-8 text-center md:px-6 md:py-10">
+        <p className="text-xs font-medium tracking-[0.2em] text-maroon uppercase">About Us</p>
+        <p className="mt-2 font-serif text-xl text-charcoal md:text-2xl">{aboutStory.title}</p>
+        <span className="mx-auto mt-4 block h-px w-10 bg-gold" />
+      </div>
+      <div className="bg-cream px-4 py-8 md:px-8 md:py-10 lg:px-12">
+        <div className="overflow-hidden border border-accent/60 p-1 md:p-1.5">
+          <img
+            src="/images/about/team-hero.png"
+            alt="The Boutique Fashion family — generations of craftsmanship and style"
+            className="h-[220px] w-full object-cover object-[center_42%] sm:h-[280px] md:h-[340px] lg:h-[540px]"
+            loading="eager"
+            fetchPriority="high"
+          />
+        </div>
       </div>
     </section>
   )

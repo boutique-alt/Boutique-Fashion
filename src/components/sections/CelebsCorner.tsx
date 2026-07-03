@@ -19,6 +19,8 @@ export default function CelebsCorner() {
               <img
                 src={post.image}
                 alt={post.caption}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-contain object-center p-1 transition-transform duration-500 group-hover:scale-[1.03]"
               />
             </a>

@@ -1,10 +1,8 @@
 import { Navigate } from 'react-router-dom'
-import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getShopCategoryById } from '../data/shopCategories'
 import { useProductCatalog } from '../hooks/useProductCatalog'
-import { aboutAssets } from '../data/about'
 
 interface ShopCategoryLandingPageProps {
   categoryId: string
@@ -22,14 +20,6 @@ export default function ShopCategoryLandingPage({ categoryId }: ShopCategoryLand
 
   return (
     <main>
-      <PageBanner
-        title={config.label}
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: config.label },
-        ]}
-      />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <CategoryToolbar total={categoryProducts.length} onSortChange={setSort} />

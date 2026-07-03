@@ -306,14 +306,19 @@ export async function restoreStaticProduct(slug: string): Promise<void> {
   notifyCatalogChanged()
 }
 
-export const adminCategoryOptions = [
-  { slug: 'one-piece', label: 'Dresses' },
-  { slug: 'kurta-set', label: 'Kurta Set' },
-  { slug: 'coord-set', label: 'Coord Set' },
-  { slug: 'tops-pant-skirt', label: 'Tops with Pant' },
-  { slug: 'tops-pant-skirt', label: 'Tops with Skirt' },
-  { slug: 'mens', label: 'Grooms' },
-  { slug: 'blouse', label: 'Brides' },
-  { slug: 'three-piece', label: 'Suit Set' },
-  { slug: 'fabric', label: 'Fabric' },
-]
+const adminCategoryLabels: Record<string, string> = {
+  'one-piece': 'Dresses',
+  'kurta-set': 'Kurta Set',
+  'coord-set': 'Coord Set',
+  'tops-pant-skirt': 'Tops with Pant / Skirt',
+  blouse: 'Blouse',
+  mens: 'Blouse Men',
+  'three-piece': 'Suit Set',
+  fabric: 'Fabric',
+  bridal: 'Bridal',
+}
+
+export const adminCategoryOptions = allCategories.map((cat) => ({
+  slug: cat.slug,
+  label: adminCategoryLabels[cat.slug] ?? cat.title,
+}))

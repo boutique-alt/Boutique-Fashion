@@ -1,21 +1,11 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import SectionHeading from '../components/ui/SectionHeading'
 import { collectionLandingCategories } from '../data/categories'
-import { aboutAssets } from '../data/about'
 
 export default function ShopPage() {
   return (
     <main>
-      <PageBanner
-        title="Shop"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Shop' },
-        ]}
-      />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <SectionHeading title="Browse Collections" subtitle="All Categories" />

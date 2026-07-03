@@ -1,5 +1,6 @@
 import { Star } from 'lucide-react'
 import { customerReviews, type CustomerReview } from '../../data/reviews'
+import { useInView } from '../../hooks/useInView'
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -30,9 +31,10 @@ function ReviewCard({ review }: { review: CustomerReview }) {
 
 export default function CustomerReviews() {
   const track = [...customerReviews, ...customerReviews]
+  const { ref, inView } = useInView<HTMLElement>('200px')
 
   return (
-    <section className="overflow-hidden bg-cream py-14 md:py-20">
+    <section ref={ref} className={`overflow-hidden bg-cream py-14 md:py-20${inView ? '' : ' marquee-pause-offscreen'}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <h2 className="text-center font-serif text-2xl font-medium tracking-wide text-charcoal md:text-3xl lg:text-4xl">
           From Our Customers

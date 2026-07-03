@@ -1,7 +1,5 @@
 export const env = {
   razorpayKeyId: import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined,
-  adminEmail: (import.meta.env.VITE_ADMIN_EMAIL as string | undefined) ?? 'admin@boutiquefashion.com',
-  adminPassword: (import.meta.env.VITE_ADMIN_PASSWORD as string | undefined) ?? 'admin123',
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL as string | undefined,
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined,
   upiId: (import.meta.env.VITE_UPI_ID as string | undefined) ?? '2470709a@bandhan',

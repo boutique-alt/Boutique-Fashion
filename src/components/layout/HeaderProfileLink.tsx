@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { User } from 'lucide-react'
 import { useStore } from '../../context/StoreContext'
+import { useUserProfile } from '../../hooks/useUserProfile'
+import UserAvatar from '../ui/UserAvatar'
 
 interface HeaderProfileLinkProps {
   className?: string
@@ -13,6 +15,7 @@ function displayName(name: string): string {
 
 export default function HeaderProfileLink({ className = '' }: HeaderProfileLinkProps) {
   const { user } = useStore()
+  const { avatarUrl } = useUserProfile()
   const label = user ? displayName(user.name) : 'Sign In'
 
   return (
@@ -21,7 +24,11 @@ export default function HeaderProfileLink({ className = '' }: HeaderProfileLinkP
       className={`flex items-center gap-2 text-charcoal/80 transition-colors hover:text-maroon ${className}`}
       aria-label={user ? `Account, ${user.name}` : 'Sign in'}
     >
-      <User size={20} strokeWidth={1.5} className="shrink-0" />
+      {user ? (
+        <UserAvatar name={user.name} avatarUrl={avatarUrl} size="sm" />
+      ) : (
+        <User size={20} strokeWidth={1.5} className="shrink-0" />
+      )}
       <span className="hidden max-w-[6.5rem] truncate text-sm md:inline">{label}</span>
     </Link>
   )

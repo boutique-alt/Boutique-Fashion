@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import ProductGallery from '../components/product/ProductGallery'
 import ProductPurchase from '../components/product/ProductPurchase'
 
@@ -9,7 +8,6 @@ import ProductCard from '../components/ui/ProductCard'
 import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { productPath } from '../utils/productSlug'
-import { aboutAssets } from '../data/about'
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -29,16 +27,6 @@ export default function ProductPage() {
 
   return (
     <main key={slug}>
-      <PageBanner
-        title={product.name}
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: product.categoryLabel, href: product.categoryPath },
-          { label: product.name },
-        ]}
-      />
-
       {(prev || next) && (
         <div className="border-b border-accent bg-cream-dark/40">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 text-xs md:px-6">

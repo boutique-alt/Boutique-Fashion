@@ -1,10 +1,8 @@
 import { Navigate, useParams } from 'react-router-dom'
-import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getCategoryBySlug } from '../data/categories'
 import { useProductCatalog } from '../hooks/useProductCatalog'
-import { aboutAssets } from '../data/about'
 
 interface CategoryPageProps {
   slug?: string
@@ -24,15 +22,6 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
 
   return (
     <main>
-      <PageBanner
-        title={config.title}
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: config.parent.label, href: config.parent.href },
-          { label: config.title },
-        ]}
-      />
       {config.description && (
         <p className="mx-auto max-w-2xl px-4 pt-10 text-center text-sm leading-relaxed text-charcoal/60 md:px-6">
           {config.description}

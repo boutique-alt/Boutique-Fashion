@@ -2,11 +2,10 @@ import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { Lock } from 'lucide-react'
 import { adminLogin, isAdminLoggedIn } from '../../services/adminService'
-import { env } from '../../config/env'
 
 export default function AdminLoginPage() {
   const navigate = useNavigate()
-  const [email, setEmail] = useState(env.adminEmail)
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -84,15 +83,13 @@ export default function AdminLoginPage() {
         </form>
 
         <p className="mt-6 text-center text-[10px] text-charcoal/40">
-          Or sign in at{' '}
           <button
             type="button"
-            onClick={() => navigate('/account')}
+            onClick={() => navigate('/')}
             className="text-maroon hover:underline"
           >
-            My Account
+            Back to store
           </button>
-          {' '}with the same admin credentials
         </p>
       </div>
     </div>

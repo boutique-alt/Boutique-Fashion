@@ -4,6 +4,7 @@ import type { ProductDetail } from '../../data/productCatalog'
 import type { ProductAddon } from '../../types/adminProduct'
 import { useStore } from '../../context/StoreContext'
 import WishlistButton from '../wishlist/WishlistButton'
+import { brand } from '../../data/navigation'
 
 interface ProductPurchaseProps {
   product: ProductDetail
@@ -278,40 +279,38 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
 
       </div>
 
-      {/* Box 7: Payment & Customer Support */}
+      {/* Box 7: Contact & Boutique */}
       <div className="border border-accent/80 bg-white p-5 rounded-md shadow-sm divide-y divide-accent/40">
-        
-        {/* We Accept */}
+
         <div className="pb-5">
-          <h3 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">We Accept</h3>
-          <div className="flex flex-wrap gap-2 opacity-80">
-            <span className="px-3 py-1 bg-[#FAF7F7] rounded text-[10px] font-semibold tracking-wider text-charcoal/60 border border-accent/40">VISA</span>
-            <span className="px-3 py-1 bg-[#FAF7F7] rounded text-[10px] font-semibold tracking-wider text-charcoal/60 border border-accent/40">MASTERCARD</span>
-            <span className="px-3 py-1 bg-[#FAF7F7] rounded text-[10px] font-semibold tracking-wider text-charcoal/60 border border-accent/40">AMEX</span>
-            <span className="px-3 py-1 bg-[#FAF7F7] rounded text-[10px] font-semibold tracking-wider text-charcoal/60 border border-accent/40">UPI</span>
-            <span className="px-3 py-1 bg-[#FAF7F7] rounded text-[10px] font-semibold tracking-wider text-charcoal/60 border border-accent/40">NETBANKING</span>
+          <h3 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Contact Us</h3>
+          <div className="space-y-3 text-[13px] text-charcoal/70 font-light leading-relaxed">
+            <p className="font-medium text-charcoal">Find our location. Visit Our Store</p>
+            <p className="flex items-center gap-2">
+              <Phone size={13} className="text-maroon shrink-0" />
+              <a href={`tel:${brand.phone.replace(/\s/g, '')}`} className="text-maroon font-medium hover:underline">
+                {brand.phone}
+              </a>
+            </p>
+            <p className="flex items-center gap-2">
+              <Mail size={13} className="text-maroon shrink-0" />
+              <a href={`mailto:${brand.email}`} className="text-maroon font-medium hover:underline">
+                {brand.email}
+              </a>
+            </p>
           </div>
         </div>
 
-        {/* Customer Care */}
         <div className="pt-5">
-          <h3 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Customer Care</h3>
-          <div className="space-y-4 text-[13px] text-charcoal/70 font-light leading-relaxed">
+          <h3 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Our Boutique</h3>
+          <div className="space-y-2 text-[13px] text-charcoal/70 font-light leading-relaxed">
             <p>
-              <strong className="font-semibold text-charcoal">Have a question? We can help.</strong><br/>
-              Mon-Sat 10:00 AM To 6:30 PM (IST)
+              <strong className="font-semibold text-charcoal">Address:</strong>{' '}
+              {brand.address}
             </p>
             <p>
-              <strong className="font-semibold text-charcoal">For any assistance/query, Please contact at</strong><br/>
-              Sujatra, Survey no 314/3 Marble Market, Bavdhan Pune 411021, Maharashtra
-            </p>
-            <p className="flex items-center gap-2 pt-1">
-              <Phone size={13} className="text-maroon shrink-0" />
-              <span>Contact number: <a href="tel:+919881880004" className="text-maroon font-medium hover:underline">+91 9881880004</a></span>
-            </p>
-            <p className="flex items-start gap-2">
-              <Mail size={13} className="text-maroon shrink-0 mt-0.5" />
-              <span>Email: <a href="mailto:care@sujatra.com" className="text-maroon font-medium hover:underline font-normal">care@sujatra.com</a> or DM us on Instagram/Facebook.</span>
+              <strong className="font-semibold text-charcoal">Hours:</strong>{' '}
+              {brand.hours}
             </p>
           </div>
         </div>

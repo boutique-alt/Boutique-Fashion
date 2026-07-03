@@ -8,10 +8,30 @@ export default function Hero() {
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % heroSlides.length)
-    }, 5000)
-    return () => clearInterval(timer)
+    let timer: ReturnType<typeof setInterval> | undefined
+
+    const start = () => {
+      timer = setInterval(() => {
+        setCurrent((prev) => (prev + 1) % heroSlides.length)
+      }, 5000)
+    }
+
+    const stop = () => {
+      if (timer) clearInterval(timer)
+      timer = undefined
+    }
+
+    const onVisibility = () => {
+      stop()
+      if (document.visibilityState === 'visible') start()
+    }
+
+    if (document.visibilityState === 'visible') start()
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => {
+      stop()
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
   }, [])
 
   const slide = heroSlides[current]
@@ -93,6 +113,8 @@ export default function Hero() {
                     alt={slide.title}
                     className="max-h-[min(520px,65vh)] w-full object-contain md:max-h-[560px]"
                     style={{ objectPosition: slide.objectPosition ?? 'center' }}
+                    fetchPriority={current === 0 ? 'high' : 'low'}
+                    decoding="async"
                   />
                 </motion.div>
               </AnimatePresence>

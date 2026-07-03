@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import type { Product } from '../../data/products'
@@ -12,6 +13,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, showVideo }: ProductCardProps) {
   const slug = product.slug ?? slugFromHref(product.href)
   const to = slug ? productPath(slug) : '#'
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   const discount =
     product.onSale && product.originalPrice
@@ -20,18 +22,37 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
 
   const videoSrc = showVideo ? product.newArrivalVideo : undefined
 
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !videoSrc) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          void video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { rootMargin: '100px', threshold: 0.1 },
+    )
+    observer.observe(video)
+    return () => observer.disconnect()
+  }, [videoSrc])
+
   return (
     <div className="group relative">
       <Link to={to} className="block">
         <div className="relative aspect-[480/638] overflow-hidden bg-[#f4f4f4]">
           {videoSrc ? (
             <video
+              ref={videoRef}
               src={videoSrc}
               className="h-full w-full object-contain object-center"
-              autoPlay
               muted
               loop
               playsInline
+              preload="metadata"
             />
           ) : (
             <img
@@ -39,6 +60,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               alt={product.name}
               className="h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               loading="lazy"
+              decoding="async"
             />
           )}
           {product.isNew && (

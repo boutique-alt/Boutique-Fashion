@@ -3,6 +3,7 @@ import { allCategories } from './categories'
 import { slugFromHref } from '../utils/productSlug'
 import {
   getAdminProducts,
+  getCatalogVersion,
   getDeletedSlugs,
   getProductOverrides,
 } from '../services/productService'
@@ -126,7 +127,15 @@ function applyOverride(product: ProductDetail, override: ReturnType<typeof getPr
   return merged
 }
 
+let cachedCatalog: ProductDetail[] | null = null
+let cachedVersion = -1
+
 function getCatalog(): ProductDetail[] {
+  const version = getCatalogVersion()
+  if (cachedCatalog && cachedVersion === version) {
+    return cachedCatalog
+  }
+
   const deleted = new Set(getDeletedSlugs())
   const overrides = getProductOverrides()
 
@@ -139,7 +148,9 @@ function getCatalog(): ProductDetail[] {
     })
 
   const adminProducts = getAdminProducts().map(adminToDetail)
-  return [...staticProducts, ...adminProducts]
+  cachedCatalog = [...staticProducts, ...adminProducts]
+  cachedVersion = version
+  return cachedCatalog
 }
 
 export function getAllProductDetails(): ProductDetail[] {

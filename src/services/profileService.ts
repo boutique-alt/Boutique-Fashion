@@ -4,6 +4,17 @@ import { mapProfile, type DbProfile } from '../lib/supabaseMappers'
 import type { UserAddress, UserProfile, UserSession } from '../types/user'
 import { getSupabaseForAdminData } from './adminDataClient'
 
+const profileListeners = new Set<() => void>()
+
+export function subscribeProfileChanged(listener: () => void): () => void {
+  profileListeners.add(listener)
+  return () => profileListeners.delete(listener)
+}
+
+function notifyProfileChanged(): void {
+  profileListeners.forEach((listener) => listener())
+}
+
 export async function fetchProfileByEmail(email: string): Promise<UserProfile | null> {
   if (!isSupabaseConfigured()) return null
 
@@ -44,6 +55,7 @@ export async function getOrCreateProfile(session: UserSession): Promise<UserProf
     .single()
 
   if (error || !data) throw new Error(error?.message ?? 'Failed to create profile')
+  notifyProfileChanged()
   return mapProfile(data as DbProfile)
 }
 
@@ -72,6 +84,7 @@ export async function updateProfile(
     .single()
 
   if (error || !data) throw new Error(error?.message ?? 'Profile not found')
+  notifyProfileChanged()
   return mapProfile(data as DbProfile)
 }
 
