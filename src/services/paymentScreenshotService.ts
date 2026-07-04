@@ -1,8 +1,5 @@
-import { isSupabaseConfigured } from '../config/env'
-import { getSupabase } from '../lib/supabase'
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, isCloudinaryConfigured } from '../config/env'
 import { compressImageFile } from '../utils/compressImage'
-
-const BUCKET = 'payment-screenshots'
 
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -22,25 +19,25 @@ export async function uploadPaymentScreenshot(file: File): Promise<string> {
   }
 
   const compressed = await compressImageFile(file)
-  const dataUrl = await blobToDataUrl(compressed)
-
-  if (!isSupabaseConfigured()) {
-    return dataUrl
+  
+  if (!isCloudinaryConfigured()) {
+    return blobToDataUrl(compressed)
   }
 
-  const client = getSupabase()
-  const { data: { session } } = await client.auth.getSession()
-  const userId = session?.user?.id ?? 'guest'
-  const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`
+  const formData = new FormData()
+  formData.append('file', compressed)
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET!)
+  formData.append('folder', 'boutique/screenshots')
 
-  const { error } = await client.storage.from(BUCKET).upload(path, compressed, {
-    contentType: 'image/jpeg',
-    cacheControl: '3600',
-    upsert: false,
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: formData,
   })
 
-  if (error) return dataUrl
+  if (!res.ok) {
+    throw new Error('Failed to upload screenshot to Cloudinary')
+  }
 
-  const { data } = client.storage.from(BUCKET).getPublicUrl(path)
-  return data.publicUrl
+  const data = await res.json()
+  return data.secure_url
 }

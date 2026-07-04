@@ -87,7 +87,8 @@ export interface DbProduct {
   fabric: string | null
   wash_care: string[] | null
   product_details: Record<string, string> | null
-  addons: unknown[] | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addons: any[] | null
   sku: string | null
   shop_category_selections: string[] | null
   created_at: string

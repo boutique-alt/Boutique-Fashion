@@ -9,4 +9,13 @@ export const env = {
 }
 
 export const isRazorpayConfigured = () => Boolean(env.razorpayKeyId)
-export const isSupabaseConfigured = () => Boolean(env.supabaseUrl && env.supabaseAnonKey)
+export const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+export const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+
+export function isSupabaseConfigured(): boolean {
+  return Boolean(env.supabaseUrl && env.supabaseAnonKey)
+}
+
+export function isCloudinaryConfigured(): boolean {
+  return Boolean(CLOUDINARY_CLOUD_NAME && CLOUDINARY_UPLOAD_PRESET)
+}

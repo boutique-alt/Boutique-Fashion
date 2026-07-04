@@ -1,8 +1,6 @@
-import { isSupabaseConfigured } from '../config/env'
-import { getSupabaseAdmin } from '../lib/supabaseAdmin'
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, isCloudinaryConfigured } from '../config/env'
 import { hasSupabaseAdminSession, isAdminLoggedIn } from './adminService'
 
-const BUCKET = 'product-images'
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024
 
 function blobToDataUrl(blob: Blob): Promise<string> {
@@ -14,12 +12,6 @@ function blobToDataUrl(blob: Blob): Promise<string> {
   })
 }
 
-function videoExtension(file: File): string {
-  if (file.type === 'video/quicktime') return 'mov'
-  if (file.type === 'video/webm') return 'webm'
-  return 'mp4'
-}
-
 export async function uploadProductVideo(file: File): Promise<string> {
   if (!file.type.startsWith('video/')) {
     throw new Error('Please choose a video file')
@@ -28,7 +20,7 @@ export async function uploadProductVideo(file: File): Promise<string> {
     throw new Error('Video must be under 50 MB')
   }
 
-  if (!isSupabaseConfigured() || !isAdminLoggedIn()) {
+  if (!isCloudinaryConfigured() || !isAdminLoggedIn()) {
     return blobToDataUrl(file)
   }
 
@@ -36,17 +28,20 @@ export async function uploadProductVideo(file: File): Promise<string> {
     return blobToDataUrl(file)
   }
 
-  const ext = videoExtension(file)
-  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
-  const client = getSupabaseAdmin()
-  const { error } = await client.storage.from(BUCKET).upload(path, file, {
-    contentType: file.type || 'video/mp4',
-    cacheControl: '3600',
-    upsert: false,
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET!)
+  formData.append('folder', 'boutique/videos')
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`, {
+    method: 'POST',
+    body: formData,
   })
 
-  if (error) return blobToDataUrl(file)
+  if (!res.ok) {
+    throw new Error('Failed to upload video to Cloudinary')
+  }
 
-  const { data } = client.storage.from(BUCKET).getPublicUrl(path)
-  return data.publicUrl
+  const data = await res.json()
+  return data.secure_url
 }

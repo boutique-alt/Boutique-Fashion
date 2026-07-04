@@ -1,9 +1,6 @@
-import { isSupabaseConfigured } from '../config/env'
-import { getSupabaseAdmin } from '../lib/supabaseAdmin'
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, isCloudinaryConfigured } from '../config/env'
 import { compressImageFile } from '../utils/compressImage'
 import { hasSupabaseAdminSession, isAdminLoggedIn } from './adminService'
-
-const BUCKET = 'product-images'
 
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -23,26 +20,29 @@ export async function uploadProductImage(file: File): Promise<string> {
   }
 
   const compressed = await compressImageFile(file)
-  const dataUrl = await blobToDataUrl(compressed)
-
-  if (!isSupabaseConfigured() || !isAdminLoggedIn()) {
-    return dataUrl
+  
+  if (!isCloudinaryConfigured() || !isAdminLoggedIn()) {
+    return blobToDataUrl(compressed)
   }
 
   if (!(await hasSupabaseAdminSession())) {
-    return dataUrl
+    return blobToDataUrl(compressed)
   }
 
-  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`
-  const client = getSupabaseAdmin()
-  const { error } = await client.storage.from(BUCKET).upload(path, compressed, {
-    contentType: 'image/jpeg',
-    cacheControl: '3600',
-    upsert: false,
+  const formData = new FormData()
+  formData.append('file', compressed)
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET!)
+  formData.append('folder', 'boutique/products')
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: formData,
   })
 
-  if (error) return dataUrl
+  if (!res.ok) {
+    throw new Error('Failed to upload image to Cloudinary')
+  }
 
-  const { data } = client.storage.from(BUCKET).getPublicUrl(path)
-  return data.publicUrl
+  const data = await res.json()
+  return data.secure_url
 }
