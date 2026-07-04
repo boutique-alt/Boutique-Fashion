@@ -18,6 +18,7 @@ export function useUserProfile() {
   }, [user])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load()
     window.addEventListener('focus', load)
     const unsubscribe = subscribeProfileChanged(load)

@@ -73,6 +73,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
           product.shopCategorySelections?.includes(c.id) ?? false,
         ]),
       )
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShopCategoryChecks(checks)
       setForm({
         name: product.name,

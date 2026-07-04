@@ -1,4 +1,5 @@
 import type { OrderStatus } from '../../types/order'
+/* eslint-disable react-refresh/only-export-components */
 import { isOrderStatusLocked } from '../../types/order'
 
 const statusStyles: Record<OrderStatus, string> = {

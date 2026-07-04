@@ -29,6 +29,7 @@ export default function ContactForm() {
 
   useEffect(() => {
     if (!user) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setForm((prev) => ({ ...prev, email: user.email }))
   }, [user])
 

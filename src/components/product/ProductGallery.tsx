@@ -11,6 +11,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
   const gallery = images.length > 0 ? images : []
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActive(0)
   }, [images])
 

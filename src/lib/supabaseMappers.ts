@@ -87,7 +87,7 @@ export interface DbProduct {
   fabric: string | null
   wash_care: string[] | null
   product_details: Record<string, string> | null
-  addons: any[] | null
+  addons: unknown[] | null
   sku: string | null
   shop_category_selections: string[] | null
   created_at: string

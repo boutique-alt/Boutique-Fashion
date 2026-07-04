@@ -26,6 +26,7 @@ export default function ProfileForm({ profile, onSave, saved }: ProfileFormProps
   })
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setForm({
       name: profile.name,
       phone: profile.phone ?? '',

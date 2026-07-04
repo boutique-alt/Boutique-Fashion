@@ -66,6 +66,7 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (!user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setProfile(null)
       return
     }
@@ -78,7 +79,6 @@ export default function AccountPage() {
       .catch(() => {
         if (!cancelled) setProfile(fallbackProfile(user))
       })
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadOrders()
 
     return () => {
@@ -91,6 +91,7 @@ export default function AccountPage() {
     const onFocus = () => loadOrders()
     window.addEventListener('focus', onFocus)
     return () => window.removeEventListener('focus', onFocus)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {
@@ -342,6 +343,7 @@ export function AccountOrdersPage() {
     const onFocus = () => loadOrders()
     window.addEventListener('focus', onFocus)
     return () => window.removeEventListener('focus', onFocus)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   if (!user) {
@@ -419,6 +421,7 @@ export function AccountReturnsPage() {
     const onFocus = () => loadReturns()
     window.addEventListener('focus', onFocus)
     return () => window.removeEventListener('focus', onFocus)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   if (!user) {

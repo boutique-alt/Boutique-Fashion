@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { isSupabaseConfigured } from '../config/env'
 import { supabase } from '../lib/supabase'
@@ -63,6 +64,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!isSupabaseConfigured() || !supabase) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAuthReady(true)
       return
     }

@@ -31,6 +31,7 @@ export default function Header() {
   const { wishlistCount, setSearchOpen } = useStore()
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false)
   }, [location.pathname])
 

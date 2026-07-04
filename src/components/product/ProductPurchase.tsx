@@ -29,7 +29,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
 
   const { addToCart } = useStore()
 
-  const addons = product.addons ?? []
+  const addons = useMemo(() => product.addons ?? [], [product.addons])
 
   const totalPrice = useMemo(() => {
     let t = product.price

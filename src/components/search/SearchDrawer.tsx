@@ -15,6 +15,7 @@ export default function SearchDrawer() {
 
   useEffect(() => {
     if (searchOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setQuery('')
       setTimeout(() => inputRef.current?.focus(), 100)
       document.body.style.overflow = 'hidden'

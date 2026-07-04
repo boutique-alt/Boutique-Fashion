@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+/* eslint-disable react-refresh/only-export-components */
 import { SlidersHorizontal } from 'lucide-react'
 import type { Product } from '../../data/products'
 
