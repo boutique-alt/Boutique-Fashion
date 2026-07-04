@@ -100,16 +100,16 @@ export const features = [
 ]
 
 export const instagramPosts = [
-  { id: 1, caption: 'Grace never goes out of style', image: `${BF}/2026/03/prod-2.png` },
-  { id: 2, caption: 'Elegance woven with tradition', image: `${BF}/2026/03/1.png` },
+  { id: 1, caption: 'Grace never goes out of style', image: '/images/assets/prod-2.png' },
+  { id: 2, caption: 'Elegance woven with tradition', image: '/images/assets/1.png' },
   { id: 3, caption: 'Sophisticated craftsmanship meets everyday elegance', image: kurtaCoordCategoryImage },
-  { id: 4, caption: 'Elegance in Every Thread', image: `${BF}/2026/03/4.png` },
-  { id: 5, caption: 'Sunshine, style, and timeless elegance', image: `${BF}/2026/03/home-ban-2.png` },
+  { id: 4, caption: 'Elegance in Every Thread', image: '/images/assets/4.png' },
+  { id: 5, caption: 'Sunshine, style, and timeless elegance', image: '/images/assets/home-ban-2.png' },
   { id: 6, caption: 'Heritage meets contemporary', image: dressCategoryImage },
 ]
 
 export const brandAssets = {
-  logo: `${BF}/2026/02/Boutique-Fashion_-New-Logo_V4.png`,
-  newArrivalsBanner: `${BF}/2026/03/home-ban-2.png`,
+  logo: '/images/assets/logo.png',
+  newArrivalsBanner: '/images/assets/home-ban-2.png',
   mensExclusiveBanner,
 }

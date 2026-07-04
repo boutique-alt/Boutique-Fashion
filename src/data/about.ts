@@ -4,7 +4,7 @@ const teamPhoto = '/images/about/team-hero.png'
 
 export const aboutAssets = {
   hero: teamPhoto,
-  banner: `${BF}/2022/01/breadcrumbs-woo.jpg`,
+  banner: '/images/assets/breadcrumbs-woo.jpg',
   storyImage: teamPhoto,
   image2: teamPhoto,
 }
