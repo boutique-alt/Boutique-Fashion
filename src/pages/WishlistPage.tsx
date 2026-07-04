@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import { useStore } from '../context/StoreContext'
 import { getProductsBySlugs } from '../data/productCatalog'
-import { aboutAssets } from '../data/about'
 
 export default function WishlistPage() {
   const { wishlist } = useStore()
@@ -12,15 +10,6 @@ export default function WishlistPage() {
 
   return (
     <main>
-      <PageBanner
-        title="Wishlist"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Wishlist' },
-        ]}
-      />
-
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           {products.length === 0 ? (

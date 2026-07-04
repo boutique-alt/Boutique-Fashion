@@ -1,10 +1,12 @@
 const BF = 'https://boutiquefashion.shop/wp-content/uploads'
 
+const teamPhoto = '/images/about/team-hero.png'
+
 export const aboutAssets = {
-  hero: `${BF}/2022/09/bg-about-us.jpg`,
+  hero: teamPhoto,
   banner: `${BF}/2022/01/breadcrumbs-woo.jpg`,
-  storyImage: `${BF}/2026/03/about-2-770x462.png`,
-  image2: `${BF}/2026/03/about-2-770x462.png`,
+  storyImage: teamPhoto,
+  image2: teamPhoto,
 }
 
 export const aboutPillars = [

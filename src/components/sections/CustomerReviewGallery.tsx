@@ -1,10 +1,12 @@
 import { reviewGalleryImages } from '../../data/reviews'
+import { useInView } from '../../hooks/useInView'
 
 export default function CustomerReviewGallery() {
   const track = [...reviewGalleryImages, ...reviewGalleryImages]
+  const { ref, inView } = useInView<HTMLElement>('200px')
 
   return (
-    <section className="overflow-hidden bg-cream-dark/30 py-14 md:py-20">
+    <section ref={ref} className={`overflow-hidden bg-cream-dark/30 py-14 md:py-20${inView ? '' : ' marquee-pause-offscreen'}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <h2 className="text-center font-serif text-2xl font-medium tracking-wide text-charcoal md:text-3xl lg:text-4xl">
           Customer Moments
@@ -22,6 +24,7 @@ export default function CustomerReviewGallery() {
                 alt={image.alt}
                 className="h-[280px] w-[200px] object-cover object-center md:h-[340px] md:w-[240px]"
                 loading="lazy"
+                decoding="async"
               />
             </div>
           ))}

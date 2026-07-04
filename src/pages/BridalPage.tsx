@@ -1,9 +1,7 @@
 import { Sparkles } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { useProductCatalog } from '../hooks/useProductCatalog'
-import { aboutAssets } from '../data/about'
 
 const bridalSlugs = new Set(['blouse', 'three-piece', 'bridal'])
 
@@ -14,14 +12,6 @@ export default function BridalPage() {
 
   return (
     <main>
-      <PageBanner
-        title="Bridal"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Bridal' },
-        ]}
-      />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="mx-auto mb-12 max-w-2xl text-center">

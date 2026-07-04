@@ -25,6 +25,8 @@ export default function ExclusiveSarees() {
           <img
             src={brandAssets.mensExclusiveBanner}
             alt="Men's Exclusive Collection"
+            loading="lazy"
+            decoding="async"
             className="max-h-[480px] w-full object-contain object-center md:max-h-[520px]"
           />
         </div>

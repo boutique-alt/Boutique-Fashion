@@ -1,24 +1,13 @@
 import { Link } from 'react-router-dom'
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import { useStore } from '../context/StoreContext'
 import { productPath } from '../utils/productSlug'
-import { aboutAssets } from '../data/about'
 
 export default function CartPage() {
   const { cart, cartTotal, updateCartQty, removeFromCart, clearCart } = useStore()
 
   return (
     <main>
-      <PageBanner
-        title="Shopping Cart"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Cart' },
-        ]}
-      />
-
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           {cart.length === 0 ? (

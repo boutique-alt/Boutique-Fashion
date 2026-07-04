@@ -13,3 +13,7 @@ export function slugFromHref(href?: string): string {
 export function productPath(slug: string): string {
   return `/product/${slug}`
 }
+
+export function adminProductPreviewPath(slug: string): string {
+  return `/admin/products/preview/${slug}`
+}

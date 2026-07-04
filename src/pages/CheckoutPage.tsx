@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { CheckCircle } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import PaymentMethodSelect from '../components/checkout/PaymentMethodSelect'
 import UpiPaymentPanel from '../components/checkout/UpiPaymentPanel'
 import { useStore } from '../context/StoreContext'
-import { aboutAssets } from '../data/about'
 import { brand } from '../data/navigation'
 import { createOrder } from '../services/orderService'
 import { getOrCreateProfile } from '../services/profileService'
@@ -139,7 +137,7 @@ export default function CheckoutPage() {
   if (placed) {
     return (
       <main>
-        <section className="flex min-h-[60vh] items-center justify-center py-20 pt-[var(--site-header-height)]">
+        <section className="flex min-h-[60vh] items-center justify-center py-20">
           <div className="px-4 text-center">
             <CheckCircle size={56} className="mx-auto text-maroon" />
             <h1 className="mt-6 font-serif text-3xl text-charcoal">Order Placed!</h1>
@@ -168,16 +166,6 @@ export default function CheckoutPage() {
 
   return (
     <main>
-      <PageBanner
-        title="Checkout"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Cart', href: '/cart' },
-          { label: 'Checkout' },
-        ]}
-      />
-
       <section className="py-12 md:py-16">
         <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-5">
           <form onSubmit={handleSubmit} className="space-y-8 lg:col-span-3">

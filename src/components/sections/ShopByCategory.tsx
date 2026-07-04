@@ -27,6 +27,8 @@ export default function ShopByCategory() {
                 <img
                   src={cat.image}
                   alt={cat.label}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-contain object-center p-2 transition-transform duration-500 group-hover:scale-[1.03]"
                 />
               </div>

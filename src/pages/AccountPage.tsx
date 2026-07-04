@@ -1,24 +1,45 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { Package } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import AccountSidebar from '../components/account/AccountSidebar'
 import ProfileForm from '../components/account/ProfileForm'
 import AccountRecentOrders from '../components/account/AccountRecentOrders'
 import AccountOrderCard from '../components/account/AccountOrderCard'
 import { useStore } from '../context/StoreContext'
-import { aboutAssets } from '../data/about'
 import { fetchOrdersByEmail } from '../services/orderService'
 import { fetchReturnsByEmail } from '../services/returnService'
 import ReturnStatusBadge from '../components/return/ReturnStatusBadge'
 import ReturnStatusStepper from '../components/return/ReturnStatusStepper'
 import { getOrCreateProfile, updateProfile } from '../services/profileService'
+import PasswordInput from '../components/ui/PasswordInput'
+import RegisterConsentCheckboxes from '../components/account/RegisterConsentCheckboxes'
 import { customerSignIn, customerSignUp } from '../services/authService'
-import { adminLogin, isAdminCredentials } from '../services/adminService'
-import { env, isSupabaseConfigured } from '../config/env'
+import { adminLogin } from '../services/adminService'
+import { isSupabaseConfigured } from '../config/env'
 import type { UserProfile, UserSession } from '../types/user'
 import type { Order } from '../types/order'
 import type { ReturnRequest } from '../types/return'
+
+function AccountProfileLoading() {
+  return (
+    <main>
+      <div className="flex min-h-[40vh] items-center justify-center py-16">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-maroon/20 border-t-maroon" />
+      </div>
+    </main>
+  )
+}
+
+function fallbackProfile(session: UserSession): UserProfile {
+  const now = new Date().toISOString()
+  return {
+    id: 'local',
+    name: session.name,
+    email: session.email,
+    createdAt: now,
+    updatedAt: now,
+  }
+}
 
 export default function AccountPage() {
   const { user, login, logout } = useStore()
@@ -29,6 +50,9 @@ export default function AccountPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [message, setMessage] = useState('')
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [saved, setSaved] = useState(false)
@@ -41,10 +65,25 @@ export default function AccountPage() {
   }
 
   useEffect(() => {
-    if (!user) return
-    getOrCreateProfile(user).then(setProfile).catch(() => setProfile(null))
+    if (!user) {
+      setProfile(null)
+      return
+    }
+
+    let cancelled = false
+    getOrCreateProfile(user)
+      .then((p) => {
+        if (!cancelled) setProfile(p)
+      })
+      .catch(() => {
+        if (!cancelled) setProfile(fallbackProfile(user))
+      })
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadOrders()
+
+    return () => {
+      cancelled = true
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
@@ -64,6 +103,9 @@ export default function AccountPage() {
   const finishAuth = (session: UserSession) => {
     login(session)
     setPassword('')
+    setConfirmPassword('')
+    setAcceptedTerms(false)
+    setAcceptedPrivacy(false)
     setAuthLoading(false)
     setMessage('')
     if (redirectTo?.startsWith('/') && redirectTo.split('?')[0] !== '/account') {
@@ -81,52 +123,54 @@ export default function AccountPage() {
       setMessage('Please enter your name.')
       return
     }
-
-    if (mode === 'register' && email.trim().toLowerCase() === env.adminEmail.trim().toLowerCase()) {
-      setMessage('This email is for admin login only. Switch to Login and sign in.')
+    if (mode === 'register' && password !== confirmPassword) {
+      setMessage('Passwords do not match.')
       return
     }
-
-    if (mode === 'login' && isAdminCredentials(email, password)) {
-      setAuthLoading(true)
-      setMessage('')
-      const result = await adminLogin(email, password)
-      setAuthLoading(false)
-      if (result.ok) {
-        window.location.href = '/admin'
-        return
-      }
-      setMessage(result.error ?? 'Admin login failed.')
+    if (mode === 'register' && !acceptedTerms) {
+      setMessage('Please accept the Terms & Conditions.')
+      return
+    }
+    if (mode === 'register' && !acceptedPrivacy) {
+      setMessage('Please accept the Privacy Policy.')
       return
     }
 
     if (isSupabaseConfigured()) {
       setAuthLoading(true)
       setMessage('')
-      if (mode === 'login') {
-        const result = await customerSignIn(email, password)
-        if (!result.ok) {
-          setMessage(result.error ?? 'Login failed.')
-          setAuthLoading(false)
-          return
-        }
-        if (result.session) finishAuth(result.session)
-        else setAuthLoading(false)
-      } else {
-        const signUp = await customerSignUp(name, email, password)
-        if (!signUp.ok) {
-          setMessage(signUp.error ?? 'Registration failed.')
-          setAuthLoading(false)
-          return
-        }
+      try {
+        if (mode === 'login') {
+          const adminResult = await adminLogin(email, password)
+          if (adminResult.ok) {
+            window.location.href = '/admin'
+            return
+          }
 
-        const signIn = await customerSignIn(email, password)
-        if (!signIn.ok || !signIn.session) {
-          setMessage('Account created. Please check your email to confirm, then log in.')
-          setAuthLoading(false)
-          return
+          const result = await customerSignIn(email, password)
+          if (!result.ok) {
+            setMessage(result.error ?? 'Login failed.')
+            return
+          }
+          if (result.session) finishAuth(result.session)
+        } else {
+          const signUp = await customerSignUp(name, email, password)
+          if (!signUp.ok) {
+            setMessage(signUp.error ?? 'Registration failed.')
+            return
+          }
+
+          const signIn = await customerSignIn(email, password)
+          if (!signIn.ok || !signIn.session) {
+            setMessage('Account created. Please check your email to confirm, then log in.')
+            return
+          }
+          finishAuth(signIn.session)
         }
-        finishAuth(signIn.session)
+      } catch {
+        setMessage('Something went wrong. Please try again.')
+      } finally {
+        setAuthLoading(false)
       }
       return
     }
@@ -144,17 +188,11 @@ export default function AccountPage() {
     setTimeout(() => setSaved(false), 3000)
   }
 
-  if (user && profile) {
+  if (user) {
+    if (!profile) return <AccountProfileLoading />
+
     return (
       <main>
-        <PageBanner
-          title="My Account"
-          image={aboutAssets.banner}
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'My Account' },
-          ]}
-        />
         <section className="py-12 md:py-16">
           <div className="mx-auto grid max-w-5xl gap-8 px-4 md:px-6 lg:grid-cols-3">
             <div className="lg:col-span-1">
@@ -177,19 +215,11 @@ export default function AccountPage() {
 
   return (
     <main>
-      <PageBanner
-        title={mode === 'login' ? 'Sign In' : 'Create Account'}
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'My Account' },
-        ]}
-      />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-md px-4 md:px-6">
           <div className="mb-6 flex border-b border-accent">
             <button
-              onClick={() => { setMode('login'); setMessage('') }}
+              onClick={() => { setMode('login'); setMessage(''); setConfirmPassword(''); setAcceptedTerms(false); setAcceptedPrivacy(false) }}
               className={`flex-1 pb-3 text-xs font-medium tracking-[0.15em] uppercase transition-colors ${
                 mode === 'login' ? 'border-b-2 border-maroon text-maroon' : 'text-charcoal/50 hover:text-charcoal'
               }`}
@@ -197,7 +227,7 @@ export default function AccountPage() {
               Log In
             </button>
             <button
-              onClick={() => { setMode('register'); setMessage('') }}
+              onClick={() => { setMode('register'); setMessage(''); setConfirmPassword(''); setAcceptedTerms(false); setAcceptedPrivacy(false) }}
               className={`flex-1 pb-3 text-xs font-medium tracking-[0.15em] uppercase transition-colors ${
                 mode === 'register' ? 'border-b-2 border-maroon text-maroon' : 'text-charcoal/50 hover:text-charcoal'
               }`}
@@ -243,14 +273,33 @@ export default function AccountPage() {
               <label htmlFor="authPassword" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                 Password *
               </label>
-              <input
+              <PasswordInput
                 id="authPassword"
-                type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-accent px-4 py-3 text-sm text-charcoal outline-none transition-colors focus:border-maroon"
+                onChange={setPassword}
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               />
             </div>
+            {mode === 'register' && (
+              <div>
+                <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                  Confirm Password *
+                </label>
+                <PasswordInput
+                  value={confirmPassword}
+                  onChange={setConfirmPassword}
+                  autoComplete="new-password"
+                />
+              </div>
+            )}
+            {mode === 'register' && (
+              <RegisterConsentCheckboxes
+                termsAccepted={acceptedTerms}
+                privacyAccepted={acceptedPrivacy}
+                onTermsChange={setAcceptedTerms}
+                onPrivacyChange={setAcceptedPrivacy}
+              />
+            )}
             {message && <p className="text-sm text-red-500">{message}</p>}
             <button
               type="submit"
@@ -305,15 +354,6 @@ export function AccountOrdersPage() {
 
   return (
     <main>
-      <PageBanner
-        title="My Orders"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'My Account', href: '/account' },
-          { label: 'My Orders' },
-        ]}
-      />
       <section className="py-12 md:py-16">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 md:px-6 lg:grid-cols-3">
           <div className="lg:col-span-1">
@@ -391,15 +431,6 @@ export function AccountReturnsPage() {
 
   return (
     <main>
-      <PageBanner
-        title="My Returns"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'My Account', href: '/account' },
-          { label: 'My Returns' },
-        ]}
-      />
       <section className="py-12 md:py-16">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 md:px-6 lg:grid-cols-3">
           <div className="lg:col-span-1">

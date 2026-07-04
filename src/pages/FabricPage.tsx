@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { Layers } from 'lucide-react'
-import PageBanner from '../components/layout/PageBanner'
 import ProductCard from '../components/ui/ProductCard'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets, aboutPillars } from '../data/about'
@@ -19,14 +18,6 @@ export default function FabricPage() {
 
   return (
     <main>
-      <PageBanner
-        title="Fabric"
-        image={aboutAssets.banner}
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Fabric' },
-        ]}
-      />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="mx-auto mb-12 max-w-2xl text-center">

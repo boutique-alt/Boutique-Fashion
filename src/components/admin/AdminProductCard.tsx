@@ -1,16 +1,22 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, Pencil, Trash2 } from 'lucide-react'
 import type { ProductDetail } from '../../data/productCatalog'
-import { productPath } from '../../utils/productSlug'
+import { adminProductPreviewPath } from '../../utils/productSlug'
 
 interface AdminProductCardProps {
   product: ProductDetail
-  onEdit: () => void
-  onDelete: () => void
+  onEdit?: () => void
+  onDelete?: () => void
+  previewOnly?: boolean
 }
 
-export default function AdminProductCard({ product, onEdit, onDelete }: AdminProductCardProps) {
-  const to = productPath(product.slug)
+export default function AdminProductCard({
+  product,
+  onEdit,
+  onDelete,
+  previewOnly = false,
+}: AdminProductCardProps) {
+  const to = adminProductPreviewPath(product.slug)
 
   const discount =
     product.onSale && product.originalPrice
@@ -58,32 +64,34 @@ export default function AdminProductCard({ product, onEdit, onDelete }: AdminPro
         </div>
       </Link>
 
-      <div className="absolute right-2 top-2 z-10 flex flex-col gap-1.5">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            onEdit()
-          }}
-          className="rounded-full bg-cream/90 p-1.5 text-charcoal/60 shadow-sm transition-colors hover:text-maroon"
-          aria-label="Edit product"
-        >
-          <Pencil size={16} strokeWidth={1.5} />
-        </button>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            onDelete()
-          }}
-          className="rounded-full bg-cream/90 p-1.5 text-charcoal/60 shadow-sm transition-colors hover:text-gold"
-          aria-label="Delete product"
-        >
-          <Trash2 size={16} strokeWidth={1.5} />
-        </button>
-      </div>
+      {!previewOnly && onEdit && onDelete && (
+        <div className="absolute right-2 top-2 z-10 flex flex-col gap-1.5">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onEdit()
+            }}
+            className="rounded-full bg-cream/90 p-1.5 text-charcoal/60 shadow-sm transition-colors hover:text-maroon"
+            aria-label="Edit product"
+          >
+            <Pencil size={16} strokeWidth={1.5} />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onDelete()
+            }}
+            className="rounded-full bg-cream/90 p-1.5 text-charcoal/60 shadow-sm transition-colors hover:text-gold"
+            aria-label="Delete product"
+          >
+            <Trash2 size={16} strokeWidth={1.5} />
+          </button>
+        </div>
+      )}
     </div>
   )
 }
