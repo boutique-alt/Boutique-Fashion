@@ -27,8 +27,9 @@ export async function loadPageVisits(): Promise<PageVisit[]> {
 
   const { data } = await adminClient
     .from('page_visits')
-    .select('*')
+    .select('path, product_slug, product_name, created_at')
     .order('created_at', { ascending: false })
+    .limit(5000)
 
   visitsCache = data ? (data as DbPageVisit[]).map(mapPageVisit) : []
   return visitsCache

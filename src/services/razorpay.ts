@@ -33,11 +33,9 @@ export async function initiateRazorpayPayment(
   options: RazorpayCheckoutOptions,
 ): Promise<RazorpayPaymentResult> {
   if (!isRazorpayConfigured()) {
-    await new Promise((r) => setTimeout(r, 800))
     return {
-      success: true,
-      paymentId: `mock_pay_${Date.now()}`,
-      orderId: options.orderId ?? `mock_order_${Date.now()}`,
+      success: false,
+      error: 'Online payment is not available right now. Please use UPI or Cash on Delivery.',
     }
   }
 

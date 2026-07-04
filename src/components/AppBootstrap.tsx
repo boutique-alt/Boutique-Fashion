@@ -1,11 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { isSupabaseConfigured } from '../config/env'
-import { loadContactMessages } from '../services/contactService'
-import { loadOrders } from '../services/orderService'
-import { loadPageVisits } from '../services/analyticsService'
 import { hydrateProductStore } from '../services/productService'
 import { hydrateShopCategoryStore } from '../services/shopCategoryService'
-import { loadReturns } from '../services/returnService'
 
 const catalogChannel = typeof BroadcastChannel !== 'undefined'
   ? new BroadcastChannel('bf-catalog')
@@ -20,10 +16,6 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
     Promise.all([
       hydrateProductStore(),
       hydrateShopCategoryStore(),
-      loadOrders(),
-      loadReturns(),
-      loadContactMessages(),
-      loadPageVisits(),
     ]).finally(() => setReady(true))
 
     const onVisible = () => {
@@ -44,6 +36,6 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  if (!ready) return null
+  if (!ready) return <div className="flex min-h-screen items-center justify-center"><p className="text-sm text-charcoal/40 animate-pulse">Loading...</p></div>
   return children
 }

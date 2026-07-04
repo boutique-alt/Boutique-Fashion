@@ -185,10 +185,11 @@ export default function CheckoutPage() {
               <h2 className="font-serif text-xl text-charcoal">Billing Details</h2>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                  <label htmlFor="firstName" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                     First Name *
                   </label>
                   <input
+                    id="firstName"
                     required
                     value={form.firstName}
                     onChange={(e) => handleChange('firstName', e.target.value)}
@@ -196,10 +197,11 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                  <label htmlFor="lastName" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                     Last Name *
                   </label>
                   <input
+                    id="lastName"
                     required
                     value={form.lastName}
                     onChange={(e) => handleChange('lastName', e.target.value)}
@@ -208,10 +210,11 @@ export default function CheckoutPage() {
                 </div>
               </div>
               <div>
-                <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                <label htmlFor="accountEmail" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                   Account Email
                 </label>
                 <input
+                  id="accountEmail"
                   readOnly
                   type="email"
                   value={accountEmail}
@@ -222,22 +225,27 @@ export default function CheckoutPage() {
                 </p>
               </div>
               <div>
-                <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                <label htmlFor="phone" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                   Phone *
                 </label>
                 <input
+                  id="phone"
                   required
                   type="tel"
+                  pattern="[0-9]{10}"
+                  maxLength={10}
+                  title="Please enter a valid 10-digit phone number"
                   value={form.phone}
                   onChange={(e) => handleChange('phone', e.target.value)}
                   className="w-full border border-accent px-4 py-3 text-sm outline-none focus:border-maroon"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                <label htmlFor="address" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                   Street Address *
                 </label>
                 <input
+                  id="address"
                   required
                   value={form.address}
                   onChange={(e) => handleChange('address', e.target.value)}
@@ -246,10 +254,11 @@ export default function CheckoutPage() {
               </div>
               <div className="grid gap-5 sm:grid-cols-3">
                 <div>
-                  <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                  <label htmlFor="city" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                     City *
                   </label>
                   <input
+                    id="city"
                     required
                     value={form.city}
                     onChange={(e) => handleChange('city', e.target.value)}
@@ -257,10 +266,11 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                  <label htmlFor="state" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                     State *
                   </label>
                   <input
+                    id="state"
                     required
                     value={form.state}
                     onChange={(e) => handleChange('state', e.target.value)}
@@ -268,11 +278,15 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                  <label htmlFor="pincode" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                     PIN Code *
                   </label>
                   <input
+                    id="pincode"
                     required
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                    title="Please enter a valid 6-digit PIN code"
                     value={form.pincode}
                     onChange={(e) => handleChange('pincode', e.target.value)}
                     className="w-full border border-accent px-4 py-3 text-sm outline-none focus:border-maroon"
@@ -280,10 +294,11 @@ export default function CheckoutPage() {
                 </div>
               </div>
               <div>
-                <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                <label htmlFor="notes" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                   Order Notes
                 </label>
                 <textarea
+                  id="notes"
                   rows={3}
                   value={form.notes}
                   onChange={(e) => handleChange('notes', e.target.value)}
@@ -308,7 +323,7 @@ export default function CheckoutPage() {
               />
             )}
 
-            {paymentError && <p className="text-sm text-gold">{paymentError}</p>}
+            {paymentError && <p className="text-sm text-red-500">{paymentError}</p>}
 
             <button
               type="submit"

@@ -12,8 +12,16 @@ import { aboutAssets } from '../data/about'
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>()
-  useProductCatalog()
+  const { version } = useProductCatalog()
   const product = slug ? getProductBySlug(slug) : undefined
+
+  if (!product && version === 0) {
+    return (
+      <main className="flex min-h-[60vh] items-center justify-center pt-[var(--site-header-height)]">
+        <p className="animate-pulse text-sm text-charcoal/40">Loading product...</p>
+      </main>
+    )
+  }
 
   if (!product) {
     return <Navigate to="/dress" replace />

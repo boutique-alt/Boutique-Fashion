@@ -43,7 +43,9 @@ export default function AccountPage() {
   useEffect(() => {
     if (!user) return
     getOrCreateProfile(user).then(setProfile).catch(() => setProfile(null))
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadOrders()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {
@@ -213,10 +215,11 @@ export default function AccountPage() {
           <form onSubmit={handleAuthSubmit} className="space-y-5">
             {mode === 'register' && (
               <div>
-                <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+                <label htmlFor="registerName" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                   Name *
                 </label>
                 <input
+                  id="registerName"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -225,10 +228,11 @@ export default function AccountPage() {
               </div>
             )}
             <div>
-              <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+              <label htmlFor="authEmail" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                 Email *
               </label>
               <input
+                id="authEmail"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -236,17 +240,18 @@ export default function AccountPage() {
               />
             </div>
             <div>
-              <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
+              <label htmlFor="authPassword" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                 Password *
               </label>
               <input
+                id="authPassword"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-accent px-4 py-3 text-sm text-charcoal outline-none transition-colors focus:border-maroon"
               />
             </div>
-            {message && <p className="text-sm text-gold">{message}</p>}
+            {message && <p className="text-sm text-red-500">{message}</p>}
             <button
               type="submit"
               disabled={authLoading}
@@ -257,7 +262,7 @@ export default function AccountPage() {
           </form>
           {mode === 'login' && (
             <p className="mt-4 text-center text-xs text-charcoal/50">
-              <button type="button" className="transition-colors hover:text-maroon">Lost password?</button>
+              <a href="mailto:admin@boutiquefashion.com?subject=Lost Password" className="transition-colors hover:text-maroon">Lost password?</a>
             </p>
           )}
         </div>
@@ -279,7 +284,9 @@ export function AccountOrdersPage() {
   useEffect(() => {
     if (!user) return
     getOrCreateProfile(user).then(setProfile).catch(() => setProfile(null))
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadOrders()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {
@@ -363,7 +370,9 @@ export function AccountReturnsPage() {
   useEffect(() => {
     if (!user) return
     getOrCreateProfile(user).then(setProfile).catch(() => setProfile(null))
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadReturns()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {

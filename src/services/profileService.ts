@@ -89,6 +89,6 @@ export async function getAllProfiles(): Promise<UserProfile[]> {
   const adminClient = await getSupabaseForAdminData()
   if (!adminClient) return []
 
-  const { data } = await adminClient.from('profiles').select('*')
+  const { data } = await adminClient.from('profiles').select('id, email, name, phone, avatar_url, gender, voluntary_consent, address, created_at, updated_at').limit(1000)
   return data ? (data as DbProfile[]).map(mapProfile) : []
 }

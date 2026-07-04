@@ -9,6 +9,12 @@ export function buildUpiPaymentLink(upiId: string, payeeName: string, amount: nu
   return `upi://pay?${params.toString()}`
 }
 
-export function buildUpiQrUrl(upiLink: string, size = 220): string {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(upiLink)}`
+import QRCode from 'qrcode'
+
+export async function buildUpiQrUrl(upiLink: string, size = 220): Promise<string> {
+  try {
+    return await QRCode.toDataURL(upiLink, { width: size, margin: 1 })
+  } catch {
+    return ''
+  }
 }

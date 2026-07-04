@@ -9,15 +9,24 @@ import { aboutAssets } from '../data/about'
 export default function ShopAllPage() {
   const { page } = useParams<{ page?: string }>()
   const currentPage = page ? parseInt(page, 10) : 1
-  useProductCatalog()
-
-  if (isNaN(currentPage) || currentPage < 1 || currentPage > getShopTotalPages()) {
-    return <Navigate to="/shop/all" replace />
-  }
+  const { version } = useProductCatalog()
+  const totalPages = getShopTotalPages()
 
   const products = getShopPageProducts(currentPage)
   const range = getShopResultRange(currentPage)
   const { sorted, setSort } = useSortedProducts(products)
+
+  if (version === 0 && totalPages === 0) {
+    return (
+      <main className="flex min-h-[60vh] items-center justify-center pt-[var(--site-header-height)]">
+        <p className="animate-pulse text-sm text-charcoal/40">Loading products...</p>
+      </main>
+    )
+  }
+
+  if (isNaN(currentPage) || currentPage < 1 || currentPage > totalPages) {
+    return <Navigate to="/shop/all" replace />
+  }
 
   return (
     <main>

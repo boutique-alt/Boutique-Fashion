@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ProductGalleryProps {
@@ -9,6 +9,10 @@ interface ProductGalleryProps {
 export default function ProductGallery({ images, name }: ProductGalleryProps) {
   const [active, setActive] = useState(0)
   const gallery = images.length > 0 ? images : []
+
+  useEffect(() => {
+    setActive(0)
+  }, [images])
 
   const prev = () => setActive((a) => (a === 0 ? gallery.length - 1 : a - 1))
   const next = () => setActive((a) => (a === gallery.length - 1 ? 0 : a + 1))

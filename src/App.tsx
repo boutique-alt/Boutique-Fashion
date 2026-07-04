@@ -21,10 +21,13 @@ import AdminMessagesPage from './pages/admin/AdminMessagesPage'
 import AdminProductsPage from './pages/admin/AdminProductsPage'
 import AdminAnalyticsPage from './pages/admin/AdminAnalyticsPage'
 import AdminReturnsPage from './pages/admin/AdminReturnsPage'
+import NotFoundPage from './pages/NotFoundPage'
+import ScrollToTop from './components/layout/ScrollToTop'
 
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<PageLayout />}>
           <Route index element={<HomePage />} />
@@ -49,6 +52,7 @@ export default function App() {
           <Route path="account/orders" element={<AccountOrdersPage />} />
           <Route path="account/returns" element={<AccountReturnsPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
         <Route path="admin/login" element={<AdminLoginPage />} />

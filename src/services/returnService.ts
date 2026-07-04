@@ -3,7 +3,7 @@ import { getSupabase } from '../lib/supabase'
 import { mapReturn, type DbReturn } from '../lib/supabaseMappers'
 import type { ReturnRequest, ReturnStatus } from '../types/return'
 import { getSupabaseForAdminData } from './adminDataClient'
-import { fetchOrdersByEmail } from './orderService'
+
 
 let returnsCache: ReturnRequest[] | null = null
 
@@ -24,7 +24,7 @@ async function fetchRemoteReturnsByEmail(email: string): Promise<ReturnRequest[]
 
   const { data, error } = await client
     .from('returns')
-    .select('*')
+    .select('id, order_id, user_email, reason, status, status_updated_at, created_at')
     .eq('user_email', normalized)
     .order('created_at', { ascending: false })
 
@@ -43,7 +43,7 @@ async function fetchRemoteReturnByOrderId(orderId: string): Promise<ReturnReques
 
   const { data, error } = await client
     .from('returns')
-    .select('*')
+    .select('id, order_id, user_email, reason, status, status_updated_at, created_at')
     .eq('order_id', orderId)
     .maybeSingle()
 
@@ -60,8 +60,9 @@ export async function loadReturns(): Promise<ReturnRequest[]> {
   if (adminClient) {
     const { data } = await adminClient
       .from('returns')
-      .select('*')
+      .select('id, order_id, user_email, reason, status, status_updated_at, created_at')
       .order('created_at', { ascending: false })
+      .limit(500)
     returnsCache = data ? (data as DbReturn[]).map(mapReturn) : []
     return returnsCache
   }
@@ -78,18 +79,11 @@ export async function fetchReturnsByEmail(email: string): Promise<ReturnRequest[
   if (!isSupabaseConfigured()) return []
 
   const normalized = email.toLowerCase()
-  const orders = await fetchOrdersByEmail(normalized)
-  const orderIds = new Set(orders.map((order) => order.id))
 
   const remoteByEmail = await fetchRemoteReturnsByEmail(normalized)
-  const remoteByOrders: ReturnRequest[] = []
-  for (const orderId of orderIds) {
-    const request = await fetchRemoteReturnByOrderId(orderId)
-    if (request) remoteByOrders.push(request)
-  }
 
   const byId = new Map<string, ReturnRequest>()
-  for (const item of [...remoteByEmail, ...remoteByOrders]) {
+  for (const item of remoteByEmail) {
     byId.set(item.id, item)
   }
   return [...byId.values()].sort(sortReturnsNewest)
@@ -97,10 +91,14 @@ export async function fetchReturnsByEmail(email: string): Promise<ReturnRequest[
 
 export async function fetchReturnByOrderId(
   orderId: string,
-  _email: string,
+  email: string,
 ): Promise<ReturnRequest | undefined> {
   if (!isSupabaseConfigured()) return undefined
-  return fetchRemoteReturnByOrderId(orderId)
+  const returnReq = await fetchRemoteReturnByOrderId(orderId)
+  if (returnReq && returnReq.email === email.toLowerCase()) {
+    return returnReq
+  }
+  return undefined
 }
 
 export async function createReturnRequest(params: {

@@ -25,7 +25,7 @@ async function fetchRemoteOrdersByEmail(email: string): Promise<Order[]> {
 
   const { data, error } = await client
     .from('orders')
-    .select('*')
+    .select('id, user_id, user_email, items, billing, subtotal, shipping, total, payment_method, payment_status, status, razorpay_payment_id, razorpay_order_id, payment_screenshot_url, status_updated_at, created_at')
     .eq('user_email', normalized)
     .order('created_at', { ascending: false })
 
@@ -43,8 +43,9 @@ export async function loadOrders(): Promise<Order[]> {
   if (adminClient) {
     const { data } = await adminClient
       .from('orders')
-      .select('*')
+      .select('id, user_id, user_email, items, billing, subtotal, shipping, total, payment_method, payment_status, status, razorpay_payment_id, razorpay_order_id, payment_screenshot_url, status_updated_at, created_at')
       .order('created_at', { ascending: false })
+      .limit(500)
     ordersCache = data ? (data as DbOrder[]).map(mapOrder) : []
     return ordersCache
   }

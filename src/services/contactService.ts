@@ -24,8 +24,9 @@ export async function loadContactMessages(): Promise<ContactMessage[]> {
 
   const { data } = await adminClient
     .from('contact_messages')
-    .select('*')
+    .select('id, first_name, last_name, email, phone, message, read, created_at')
     .order('created_at', { ascending: false })
+    .limit(500)
 
   messagesCache = data ? (data as DbContactMessage[]).map(mapContact).sort(sortMessagesNewest) : []
   return messagesCache

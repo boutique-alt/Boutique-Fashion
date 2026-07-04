@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Copy, Check } from 'lucide-react'
 import { env } from '../../config/env'
 import { upiPaymentDetails } from '../../data/payment'
@@ -16,11 +16,22 @@ interface UpiPaymentPanelProps {
 export default function UpiPaymentPanel({ amount, screenshotUrl, onScreenshotChange }: UpiPaymentPanelProps) {
   const [copied, setCopied] = useState(false)
 
+  const [qrUrl, setQrUrl] = useState('')
+
   const upiLink = useMemo(
     () => buildUpiPaymentLink(env.upiId, env.upiPayeeName, amount),
     [amount],
   )
-  const qrUrl = useMemo(() => buildUpiQrUrl(upiLink, QR_SIZE), [upiLink])
+
+  useEffect(() => {
+    let mounted = true
+    buildUpiQrUrl(upiLink, QR_SIZE).then((url) => {
+      if (mounted) setQrUrl(url)
+    })
+    return () => {
+      mounted = false
+    }
+  }, [upiLink])
 
   const handleCopy = async () => {
     try {
@@ -43,13 +54,19 @@ export default function UpiPaymentPanel({ amount, screenshotUrl, onScreenshotCha
 
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
         <div className="shrink-0 rounded border border-accent bg-white p-3">
-          <img
-            src={qrUrl}
-            alt="UPI payment QR code"
-            width={QR_SIZE}
-            height={QR_SIZE}
-            className="h-[300px] w-[300px] object-contain"
-          />
+          {qrUrl ? (
+            <img
+              src={qrUrl}
+              alt="UPI payment QR code"
+              width={QR_SIZE}
+              height={QR_SIZE}
+              className="h-[300px] w-[300px] object-contain"
+            />
+          ) : (
+            <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-100">
+              <span className="text-sm text-gray-400">Generating QR...</span>
+            </div>
+          )}
         </div>
 
         <div className="w-full space-y-3 text-sm">

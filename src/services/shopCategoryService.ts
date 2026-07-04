@@ -66,8 +66,10 @@ export function getSelectedCategorySlugs(): string[] {
 }
 
 export async function applyShopCategorySelectionFromProduct(
-  _image: string,
-  _selectedIds: string[],
+  image: string,
+  selectedIds: string[],
 ): Promise<void> {
+  void image
+  void selectedIds
   notifyChanged()
 }

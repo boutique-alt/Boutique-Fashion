@@ -139,12 +139,12 @@ export async function hydrateProductStore(): Promise<void> {
 
   const client = getSupabase()
   const [productsRes, hiddenRes, overridesRes] = await Promise.all([
-    client.from('products').select('*').order('created_at', { ascending: false }),
+    client.from('products').select('id, slug, name, price, original_price, image, category_slug, category_label, category_path, sizes, short_description, description, on_sale, is_new, is_bestseller, video_url, addons, shop_category_selections, created_at, updated_at').order('created_at', { ascending: false }),
     client.from('catalog_hidden_slugs').select('slug'),
     client.from('catalog_overrides').select('slug, override_data'),
   ])
 
-  productsCache = productsRes.data ? (productsRes.data as DbProduct[]).map(mapProduct) : []
+  productsCache = productsRes.data ? (productsRes.data as unknown as DbProduct[]).map(mapProduct) : []
   deletedCache = hiddenRes.data ? hiddenRes.data.map((r: { slug: string }) => r.slug) : []
   overridesCache = overridesRes.data
     ? mapOverrides(overridesRes.data as { slug: string; override_data: ProductOverride }[])
@@ -310,8 +310,7 @@ export const adminCategoryOptions = [
   { slug: 'one-piece', label: 'Dresses' },
   { slug: 'kurta-set', label: 'Kurta Set' },
   { slug: 'coord-set', label: 'Coord Set' },
-  { slug: 'tops-pant-skirt', label: 'Tops with Pant' },
-  { slug: 'tops-pant-skirt', label: 'Tops with Skirt' },
+  { slug: 'tops-pant-skirt', label: 'Tops with Pant / Skirt' },
   { slug: 'mens', label: 'Grooms' },
   { slug: 'blouse', label: 'Brides' },
   { slug: 'three-piece', label: 'Suit Set' },
