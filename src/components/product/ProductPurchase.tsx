@@ -11,7 +11,9 @@ interface ProductPurchaseProps {
 }
 
 export default function ProductPurchase({ product }: ProductPurchaseProps) {
-  const [size, setSize] = useState(product.sizes[0] ?? 'M')
+  const [size, setSize] = useState<string | null>(null)
+  const [quantity, setQuantity] = useState(1)
+  const [sizeError, setSizeError] = useState(false)
   const [expanded, setExpanded] = useState(false)
   
   // Accordion states
@@ -43,6 +45,11 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
   const showReadMore = desc.length > 120
 
   const handleAddToCart = () => {
+    if (!size) {
+      setSizeError(true)
+      return
+    }
+
     const selectedAddons = addons
       .filter((a) => !a.optional || addonStates[a.id])
       .map((a) => a.label)
@@ -54,8 +61,9 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
       image: product.image,
       price: totalPrice,
       size,
-      quantity: 1,
+      quantity,
     })
+    setSizeError(false)
   }
 
 
@@ -104,7 +112,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         <p className="text-[10px] font-light text-charcoal/50 mt-1">(Inclusive of all taxes)</p>
       </div>
 
-      {/* Box 3: Size Selector */}
+      {/* Box 3: Size & Quantity Selector */}
       <div className="bg-white rounded-md shadow-sm">
         <div className="flex items-center gap-3 mb-4 px-1">
           <p className="text-[15px] font-medium text-maroon">Size</p>
@@ -117,7 +125,10 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
           {product.sizes.map((s) => (
             <button
               key={s}
-              onClick={() => setSize(s)}
+              onClick={() => {
+                setSize(s)
+                setSizeError(false)
+              }}
               className={`min-w-[3rem] h-10 rounded-sm border px-3 py-1.5 text-[14px] font-medium tracking-wide transition-all uppercase shadow-sm ${
                 size === s
                   ? 'border-maroon text-maroon bg-white ring-1 ring-maroon'
@@ -127,6 +138,30 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
               {s}
             </button>
           ))}
+        </div>
+        {sizeError && (
+          <p className="mt-2 text-[12px] font-medium text-red-500 px-1">
+            Please select a size before adding to cart.
+          </p>
+        )}
+
+        <div className="mt-6 px-1">
+          <p className="text-[15px] font-medium text-maroon mb-3">Quantity</p>
+          <div className="flex items-center border border-accent/40 rounded-sm w-fit">
+            <button
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              className="px-4 py-2 text-charcoal/70 hover:bg-maroon/5 hover:text-maroon transition-colors"
+            >
+              -
+            </button>
+            <span className="w-12 text-center text-[14px] font-medium">{quantity}</span>
+            <button
+              onClick={() => setQuantity((q) => q + 1)}
+              className="px-4 py-2 text-charcoal/70 hover:bg-maroon/5 hover:text-maroon transition-colors"
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
 

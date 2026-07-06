@@ -6,6 +6,10 @@ import { getSupabaseForAdminData } from './adminDataClient'
 
 let messagesCache: ContactMessage[] | null = null
 
+export function clearContactCache(): void {
+  messagesCache = null
+}
+
 function sortMessagesNewest(a: ContactMessage, b: ContactMessage): number {
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 }

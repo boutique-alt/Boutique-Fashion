@@ -1,27 +1,42 @@
+import { useState, useEffect } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getCategoryBySlug } from '../data/categories'
 import { useProductCatalog } from '../hooks/useProductCatalog'
+import { CategorySchema } from '../components/seo/CategorySchema'
+import SEO from '../components/ui/SEO'
 
 interface CategoryPageProps {
   slug?: string
 }
 
 export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
-  const { category } = useParams<{ category: string }>()
-  const slug = slugProp ?? category
+  const { category: categorySlug } = useParams<{ category: string }>()
+  const slug = slugProp ?? categorySlug
   const config = slug ? getCategoryBySlug(slug) : undefined
   const { products: catalog } = useProductCatalog()
   const categoryProducts = catalog.filter((p) => p.categorySlug === slug)
   const { sorted, setSort } = useSortedProducts(categoryProducts)
+  const [visibleCount, setVisibleCount] = useState(24)
+
+  useEffect(() => {
+    setVisibleCount(24)
+  }, [slug])
 
   if (!config) {
     return <Navigate to="/dress" replace />
   }
 
+  const description = `Shop our exclusive ${config?.title || 'collection'}. Discover premium boutique fashion, crafted with quality fabrics and elegant design.`
+
   return (
     <main>
+      <SEO 
+        title={config?.title || 'Collection'} 
+        description={description} 
+      />
+      <CategorySchema category={config} />
       {config.description && (
         <p className="mx-auto max-w-2xl px-4 pt-10 text-center text-sm leading-relaxed text-charcoal/60 md:px-6">
           {config.description}
@@ -31,10 +46,20 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <CategoryToolbar total={categoryProducts.length} onSortChange={setSort} />
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-            {sorted.map((product) => (
+            {sorted.slice(0, visibleCount).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
+          {visibleCount < sorted.length && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={() => setVisibleCount((c) => c + 24)}
+                className="rounded-sm border border-maroon px-8 py-3 text-sm font-medium tracking-wide text-maroon transition-colors hover:bg-maroon hover:text-white"
+              >
+                Load More
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </main>

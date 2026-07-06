@@ -1,6 +1,11 @@
 import { isSupabaseConfigured } from '../config/env'
 import { getSupabase } from '../lib/supabase'
 import type { UserSession } from '../types/user'
+import { clearOrdersCache } from './orderService'
+import { clearReturnsCache } from './returnService'
+import { clearAdminCache } from './adminService'
+import { clearContactCache } from './contactService'
+import { clearAnalyticsCache } from './analyticsService'
 
 function sessionFromSupabaseUser(
   user: { email?: string | null; user_metadata?: Record<string, unknown> },
@@ -131,6 +136,11 @@ export async function customerSignIn(
 }
 
 export async function customerSignOut(): Promise<void> {
+  clearOrdersCache()
+  clearReturnsCache()
+  clearAdminCache()
+  clearContactCache()
+  clearAnalyticsCache()
   if (!isSupabaseConfigured()) return
   await getSupabase().auth.signOut()
 }
@@ -149,4 +159,30 @@ export async function getCustomerUserId(): Promise<string | null> {
   if (!isSupabaseConfigured()) return null
   const { data: { session } } = await getSupabase().auth.getSession()
   return session?.user?.id ?? null
+}
+
+export async function requestPasswordReset(
+  email: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const check = requireSupabase()
+  if (!check.ok) return check
+
+  const normalizedEmail = email.trim().toLowerCase()
+  const { error } = await getSupabase().auth.resetPasswordForEmail(normalizedEmail, {
+    redirectTo: `${window.location.origin}/account/reset-password`,
+  })
+
+  if (error) return { ok: false, error: error.message }
+  return { ok: true }
+}
+
+export async function updateCustomerPassword(
+  password: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const check = requireSupabase()
+  if (!check.ok) return check
+
+  const { error } = await getSupabase().auth.updateUser({ password })
+  if (error) return { ok: false, error: error.message }
+  return { ok: true }
 }

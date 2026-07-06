@@ -1,4 +1,5 @@
 import { env, isRazorpayConfigured } from '../config/env'
+import { getSupabase } from '../lib/supabase'
 import type { RazorpayCheckoutOptions, RazorpayPaymentResult } from '../types/payment'
 
 declare global {
@@ -30,7 +31,7 @@ function loadRazorpayScript(): Promise<void> {
 }
 
 export async function initiateRazorpayPayment(
-  options: RazorpayCheckoutOptions,
+  options: RazorpayCheckoutOptions & { items?: any[]; billing?: any },
 ): Promise<RazorpayPaymentResult> {
   if (!isRazorpayConfigured()) {
     return {
@@ -45,14 +46,24 @@ export async function initiateRazorpayPayment(
     return { success: false, error: 'Could not load Razorpay checkout' }
   }
 
+  // Create order via Edge Function
+  const { data: edgeData, error: edgeError } = await getSupabase().functions.invoke(
+    'create-razorpay-order',
+    { body: { items: options.items, billing: options.billing } },
+  )
+
+  if (edgeError || !edgeData?.order_id) {
+    return { success: false, error: edgeError?.message ?? 'Failed to create secure payment order' }
+  }
+
   return new Promise((resolve) => {
     const rzp = new window.Razorpay!({
       key: env.razorpayKeyId,
-      amount: options.amount,
+      amount: edgeData.amount, // use backend calculated amount
       currency: options.currency ?? 'INR',
       name: options.name,
       description: options.description ?? 'Order Payment',
-      order_id: options.orderId,
+      order_id: edgeData.order_id, // use backend generated order ID
       prefill: options.prefill,
       notes: options.notes,
       theme: { color: '#2F4799' },

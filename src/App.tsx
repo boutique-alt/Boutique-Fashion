@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import PageLayout from './components/layout/PageLayout'
 import AdminLayout from './components/admin/AdminLayout'
 import ScrollToTop from './components/layout/ScrollToTop'
@@ -16,6 +17,7 @@ const ProductPage = lazy(() => import('./pages/ProductPage'))
 const CartPage = lazy(() => import('./pages/CartPage'))
 const WishlistPage = lazy(() => import('./pages/WishlistPage'))
 const AccountPage = lazy(() => import('./pages/AccountPage'))
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 const AccountOrdersPage = lazy(() => import('./pages/AccountPage').then((m) => ({ default: m.AccountOrdersPage })))
 const AccountReturnsPage = lazy(() => import('./pages/AccountPage').then((m) => ({ default: m.AccountReturnsPage })))
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'))
@@ -40,8 +42,9 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
+    <HelmetProvider>
+      <BrowserRouter>
+        <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route element={<PageLayout />}>
@@ -66,6 +69,7 @@ export default function App() {
             <Route path="cart" element={<CartPage />} />
             <Route path="wishlist" element={<WishlistPage />} />
             <Route path="account" element={<AccountPage />} />
+            <Route path="account/reset-password" element={<ResetPasswordPage />} />
             <Route path="account/orders" element={<AccountOrdersPage />} />
             <Route path="account/returns" element={<AccountReturnsPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
@@ -85,5 +89,6 @@ export default function App() {
         </Routes>
       </Suspense>
     </BrowserRouter>
+    </HelmetProvider>
   )
 }

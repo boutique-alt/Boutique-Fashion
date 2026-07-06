@@ -13,7 +13,7 @@ import ReturnStatusStepper from '../components/return/ReturnStatusStepper'
 import { getOrCreateProfile, updateProfile } from '../services/profileService'
 import PasswordInput from '../components/ui/PasswordInput'
 import RegisterConsentCheckboxes from '../components/account/RegisterConsentCheckboxes'
-import { customerSignIn, customerSignUp } from '../services/authService'
+import { customerSignIn, customerSignUp, requestPasswordReset } from '../services/authService'
 import { adminLogin } from '../services/adminService'
 import { isSupabaseConfigured } from '../config/env'
 import type { UserProfile, UserSession } from '../types/user'
@@ -46,7 +46,7 @@ export default function AccountPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirect')
-  const [mode, setMode] = useState<'login' | 'register'>('login')
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -180,6 +180,33 @@ export default function AccountPage() {
     setAuthLoading(false)
   }
 
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) {
+      setMessage('Please enter your email.')
+      return
+    }
+    if (!isSupabaseConfigured()) {
+      setMessage('Supabase is not configured. Please check your environment.')
+      return
+    }
+
+    setAuthLoading(true)
+    setMessage('')
+    try {
+      const result = await requestPasswordReset(email)
+      if (!result.ok) {
+        setMessage(result.error ?? 'Could not send reset email.')
+        return
+      }
+      setMessage('Check your email for a password reset link.')
+    } catch {
+      setMessage('Something went wrong. Please try again.')
+    } finally {
+      setAuthLoading(false)
+    }
+  }
+
   const handleProfileSave = async (updates: Partial<UserProfile>) => {
     if (!user) return
     const updated = await updateProfile(user.email, updates)
@@ -218,6 +245,7 @@ export default function AccountPage() {
     <main>
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-md px-4 md:px-6">
+          {mode !== 'forgot' && (
           <div className="mb-6 flex border-b border-accent">
             <button
               onClick={() => { setMode('login'); setMessage(''); setConfirmPassword(''); setAcceptedTerms(false); setAcceptedPrivacy(false) }}
@@ -236,6 +264,16 @@ export default function AccountPage() {
               Register
             </button>
           </div>
+          )}
+
+          {mode === 'forgot' && (
+            <div className="mb-6 text-center">
+              <h1 className="font-serif text-2xl text-charcoal">Reset Password</h1>
+              <p className="mt-2 text-sm text-charcoal/60">
+                Enter your email and we will send you a reset link.
+              </p>
+            </div>
+          )}
 
           {redirectTo === '/checkout' && (
             <p className="mb-4 text-center text-sm text-charcoal/60">
@@ -243,7 +281,7 @@ export default function AccountPage() {
             </p>
           )}
 
-          <form onSubmit={handleAuthSubmit} className="space-y-5">
+          <form onSubmit={mode === 'forgot' ? handleForgotSubmit : handleAuthSubmit} className="space-y-5">
             {mode === 'register' && (
               <div>
                 <label htmlFor="registerName" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
@@ -270,6 +308,7 @@ export default function AccountPage() {
                 className="w-full border border-accent px-4 py-3 text-sm text-charcoal outline-none transition-colors focus:border-maroon"
               />
             </div>
+            {mode !== 'forgot' && (
             <div>
               <label htmlFor="authPassword" className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
                 Password *
@@ -281,6 +320,7 @@ export default function AccountPage() {
                 autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               />
             </div>
+            )}
             {mode === 'register' && (
               <div>
                 <label className="mb-2 block text-xs font-medium tracking-[0.15em] text-charcoal uppercase">
@@ -307,12 +347,29 @@ export default function AccountPage() {
               disabled={authLoading}
               className="w-full bg-maroon py-3.5 text-xs font-medium tracking-[0.2em] text-cream uppercase transition-colors hover:bg-maroon-light disabled:opacity-60"
             >
-              {authLoading ? 'Please wait...' : mode === 'login' ? 'Log In' : 'Create Account'}
+              {authLoading ? 'Please wait...' : mode === 'login' ? 'Log In' : mode === 'register' ? 'Create Account' : 'Send Reset Link'}
             </button>
           </form>
           {mode === 'login' && (
             <p className="mt-4 text-center text-xs text-charcoal/50">
-              <a href="mailto:admin@boutiquefashion.com?subject=Lost Password" className="transition-colors hover:text-maroon">Lost password?</a>
+              <button
+                type="button"
+                onClick={() => { setMode('forgot'); setMessage(''); setPassword('') }}
+                className="transition-colors hover:text-maroon"
+              >
+                Lost password?
+              </button>
+            </p>
+          )}
+          {mode === 'forgot' && (
+            <p className="mt-4 text-center text-xs text-charcoal/50">
+              <button
+                type="button"
+                onClick={() => { setMode('login'); setMessage('') }}
+                className="transition-colors hover:text-maroon"
+              >
+                Back to login
+              </button>
             </p>
           )}
         </div>

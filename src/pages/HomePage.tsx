@@ -11,10 +11,12 @@ import CelebsCorner from '../components/sections/CelebsCorner'
 import CustomerReviewGallery from '../components/sections/CustomerReviewGallery'
 import CustomerReviews from '../components/sections/CustomerReviews'
 import InTheNews from '../components/sections/InTheNews'
+import SEO from '../components/ui/SEO'
 
 export default function HomePage() {
   return (
     <main>
+      <SEO title="Home" />
       <Hero />
       <SummerSale />
       <NewArrival />

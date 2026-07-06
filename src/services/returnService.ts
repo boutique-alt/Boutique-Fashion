@@ -3,9 +3,13 @@ import { getSupabase } from '../lib/supabase'
 import { mapReturn, type DbReturn } from '../lib/supabaseMappers'
 import type { ReturnRequest, ReturnStatus } from '../types/return'
 import { getSupabaseForAdminData } from './adminDataClient'
-
+import { notifyStatusEmail } from './emailNotificationService'
 
 let returnsCache: ReturnRequest[] | null = null
+
+export function clearReturnsCache(): void {
+  returnsCache = null
+}
 
 function sortReturnsNewest(a: ReturnRequest, b: ReturnRequest): number {
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -141,6 +145,7 @@ export async function createReturnRequest(params: {
   }
 
   returnsCache = [request, ...(returnsCache ?? [])]
+  notifyStatusEmail({ table: 'returns', record: request, event: 'INSERT' })
   return request
 }
 
@@ -162,5 +167,6 @@ export async function updateReturnStatus(id: string, status: ReturnStatus): Prom
 
   if (error) return false
   returnsCache = (returnsCache ?? []).map((r) => (r.id === id ? updated : r))
+  notifyStatusEmail({ table: 'returns', record: updated, oldRecord: found })
   return true
 }

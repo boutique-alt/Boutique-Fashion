@@ -9,6 +9,11 @@ export interface AdminSyncResult {
 let adminVerified = false
 let lastSyncError: string | undefined
 
+export function clearAdminCache(): void {
+  adminVerified = false
+  lastSyncError = undefined
+}
+
 export function getLastAdminSyncError(): string | undefined {
   return lastSyncError
 }
@@ -109,8 +114,7 @@ export async function adminLogin(
 }
 
 export async function adminLogout(): Promise<void> {
-  adminVerified = false
-  lastSyncError = undefined
+  clearAdminCache()
   if (isSupabaseConfigured()) {
     await getSupabaseAdmin().auth.signOut()
   }

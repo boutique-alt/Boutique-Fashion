@@ -24,6 +24,7 @@ export interface AdminProductInput {
   productDetails?: Record<string, string>   // e.g. { Material: 'Chanderi', Craft: 'Embroidered' }
   addons?: ProductAddon[]
   sku?: string
+  stockQuantity?: number
   shopCategorySelections?: string[]
 }
 

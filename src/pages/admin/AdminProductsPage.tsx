@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { Plus, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { AlertTriangle, Plus, X } from 'lucide-react'
+import { isSupabaseConfigured } from '../../config/env'
 import AdminProductCard from '../../components/admin/AdminProductCard'
 import ProductForm from '../../components/admin/ProductForm'
 import CategoryToolbar, { useSortedProducts } from '../../components/shop/CategoryToolbar'
@@ -10,17 +11,41 @@ import {
   deleteAdminProduct,
   deleteStaticProduct,
   saveStaticProductOverride,
+  getLastCatalogHydrationError,
   stripShopCategoriesFromOthers,
   updateAdminProduct,
 } from '../../services/productService'
 import type { AdminProductInput } from '../../types/adminProduct'
 
 export default function AdminProductsPage() {
-  const { products } = useProductCatalog()
+  const { products, version } = useProductCatalog()
   const [editing, setEditing] = useState<ProductDetail | null>(null)
   const [adding, setAdding] = useState(false)
   const [saveError, setSaveError] = useState('')
+  const [catalogWarning, setCatalogWarning] = useState('')
   const { sorted, setSort } = useSortedProducts(products as ProductDetail[])
+
+  useEffect(() => {
+    const hydrationError = getLastCatalogHydrationError()
+    if (hydrationError) {
+      setCatalogWarning(hydrationError)
+      return
+    }
+    if (!isSupabaseConfigured()) {
+      setCatalogWarning(
+        'Supabase is not configured on this deployment. Only built-in products are shown. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY on Vercel, then redeploy.',
+      )
+      return
+    }
+    const adminCount = products.filter((p) => (p as ProductDetail).source === 'admin').length
+    if (adminCount === 0 && products.length < 100) {
+      setCatalogWarning(
+        'Cloud products did not load — only built-in catalog is visible. Check Vercel environment variables and redeploy.',
+      )
+      return
+    }
+    setCatalogWarning('')
+  }, [products, version])
 
   const handleSave = async (input: AdminProductInput) => {
     try {
@@ -64,6 +89,13 @@ export default function AdminProductsPage() {
 
   return (
     <div className="p-6 md:p-8">
+      {catalogWarning && (
+        <div className="mb-6 flex items-start gap-3 border border-gold/40 bg-gold/10 px-4 py-3 text-sm text-charcoal">
+          <AlertTriangle size={18} className="mt-0.5 shrink-0 text-gold" />
+          <p>{catalogWarning}</p>
+        </div>
+      )}
+
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-serif text-2xl text-charcoal">Products</h1>

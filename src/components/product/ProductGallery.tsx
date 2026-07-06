@@ -37,6 +37,8 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
                 src={img}
                 alt=""
                 className="h-full w-full object-cover object-top"
+                loading="lazy"
+                decoding="async"
               />
             </button>
           ))}

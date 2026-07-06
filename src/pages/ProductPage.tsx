@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ProductGallery from '../components/product/ProductGallery'
 import ProductPurchase from '../components/product/ProductPurchase'
+import SEO from '../components/ui/SEO'
 
 import ProductCard from '../components/ui/ProductCard'
 import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
@@ -35,6 +36,10 @@ export default function ProductPage() {
 
   return (
     <main key={slug}>
+      <SEO 
+        title={product.name}
+        description={product.shortDescription || `Buy ${product.name} at Boutique Fashion.`}
+      />
       {(prev || next) && (
         <div className="border-b border-accent bg-cream-dark/40">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 text-xs md:px-6">

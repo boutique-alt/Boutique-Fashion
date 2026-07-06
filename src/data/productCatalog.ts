@@ -23,6 +23,7 @@ export interface ProductDetail extends Product {
   productDetails?: Record<string, string>
   addons?: ProductAddon[]
   sku?: string
+  stockQuantity?: number
   shopCategorySelections?: string[]
   source?: 'static' | 'admin'
   adminId?: string
@@ -70,6 +71,7 @@ function buildCatalog(): ProductDetail[] {
         shortDescription: extra.shortDescription ?? `Premium ${product.name} crafted with quality fabrics and elegant design.`,
         description: extra.description ?? defaultDescription(product.name),
         sizes: extra.sizes ?? ['M', 'L', 'XL', '2XL'],
+        stockQuantity: extra.stockQuantity ?? 10, // Default for static products
         fabric: extra.fabric,
         washCare: extra.washCare,
       })
@@ -103,6 +105,7 @@ function adminToDetail(product: AdminProduct): ProductDetail {
     productDetails: product.productDetails,
     addons: product.addons,
     sku: product.sku,
+    stockQuantity: product.stockQuantity,
     shopCategorySelections: product.shopCategorySelections,
     source: 'admin',
     adminId: product.id,
@@ -123,6 +126,9 @@ function applyOverride(product: ProductDetail, override: ReturnType<typeof getPr
       merged.categoryLabel = cat.title
       merged.categoryPath = cat.parent.href === '/dress' ? `/dress/${cat.slug}` : `/${cat.slug}`
     }
+  }
+  if (override.stockQuantity !== undefined) {
+    merged.stockQuantity = override.stockQuantity
   }
   return merged
 }

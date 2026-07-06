@@ -61,6 +61,11 @@ export default function AdminProductCard({
               </p>
             )}
           </div>
+          <p className={`text-[11px] font-medium ${
+            (product.stockQuantity ?? 0) <= 0 ? 'text-red-500' : 'text-charcoal/60'
+          }`}>
+            Stock: {product.stockQuantity ?? 10}
+          </p>
         </div>
       </Link>
 

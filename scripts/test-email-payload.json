@@ -1,0 +1,31 @@
+{
+  "table": "orders",
+  "event": "INSERT",
+  "record": {
+    "id": "test-order-002",
+    "user_email": "pixelsolutionagency@gmail.com",
+    "status": "processing",
+    "subtotal": 2499,
+    "shipping": 0,
+    "total": 2499,
+    "payment_method": "razorpay",
+    "billing": {
+      "firstName": "Test",
+      "lastName": "Customer",
+      "email": "pixelsolutionagency@gmail.com",
+      "phone": "+91 9876543210",
+      "address": "Garia Station Rd",
+      "city": "Kolkata",
+      "state": "West Bengal",
+      "pincode": "700084"
+    },
+    "items": [
+      {
+        "name": "Maroon Heritage Handblock Cotton Midi Dress",
+        "size": "M",
+        "quantity": 1,
+        "price": 2499
+      }
+    ]
+  }
+}

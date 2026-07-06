@@ -1,0 +1,8 @@
+node_modules
+dist
+supabase/.temp
+.git
+playwright-report
+test-results
+temp-home.html
+*.log

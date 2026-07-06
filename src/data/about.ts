@@ -1,5 +1,3 @@
-const BF = 'https://boutiquefashion.shop/wp-content/uploads'
-
 const teamPhoto = '/images/about/team-hero.png'
 
 export const aboutAssets = {

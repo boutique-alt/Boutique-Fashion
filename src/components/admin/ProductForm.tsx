@@ -32,6 +32,7 @@ const emptyForm: AdminProductInput = {
   shortDescription: '',
   description: '',
   sku: '',
+  stockQuantity: 10,
   fabric: '',
   productDetails: {},
   addons: [],
@@ -83,6 +84,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
         categorySlug: product.categorySlug,
         sizes: product.sizes,
         sku: product.sku ?? '',
+        stockQuantity: product.stockQuantity ?? 10,
         shortDescription: product.shortDescription ?? '',
         description: product.description,
         onSale: product.onSale,
@@ -220,6 +222,10 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
         <div>
           <label className="mb-1.5 block text-xs tracking-wide text-charcoal/70 uppercase">Sizes (comma-separated)</label>
           <input value={sizesText} onChange={(e) => setSizesText(e.target.value)} className={inputClass} placeholder="M, L, XL, 2XL" />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-xs tracking-wide text-charcoal/70 uppercase">Stock Quantity *</label>
+          <input type="number" min={0} required value={form.stockQuantity ?? ''} onChange={(e) => handleChange('stockQuantity', Number(e.target.value))} className={inputClass} />
         </div>
         <div className="sm:col-span-2">
           <label className="mb-1.5 block text-xs tracking-wide text-charcoal/70 uppercase">Product Code (SKU)</label>

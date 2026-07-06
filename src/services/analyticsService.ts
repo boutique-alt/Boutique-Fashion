@@ -13,6 +13,10 @@ import { getSupabaseForAdminData } from './adminDataClient'
 
 let visitsCache: PageVisit[] | null = null
 
+export function clearAnalyticsCache(): void {
+  visitsCache = null
+}
+
 export async function loadPageVisits(): Promise<PageVisit[]> {
   if (!isSupabaseConfigured()) {
     visitsCache = []

@@ -1,0 +1,138 @@
+[
+  {
+    "name": "order-shipped",
+    "payload": {
+      "table": "orders",
+      "event": "UPDATE",
+      "record": {
+        "id": "test-order-003",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "shipped",
+        "subtotal": 2499,
+        "shipping": 0,
+        "total": 2499,
+        "payment_method": "razorpay",
+        "billing": {
+          "firstName": "Test",
+          "lastName": "Customer",
+          "phone": "+91 9876543210",
+          "address": "Garia Station Rd",
+          "city": "Kolkata",
+          "state": "West Bengal",
+          "pincode": "700084"
+        },
+        "items": [{ "name": "Maroon Heritage Dress", "size": "M", "quantity": 1, "price": 2499 }]
+      },
+      "old_record": { "status": "processing" }
+    }
+  },
+  {
+    "name": "order-delivered",
+    "payload": {
+      "table": "orders",
+      "event": "UPDATE",
+      "record": {
+        "id": "test-order-003",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "delivered",
+        "subtotal": 2499,
+        "shipping": 0,
+        "total": 2499,
+        "payment_method": "razorpay",
+        "billing": { "firstName": "Test", "lastName": "Customer" },
+        "items": [{ "name": "Maroon Heritage Dress", "size": "M", "quantity": 1, "price": 2499 }]
+      },
+      "old_record": { "status": "shipped" }
+    }
+  },
+  {
+    "name": "order-cancelled",
+    "payload": {
+      "table": "orders",
+      "event": "UPDATE",
+      "record": {
+        "id": "test-order-004",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "cancelled",
+        "total": 1499,
+        "payment_method": "cod",
+        "items": [{ "name": "Cotton Kurti Set", "size": "L", "quantity": 1, "price": 1499 }]
+      },
+      "old_record": { "status": "processing" }
+    }
+  },
+  {
+    "name": "return-requested",
+    "payload": {
+      "table": "returns",
+      "event": "INSERT",
+      "record": {
+        "id": "test-return-001",
+        "order_id": "test-order-003",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "requested",
+        "reason": "Wrong size"
+      }
+    }
+  },
+  {
+    "name": "return-approved",
+    "payload": {
+      "table": "returns",
+      "event": "UPDATE",
+      "record": {
+        "id": "test-return-001",
+        "order_id": "test-order-003",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "approved",
+        "reason": "Wrong size"
+      },
+      "old_record": { "status": "requested" }
+    }
+  },
+  {
+    "name": "return-rejected",
+    "payload": {
+      "table": "returns",
+      "event": "UPDATE",
+      "record": {
+        "id": "test-return-002",
+        "order_id": "test-order-004",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "rejected",
+        "reason": "Changed mind"
+      },
+      "old_record": { "status": "requested" }
+    }
+  },
+  {
+    "name": "return-picked-up",
+    "payload": {
+      "table": "returns",
+      "event": "UPDATE",
+      "record": {
+        "id": "test-return-001",
+        "order_id": "test-order-003",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "picked_up",
+        "reason": "Wrong size"
+      },
+      "old_record": { "status": "approved" }
+    }
+  },
+  {
+    "name": "return-refunded",
+    "payload": {
+      "table": "returns",
+      "event": "UPDATE",
+      "record": {
+        "id": "test-return-001",
+        "order_id": "test-order-003",
+        "user_email": "pixelsolutionagency@gmail.com",
+        "status": "refunded",
+        "reason": "Wrong size"
+      },
+      "old_record": { "status": "picked_up" }
+    }
+  }
+]

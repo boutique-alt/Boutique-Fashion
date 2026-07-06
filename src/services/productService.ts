@@ -45,6 +45,19 @@ async function requireAdminCloudSession(): Promise<void> {
 let productsCache: AdminProduct[] | null = null
 let deletedCache: string[] | null = null
 let overridesCache: Record<string, ProductOverride> | null = null
+let lastHydrationError: string | undefined
+
+const PRODUCTS_PAGE_SIZE = 1000
+
+export interface CatalogHydrationResult {
+  ok: boolean
+  error?: string
+  adminProductCount: number
+}
+
+export function getLastCatalogHydrationError(): string | undefined {
+  return lastHydrationError
+}
 
 function slugify(name: string): string {
   return name
@@ -128,28 +141,73 @@ function categoryMeta(categorySlug: string) {
   return { categoryLabel: cat.title, categoryPath }
 }
 
-export async function hydrateProductStore(): Promise<void> {
+async function fetchAllProducts(): Promise<{ rows: DbProduct[]; error?: string }> {
+  const client = getSupabase()
+  const rows: DbProduct[] = []
+  let from = 0
+
+  while (true) {
+    const { data, error } = await client
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .range(from, from + PRODUCTS_PAGE_SIZE - 1)
+
+    if (error) return { rows: [], error: error.message }
+    if (!data?.length) break
+
+    rows.push(...(data as DbProduct[]))
+    if (data.length < PRODUCTS_PAGE_SIZE) break
+    from += PRODUCTS_PAGE_SIZE
+  }
+
+  return { rows }
+}
+
+export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
   if (!isSupabaseConfigured()) {
     productsCache = []
     deletedCache = []
     overridesCache = {}
+    lastHydrationError = import.meta.env.PROD
+      ? 'Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY on Vercel, then redeploy.'
+      : undefined
     notifyCatalogChanged()
-    return
+    return { ok: !lastHydrationError, error: lastHydrationError, adminProductCount: 0 }
   }
 
   const client = getSupabase()
   const [productsRes, hiddenRes, overridesRes] = await Promise.all([
-    client.from('products').select('id, slug, name, price, original_price, image, category_slug, category_label, category_path, sizes, short_description, description, on_sale, is_new, is_bestseller, video_url, addons, shop_category_selections, created_at, updated_at').order('created_at', { ascending: false }),
+    fetchAllProducts(),
     client.from('catalog_hidden_slugs').select('slug'),
     client.from('catalog_overrides').select('slug, override_data'),
   ])
 
-  productsCache = productsRes.data ? (productsRes.data as unknown as DbProduct[]).map(mapProduct) : []
+  const errors = [
+    productsRes.error,
+    hiddenRes.error?.message,
+    overridesRes.error?.message,
+  ].filter(Boolean) as string[]
+
+  if (errors.length > 0) {
+    lastHydrationError = errors.join('; ')
+    console.error('[catalog] hydration failed:', lastHydrationError)
+    notifyCatalogChanged()
+    return {
+      ok: false,
+      error: lastHydrationError,
+      adminProductCount: productsCache?.length ?? 0,
+    }
+  }
+
+  productsCache = productsRes.rows.map(mapProduct)
   deletedCache = hiddenRes.data ? hiddenRes.data.map((r: { slug: string }) => r.slug) : []
   overridesCache = overridesRes.data
     ? mapOverrides(overridesRes.data as { slug: string; override_data: ProductOverride }[])
     : {}
+  lastHydrationError = undefined
   notifyCatalogChanged()
+  return { ok: true, adminProductCount: productsCache.length }
 }
 
 export function getAdminProducts(): AdminProduct[] {

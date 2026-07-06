@@ -90,6 +90,7 @@ export interface DbProduct {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addons: any[] | null
   sku: string | null
+  stock_quantity: number
   shop_category_selections: string[] | null
   created_at: string
   updated_at: string
@@ -187,6 +188,7 @@ export function mapProduct(row: DbProduct): AdminProduct {
     productDetails: row.product_details ?? undefined,
     addons: row.addons ?? undefined,
     sku: row.sku ?? undefined,
+    stockQuantity: row.stock_quantity ?? 0,
     shopCategorySelections: row.shop_category_selections ?? undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -216,6 +218,7 @@ export function productToDb(input: Omit<AdminProduct, 'id' | 'createdAt' | 'upda
     product_details: input.productDetails ?? null,
     addons: input.addons ?? null,
     sku: input.sku ?? null,
+    stock_quantity: input.stockQuantity ?? 0,
     shop_category_selections: input.shopCategorySelections ?? [],
   }
 }

@@ -111,7 +111,7 @@ export default function CheckoutPage() {
       }
 
       const result = await initiateRazorpayPayment({
-        amount: cartTotal * 100,
+        amount: cartTotal * 100, // Still passed but overridden by backend
         name: brand.name,
         description: `Order — ${cart.length} item(s)`,
         prefill: {
@@ -119,6 +119,8 @@ export default function CheckoutPage() {
           email: accountEmail,
           contact: form.phone,
         },
+        items: cart,
+        billing: { ...form, email: accountEmail },
       })
 
       if (!result.success) {
