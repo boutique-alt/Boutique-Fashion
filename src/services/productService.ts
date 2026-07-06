@@ -370,7 +370,7 @@ const adminCategoryLabels: Record<string, string> = {
   'coord-set': 'Coord Set',
   'tops-pant-skirt': 'Tops with Pant / Skirt',
   blouse: 'Blouse',
-  mens: 'Blouse Men',
+  mens: "Men's",
   'three-piece': 'Suit Set',
   fabric: 'Fabric',
   bridal: 'Bridal',
