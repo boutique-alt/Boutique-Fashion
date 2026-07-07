@@ -37,11 +37,16 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
         description={description} 
       />
       <CategorySchema category={config} />
-      {config.description && (
-        <p className="mx-auto max-w-2xl px-4 pt-10 text-center text-sm leading-relaxed text-charcoal/60 md:px-6">
-          {config.description}
-        </p>
-      )}
+      <div className="mx-auto max-w-7xl px-4 pt-10 text-center md:px-6">
+        <h1 className="font-serif text-3xl font-medium text-charcoal md:text-4xl">
+          {config.title || 'Collection'}
+        </h1>
+        {config.description && (
+          <p className="mt-4 text-sm leading-relaxed text-charcoal/60">
+            {config.description}
+          </p>
+        )}
+      </div>
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <CategoryToolbar total={categoryProducts.length} onSortChange={setSort} />

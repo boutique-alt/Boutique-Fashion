@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Truck, RotateCcw, ChevronDown, ChevronUp, Mail, Phone, Sparkles } from 'lucide-react'
+import { Truck, RotateCcw, ChevronDown, ChevronUp, Mail, Phone, Sparkles, Share2 } from 'lucide-react'
 import type { ProductDetail } from '../../data/productCatalog'
 import type { ProductAddon } from '../../types/adminProduct'
 import { useStore } from '../../context/StoreContext'
@@ -195,6 +195,38 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
           <Truck size={18} className="shrink-0" />
           <span>Estimated Delivery 7-9 working days after the order.</span>
         </div>
+
+        <div className="mt-3 flex items-center justify-center gap-4 border-t border-accent/40 pt-4">
+          <span className="text-[11px] font-bold tracking-widest text-charcoal/60 uppercase">Share</span>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-charcoal/60 hover:text-[#1877F2] transition-colors"
+            aria-label="Share on Facebook"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+          <a
+            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('Check out this amazing ' + product.name + ' at Boutique Fashion!')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-charcoal/60 hover:text-[#1DA1F2] transition-colors"
+            aria-label="Share on Twitter"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+          </a>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href)
+              alert('Link copied to clipboard!')
+            }}
+            className="text-charcoal/60 hover:text-maroon transition-colors"
+            aria-label="Copy Link"
+          >
+            <Share2 size={18} strokeWidth={1.5} />
+          </button>
+        </div>
       </div>
 
       {/* Box 6: Accordions Group */}
@@ -318,7 +350,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
       <div className="border border-accent/80 bg-white p-5 rounded-md shadow-sm divide-y divide-accent/40">
 
         <div className="pb-5">
-          <h3 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Contact Us</h3>
+          <h2 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Contact Us</h2>
           <div className="space-y-3 text-[13px] text-charcoal/70 font-light leading-relaxed">
             <p className="font-medium text-charcoal">Find our location. Visit Our Store</p>
             <p className="flex items-center gap-2">
@@ -337,7 +369,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         </div>
 
         <div className="pt-5">
-          <h3 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Our Boutique</h3>
+          <h2 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Our Boutique</h2>
           <div className="space-y-2 text-[13px] text-charcoal/70 font-light leading-relaxed">
             <p>
               <strong className="font-semibold text-charcoal">Address:</strong>{' '}

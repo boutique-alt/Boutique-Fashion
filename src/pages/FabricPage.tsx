@@ -3,6 +3,7 @@ import { Layers } from 'lucide-react'
 import ProductCard from '../components/ui/ProductCard'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets, aboutPillars } from '../data/about'
+import SEO from '../components/ui/SEO'
 
 const fabrics = [
   'Pure Cotton & Handloom',
@@ -18,6 +19,7 @@ export default function FabricPage() {
 
   return (
     <main>
+      <SEO title="Our Fabrics" description="Explore the premium, sustainable fabrics used in Boutique Fashion collections." />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="mx-auto mb-12 max-w-2xl text-center">

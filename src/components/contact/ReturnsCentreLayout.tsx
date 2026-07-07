@@ -11,7 +11,7 @@ export default function ReturnsCentreLayout() {
   return (
     <div className="grid gap-10 lg:grid-cols-[260px_1fr] lg:gap-14">
       <aside className="border border-accent bg-cream-dark/30 p-4 md:p-6">
-        <h3 className="mb-4 font-serif text-lg text-charcoal">Returns Centre</h3>
+        <h2 className="mb-4 font-serif text-lg text-charcoal">Returns Centre</h2>
         <nav className="space-y-1">
           {contactSections.map((item) => (
             <button

@@ -2,18 +2,18 @@
   "table": "orders",
   "event": "INSERT",
   "record": {
-    "id": "test-order-002",
-    "user_email": "pixelsolutionagency@gmail.com",
+    "id": "live-test-001",
+    "user_email": "theboutiquesarees@gmail.com",
     "status": "processing",
     "subtotal": 2499,
     "shipping": 0,
     "total": 2499,
     "payment_method": "razorpay",
     "billing": {
-      "firstName": "Test",
-      "lastName": "Customer",
-      "email": "pixelsolutionagency@gmail.com",
-      "phone": "+91 9876543210",
+      "firstName": "Boutique",
+      "lastName": "Fashion",
+      "email": "theboutiquesarees@gmail.com",
+      "phone": "+91 8334816333",
       "address": "Garia Station Rd",
       "city": "Kolkata",
       "state": "West Bengal",
@@ -21,7 +21,7 @@
     },
     "items": [
       {
-        "name": "Maroon Heritage Handblock Cotton Midi Dress",
+        "name": "Test Order — Live Production",
         "size": "M",
         "quantity": 1,
         "price": 2499

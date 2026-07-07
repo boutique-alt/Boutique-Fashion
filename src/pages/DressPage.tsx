@@ -2,10 +2,12 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import SectionHeading from '../components/ui/SectionHeading'
 import { dressCategories } from '../data/categories'
+import SEO from '../components/ui/SEO'
 
 export default function DressPage() {
   return (
     <main>
+      <SEO title="Dresses & Kurta Sets" description="Discover our collection of premium dresses, kurta sets, and coord sets crafted for elegance." />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <SectionHeading

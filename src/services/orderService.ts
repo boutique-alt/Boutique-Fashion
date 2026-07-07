@@ -5,7 +5,6 @@ import type { Order, OrderBilling, PaymentMethod, PaymentStatus } from '../types
 import { isOrderStatusLocked } from '../types/order'
 import type { CartItem } from '../context/StoreContext'
 import { getSupabaseForAdminData } from './adminDataClient'
-import { notifyStatusEmail } from './emailNotificationService'
 
 let ordersCache: Order[] | null = null
 
@@ -143,7 +142,6 @@ export async function createOrder(params: {
 
   const order = mapOrder(row as DbOrder)
   ordersCache = [order, ...(ordersCache ?? [])]
-  notifyStatusEmail({ table: 'orders', record: row, event: 'INSERT' })
   return order
 }
 
@@ -166,6 +164,5 @@ export async function updateOrderStatus(id: string, status: Order['status']): Pr
 
   if (error) return false
   ordersCache = (ordersCache ?? []).map((o) => (o.id === id ? updated : o))
-  notifyStatusEmail({ table: 'orders', record: updated, oldRecord: order })
   return true
 }

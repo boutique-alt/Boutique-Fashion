@@ -16,7 +16,7 @@ import SEO from '../components/ui/SEO'
 export default function HomePage() {
   return (
     <main>
-      <SEO title="Home" />
+      <SEO title="Where Comfort meets Confidence" description="Discover premium boutique fashion, exclusive clothing, and accessories at Boutique Fashion." />
       <Hero />
       <SummerSale />
       <NewArrival />

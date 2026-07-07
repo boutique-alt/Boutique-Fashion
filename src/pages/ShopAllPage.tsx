@@ -3,6 +3,7 @@ import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getShopPageProducts, getShopResultRange, getShopTotalPages } from '../data/shop'
 import { useProductCatalog } from '../hooks/useProductCatalog'
+import SEO from '../components/ui/SEO'
 
 export default function ShopAllPage() {
   const { page } = useParams<{ page?: string }>()
@@ -28,8 +29,10 @@ export default function ShopAllPage() {
 
   return (
     <main>
+      <SEO title="Shop All" description="Browse our complete collection of premium boutique clothing." />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <h1 className="mb-6 font-serif text-3xl font-medium text-charcoal md:text-4xl">Shop All</h1>
           <div className="mb-4 text-sm text-charcoal/60">
             Showing {range.from}–{range.to} of {range.total} results
           </div>

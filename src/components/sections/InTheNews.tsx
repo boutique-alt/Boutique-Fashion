@@ -7,6 +7,7 @@ export default function InTheNews() {
   return (
     <section className="border-y border-accent py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <h2 className="sr-only">Why Choose Us</h2>
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           {features.map((feature, i) => {
             const Icon = icons[i]

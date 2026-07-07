@@ -1,6 +1,9 @@
 import { Sparkles } from 'lucide-react'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
+import SectionHeading from '../components/ui/SectionHeading'
+import { bridalCategories } from '../data/categories'
+import SEO from '../components/ui/SEO'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 
 const bridalSlugs = new Set(['blouse', 'three-piece', 'bridal'])
@@ -12,6 +15,7 @@ export default function BridalPage() {
 
   return (
     <main>
+      <SEO title="Bridal Collection" description="Discover our exquisite bridal collection for the perfect wedding dress." />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="mx-auto mb-12 max-w-2xl text-center">

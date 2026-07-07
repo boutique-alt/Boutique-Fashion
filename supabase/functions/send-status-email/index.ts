@@ -141,11 +141,14 @@ function resolveEmailContent(
   return null
 }
 
-async function sendViaResend(to: string, content: EmailContent): Promise<void> {
+async function sendViaResend(to: string, content: EmailContent): Promise<string[]> {
   const apiKey = getEnv('RESEND_API_KEY')
   if (!apiKey) throw new Error('RESEND_API_KEY is not configured')
 
-  const from = getEnv('EMAIL_FROM', 'Boutique Fashion <onboarding@resend.dev>')
+  const from = getEnv('EMAIL_FROM', 'Boutique Fashion <orders@boutiquefashion.shop>')
+  const replyTo = getEnv('REPLY_TO_EMAIL', 'theboutiquesarees@gmail.com')
+  const adminNotify = getEnv('ADMIN_NOTIFY_EMAIL', 'theboutiquesarees@gmail.com').toLowerCase()
+  const bcc = adminNotify && adminNotify !== to.toLowerCase() ? [adminNotify] : undefined
 
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -155,7 +158,9 @@ async function sendViaResend(to: string, content: EmailContent): Promise<void> {
     },
     body: JSON.stringify({
       from,
+      reply_to: replyTo,
       to: [to],
+      ...(bcc ? { bcc } : {}),
       subject: content.subject,
       html: content.html,
     }),
@@ -165,6 +170,8 @@ async function sendViaResend(to: string, content: EmailContent): Promise<void> {
     const detail = await res.text()
     throw new Error(detail || 'Resend API request failed')
   }
+
+  return bcc ?? []
 }
 
 serve(async (req) => {
@@ -206,8 +213,8 @@ serve(async (req) => {
       return jsonResponse({ error: 'Recipient email missing' }, 400)
     }
 
-    await sendViaResend(to, content)
-    return jsonResponse({ sent: true, to, subject: content.subject })
+    const bcc = await sendViaResend(to, content)
+    return jsonResponse({ sent: true, to, bcc, subject: content.subject })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return jsonResponse({ error: message }, 400)
