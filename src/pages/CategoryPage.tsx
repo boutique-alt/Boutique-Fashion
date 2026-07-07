@@ -66,6 +66,14 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
             </div>
           )}
         </div>
+
+        {/* SEO Keyword Density Paragraph */}
+        <div className="mt-16 mx-auto max-w-5xl border-t border-accent/30 pt-10 text-center px-4">
+          <h2 className="text-lg font-serif text-charcoal mb-3">Shop Premium {config?.title || 'Boutique Fashion'}</h2>
+          <p className="text-[13px] text-charcoal/60 leading-relaxed font-light">
+            Discover the finest selection of {config?.title?.toLowerCase() || 'premium clothing'} at Boutique Fashion. We specialize in curating high-quality, elegant fashion pieces that offer unmatched comfort and style. From sophisticated daily wear to luxurious ceremonial outfits, our carefully designed collections are crafted with the best pure cotton, handloom, and silk fabrics available. Upgrade your wardrobe with our latest arrivals and experience the true essence of modern, sustainable boutique fashion today.
+          </p>
+        </div>
       </section>
     </main>
   )

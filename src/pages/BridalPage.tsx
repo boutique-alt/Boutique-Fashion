@@ -34,6 +34,14 @@ export default function BridalPage() {
             ))}
           </div>
         </div>
+
+        {/* SEO Keyword Density Paragraph */}
+        <div className="mt-16 mx-auto max-w-5xl border-t border-accent/30 pt-10 text-center px-4">
+          <h2 className="text-lg font-serif text-charcoal mb-3">Exclusive Bridal Wear & Designer Blouses</h2>
+          <p className="text-[13px] text-charcoal/60 leading-relaxed font-light">
+            Welcome to the ultimate destination for elegant bridal wear and ceremonial fashion. Our exclusive bridal collection features exquisite designer blouses, premium three-piece suit sets, and luxurious wedding outfits crafted for your special moments. Each piece is designed with delicate Khadi embroidery, intricate handwork, and luxurious fabrics to ensure you look absolutely stunning. Whether you are a bride-to-be or attending a grand celebration, our bespoke bridal boutique offers the finest ceremonial fashion that blends traditional heritage with contemporary elegance.
+          </p>
+        </div>
       </section>
     </main>
   )

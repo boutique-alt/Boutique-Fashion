@@ -60,6 +60,14 @@ export default function ShopAllPage() {
             </div>
           )}
         </div>
+        
+        {/* SEO Keyword Density Paragraph */}
+        <div className="mt-16 mx-auto max-w-5xl border-t border-accent/30 pt-10 text-center px-4">
+          <h2 className="text-lg font-serif text-charcoal mb-3">Premium Boutique Fashion Collection</h2>
+          <p className="text-[13px] text-charcoal/60 leading-relaxed font-light">
+            Explore our meticulously curated selection of premium boutique fashion at Boutique Fashion. We offer an exclusive range of clothing including elegant dresses, beautiful kurta sets, and sophisticated coord sets. Crafted with luxurious fabrics like pure cotton, Chanderi, and Katan silk, our online boutique guarantees high-quality, comfortable, and sustainable fashion for every occasion. Shop the latest arrivals in women's clothing and elevate your wardrobe with our signature handblock prints and delicate embroidery.
+          </p>
+        </div>
       </section>
     </main>
   )

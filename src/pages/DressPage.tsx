@@ -42,6 +42,14 @@ export default function DressPage() {
             ))}
           </div>
         </div>
+
+        {/* SEO Keyword Density Paragraph */}
+        <div className="mt-16 mx-auto max-w-5xl border-t border-accent/30 pt-10 text-center px-4">
+          <h2 className="text-lg font-serif text-charcoal mb-3">Premium Dresses, Kurta Sets & Coord Sets</h2>
+          <p className="text-[13px] text-charcoal/60 leading-relaxed font-light">
+            Elevate your everyday wardrobe with our exclusive collection of premium dresses, traditional kurta sets, and modern coord sets. Crafted with the finest materials including breathable pure cotton and handloom weaves, our dresses offer the perfect blend of comfort and confidence. Whether you are looking for a casual day outfit or a sophisticated evening look, our boutique fashion selection is meticulously curated for modern women who appreciate quality and style. Shop our versatile collections today to experience luxury fashion tailored just for you.
+          </p>
+        </div>
       </section>
     </main>
   )
