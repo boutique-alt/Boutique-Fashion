@@ -74,6 +74,7 @@ export default function Hero() {
                 {slide.title}
                 <span className="mt-1 block font-light text-charcoal/90">{slide.subtitle}</span>
               </h1>
+              <p className="sr-only">{slide.title} {slide.subtitle}</p>
               <div className="mt-5 h-px w-16 bg-maroon/30" />
               {slide.description && (
                 <p className="mt-5 max-w-md font-accent text-sm font-light leading-[1.8] tracking-wide text-charcoal/65 md:text-[15px]">
