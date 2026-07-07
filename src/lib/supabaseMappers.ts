@@ -74,6 +74,7 @@ export interface DbProduct {
   price: number
   original_price: number | null
   image: string
+  additional_images: string[] | null
   category_slug: string
   category_label: string
   category_path: string
@@ -173,6 +174,7 @@ export function mapProduct(row: DbProduct): AdminProduct {
     price: Number(row.price),
     originalPrice: row.original_price ? Number(row.original_price) : undefined,
     image: row.image,
+    additionalImages: row.additional_images ?? [],
     categorySlug: row.category_slug,
     categoryLabel: row.category_label,
     categoryPath: row.category_path,
@@ -203,6 +205,7 @@ export function productToDb(input: Omit<AdminProduct, 'id' | 'createdAt' | 'upda
     price: input.price,
     original_price: input.originalPrice ?? null,
     image: input.image,
+    additional_images: input.additionalImages ?? [],
     category_slug: input.categorySlug,
     category_label: input.categoryLabel,
     category_path: input.categoryPath,

@@ -93,7 +93,9 @@ function adminToDetail(product: AdminProduct): ProductDetail {
     isBestSeller: product.isBestSeller,
     newArrivalVideo: product.newArrivalVideo,
     slug: product.slug,
-    images: [product.image],
+    images: product.additionalImages && product.additionalImages.length > 0 
+      ? [product.image, ...product.additionalImages] 
+      : [product.image],
     shortDescription: product.shortDescription,
     description: product.description,
     sizes: product.sizes,

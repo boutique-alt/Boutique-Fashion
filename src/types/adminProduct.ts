@@ -11,6 +11,7 @@ export interface AdminProductInput {
   price: number
   originalPrice?: number
   image: string
+  additionalImages?: string[]
   categorySlug: string
   sizes: string[]
   shortDescription: string

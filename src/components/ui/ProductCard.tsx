@@ -55,13 +55,24 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               preload="metadata"
             />
           ) : (
-            <img
-              src={product.image}
-              alt={product.name}
-              className="h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-              loading="lazy"
-              decoding="async"
-            />
+            <>
+              <img
+                src={product.image}
+                alt={product.name}
+                className={`h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.03] ${product.images && product.images.length > 1 ? 'group-hover:opacity-0 transition-opacity' : ''}`}
+                loading="lazy"
+                decoding="async"
+              />
+              {product.images && product.images.length > 1 && (
+                <img
+                  src={product.images[1]}
+                  alt={`${product.name} alternate`}
+                  className="absolute inset-0 h-full w-full object-contain object-center opacity-0 transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:opacity-100"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+            </>
           )}
           {product.isNew && (
             <span className="absolute left-2 top-2 bg-charcoal px-2 py-0.5 text-[9px] font-medium tracking-widest text-cream uppercase">

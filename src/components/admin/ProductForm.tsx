@@ -36,6 +36,7 @@ const emptyForm: AdminProductInput = {
   fabric: '',
   productDetails: {},
   addons: [],
+  additionalImages: [],
 }
 
 const inputClass =
@@ -94,6 +95,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
         fabric: product.fabric ?? '',
         productDetails: product.productDetails ?? {},
         addons: product.addons ?? [],
+        additionalImages: product.additionalImages ?? [],
       })
       setSizesText(product.sizes.join(', '))
       setAddons(product.addons ?? [])
@@ -182,6 +184,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
       newArrivalVideo: form.newArrivalVideo?.trim() || undefined,
       productDetails: Object.keys(productDetails).length ? productDetails : undefined,
       addons: addons.length ? addons : undefined,
+      additionalImages: form.additionalImages?.filter(Boolean) || [],
       shopCategorySelections: shopCategoryCheckboxOptions
         .map((c) => c.id)
         .filter((id) => shopCategoryChecks[id]),
@@ -210,6 +213,17 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
         </div>
         <div className="sm:col-span-2">
           <ProductImageUpload value={form.image} onChange={(url) => handleChange('image', url)} />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="mb-1.5 block text-xs tracking-wide text-charcoal/70 uppercase">Secondary Image (Hover Effect)</label>
+          <ProductImageUpload 
+            value={form.additionalImages?.[0] ?? ''} 
+            onChange={(url) => {
+              const newImages = [...(form.additionalImages ?? [])];
+              newImages[0] = url;
+              handleChange('additionalImages', newImages);
+            }} 
+          />
         </div>
         <div>
           <label className="mb-1.5 block text-xs tracking-wide text-charcoal/70 uppercase">Category *</label>
