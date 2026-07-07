@@ -1,8 +1,6 @@
 import { Sparkles } from 'lucide-react'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
-import SectionHeading from '../components/ui/SectionHeading'
-import { bridalCategories } from '../data/categories'
 import SEO from '../components/ui/SEO'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 
