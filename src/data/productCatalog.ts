@@ -27,6 +27,7 @@ export interface ProductDetail extends Product {
   shopCategorySelections?: string[]
   source?: 'static' | 'admin'
   adminId?: string
+  additionalImages?: string[]
 }
 
 

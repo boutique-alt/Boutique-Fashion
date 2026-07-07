@@ -124,7 +124,7 @@ export default function ProductForm({ product, onSave, onCancel, error }: Produc
     }
   }, [product])
 
-  const handleChange = (field: keyof AdminProductInput, value: string | number | boolean) => {
+  const handleChange = (field: keyof AdminProductInput, value: string | number | boolean | string[]) => {
     setValidationError('')
     setForm((prev) => {
       const next = { ...prev, [field]: value }
