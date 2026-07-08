@@ -106,27 +106,80 @@ async function isAuthorized(
   return Boolean(adminRow)
 }
 
-async function enrichRecord(
-  table: TableName,
+async function enrichOrderItemImages(
   record: Record<string, unknown>,
 ): Promise<Record<string, unknown>> {
-  if (table !== 'returns' || record.order) return record
+  const order = (record.order as Record<string, unknown> | undefined) ?? record
+  if (!Array.isArray(order.items)) return record
 
-  const orderId = record.order_id
-  if (!orderId || typeof orderId !== 'string') return record
+  const items = order.items as Record<string, unknown>[]
+  const slugsNeedingImage = [
+    ...new Set(
+      items
+        .filter((item) => {
+          const image = String(item.image ?? '')
+          return (!image || image.startsWith('data:')) && item.slug
+        })
+        .map((item) => String(item.slug)),
+    ),
+  ]
+
+  if (!slugsNeedingImage.length) return record
 
   const adminClient = createClient(
     Deno.env.get('SUPABASE_URL') ?? '',
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
   )
 
-  const { data } = await adminClient
-    .from('orders')
-    .select('id, items, billing, subtotal, shipping, total, payment_method, payment_status')
-    .eq('id', orderId)
-    .maybeSingle()
+  const { data: products } = await adminClient
+    .from('products')
+    .select('slug, image')
+    .in('slug', slugsNeedingImage)
 
-  return data ? { ...record, order: data } : record
+  if (!products?.length) return record
+
+  const imageBySlug = Object.fromEntries(
+    products.map((product) => [product.slug, product.image]),
+  )
+
+  const enrichedItems = items.map((item) => {
+    const image = String(item.image ?? '')
+    if (image && !image.startsWith('data:')) return item
+
+    const slug = String(item.slug ?? '')
+    const fallbackImage = slug ? imageBySlug[slug] : undefined
+    return fallbackImage ? { ...item, image: fallbackImage } : item
+  })
+
+  const enrichedOrder = { ...order, items: enrichedItems }
+  return record.order ? { ...record, order: enrichedOrder } : enrichedOrder
+}
+
+async function enrichRecord(
+  table: TableName,
+  record: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  let enriched = record
+
+  if (table === 'returns' && !record.order) {
+    const orderId = record.order_id
+    if (orderId && typeof orderId === 'string') {
+      const adminClient = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      )
+
+      const { data } = await adminClient
+        .from('orders')
+        .select('id, items, billing, subtotal, shipping, total, payment_method, payment_status')
+        .eq('id', orderId)
+        .maybeSingle()
+
+      enriched = data ? { ...record, order: data } : record
+    }
+  }
+
+  return enrichOrderItemImages(enriched)
 }
 
 function resolveEmailContent(

@@ -14,6 +14,8 @@ interface OrderItem {
   size?: string
   quantity?: number
   price?: number
+  image?: string
+  slug?: string
 }
 
 interface OrderBilling {
@@ -52,6 +54,50 @@ function paymentLabel(method: string): string {
   return labels[method] ?? method
 }
 
+function resolveImageUrl(image: string | undefined, siteUrl: string): string | null {
+  if (!image || image.startsWith('data:')) return null
+  if (/^https?:\/\//i.test(image)) return image
+  if (image.startsWith('/')) return `${siteUrl}${image}`
+  return null
+}
+
+function buildItemImageCell(imageUrl: string | null, name: string): string {
+  if (imageUrl) {
+    return `<img src="${imageUrl}" alt="${name}" width="60" height="75" style="display:block;width:60px;height:75px;object-fit:cover;border:1px solid #dddddd;background:#f5f5f5" />`
+  }
+
+  return `<div style="width:60px;height:75px;border:1px solid #dddddd;background:#f5f5f5;text-align:center;line-height:75px;font-size:10px;color:#aaaaaa">—</div>`
+}
+
+function buildProductItemsList(items: OrderItem[], siteUrl: string): string {
+  if (!items.length) return ''
+
+  const rows = items.map((item) => {
+    const name = escapeHtml(String(item.name ?? 'Item'))
+    const size = escapeHtml(String(item.size ?? '—'))
+    const qty = Number(item.quantity ?? 1)
+    const price = Number(item.price ?? 0)
+    const lineTotal = price * qty
+    const imageUrl = resolveImageUrl(item.image, siteUrl)
+
+    return `<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;border-bottom:1px solid #eeeeee">
+      <tr>
+        <td width="72" valign="top" style="padding:0 0 12px">${buildItemImageCell(imageUrl, name)}</td>
+        <td valign="top" style="padding:0 0 12px 12px">
+          <p style="margin:0;font-size:14px;line-height:1.4;color:#121216"><strong>${name}</strong></p>
+          <p style="margin:6px 0 0;font-size:12px;color:#888">Size: ${size}</p>
+          <p style="margin:4px 0 0;font-size:13px;color:#555">Qty: ${qty} · ${formatRupee(lineTotal)}</p>
+        </td>
+      </tr>
+    </table>`
+  }).join('')
+
+  return `<div style="margin:8px 0 0">
+    <p style="margin:0 0 12px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#888">Your items</p>
+    ${rows}
+  </div>`
+}
+
 function layout(title: string, body: string, cta?: { label: string; href: string }): string {
   const button = cta
     ? `<p style="margin:28px 0 0;text-align:center">
@@ -86,36 +132,23 @@ function layout(title: string, body: string, cta?: { label: string; href: string
 </html>`
 }
 
-function buildItemsTable(items: OrderItem[]): string {
-  if (!items.length) return ''
+function buildStatusBanner(title: string, subtitle?: string): string {
+  const subtitleHtml = subtitle
+    ? `<p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#555">${subtitle}</p>`
+    : ''
 
-  const rows = items.map((item) => {
-    const name = escapeHtml(String(item.name ?? 'Item'))
-    const size = escapeHtml(String(item.size ?? '—'))
-    const qty = Number(item.quantity ?? 1)
-    const price = Number(item.price ?? 0)
-    const lineTotal = price * qty
-
-    return `<tr>
-      <td style="padding:10px 0;border-bottom:1px solid #eeeeee;font-size:14px">${name}<br><span style="color:#888;font-size:12px">Size: ${size}</span></td>
-      <td style="padding:10px 8px;border-bottom:1px solid #eeeeee;font-size:14px;text-align:center">${qty}</td>
-      <td style="padding:10px 0;border-bottom:1px solid #eeeeee;font-size:14px;text-align:right">${formatRupee(lineTotal)}</td>
-    </tr>`
-  }).join('')
-
-  return `<table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 0">
-    <thead>
-      <tr>
-        <th style="padding:0 0 8px;font-size:11px;font-weight:normal;letter-spacing:0.1em;text-transform:uppercase;color:#888;text-align:left">Item</th>
-        <th style="padding:0 8px 8px;font-size:11px;font-weight:normal;letter-spacing:0.1em;text-transform:uppercase;color:#888;text-align:center">Qty</th>
-        <th style="padding:0 0 8px;font-size:11px;font-weight:normal;letter-spacing:0.1em;text-transform:uppercase;color:#888;text-align:right">Amount</th>
-      </tr>
-    </thead>
-    <tbody>${rows}</tbody>
-  </table>`
+  return `<div style="margin:0 0 8px;padding:18px 20px;background:#f7f8fc;border:1px solid #e3e7f2;text-align:center">
+    <p style="margin:0;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:${ACCENT}"><strong>${escapeHtml(title)}</strong></p>
+    ${subtitleHtml}
+  </div>`
 }
 
-function buildOrderDetailsBlock(record: Record<string, unknown>): string {
+function buildOrderDetailsBlock(
+  record: Record<string, unknown>,
+  siteUrl: string,
+  options?: { includeItems?: boolean },
+): string {
+  const includeItems = options?.includeItems ?? true
   const order = (record.order as Record<string, unknown> | undefined) ?? record
   const items = Array.isArray(order.items) ? (order.items as OrderItem[]) : []
   const billing = (order.billing as OrderBilling | undefined) ?? {}
@@ -143,7 +176,7 @@ function buildOrderDetailsBlock(record: Record<string, unknown>): string {
     ${customerName ? `<p style="margin:0;font-size:14px"><strong>${escapeHtml(customerName)}</strong></p>` : ''}
     ${billing.phone ? `<p style="margin:4px 0 0;font-size:13px;color:#555">${escapeHtml(billing.phone)}</p>` : ''}
     ${addressHtml}
-    ${buildItemsTable(items)}
+    ${includeItems ? buildProductItemsList(items, siteUrl) : ''}
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px">
       <tr>
         <td style="padding:4px 0;font-size:14px;color:#555">Subtotal</td>
@@ -164,6 +197,12 @@ function buildOrderDetailsBlock(record: Record<string, unknown>): string {
   </div>`
 }
 
+function buildOrderItemsSection(record: Record<string, unknown>, siteUrl: string): string {
+  const order = (record.order as Record<string, unknown> | undefined) ?? record
+  const items = Array.isArray(order.items) ? (order.items as OrderItem[]) : []
+  return buildProductItemsList(items, siteUrl)
+}
+
 export function buildOrderEmail(
   status: string,
   record: Record<string, unknown>,
@@ -173,26 +212,39 @@ export function buildOrderEmail(
   const orderId = String(record.id ?? '')
   const shortId = orderIdShort(orderId)
   const accountUrl = `${siteUrl}/account/orders`
-  const details = buildOrderDetailsBlock(record)
+  const items = buildOrderItemsSection(record, siteUrl)
+  const details = buildOrderDetailsBlock(record, siteUrl, { includeItems: false })
 
   if (event === 'INSERT') {
     return {
       subject: `Order confirmed — ${shortId}`,
       html: layout(
         'Order confirmed',
-        `<p style="margin:0 0 12px">Thank you for your order.</p>
-         <p style="margin:0">We have received your order and will notify you when it ships.</p>
+        `${buildStatusBanner('Order confirmed', 'Thank you for your order. We have received it and will notify you when it ships.')}
+         ${items}
          ${details}`,
         { label: 'View order', href: accountUrl },
       ),
     }
   }
 
-  const messages: Record<string, string> = {
-    processing: `Your order <strong>#${shortId}</strong> is being prepared.`,
-    shipped: `Your order <strong>#${shortId}</strong> has been shipped and is on its way.`,
-    delivered: `Your order <strong>#${shortId}</strong> has been delivered. Easy 7-day returns are available from your account.`,
-    cancelled: `Your order <strong>#${shortId}</strong> has been cancelled. Contact us if you have questions.`,
+  const messages: Record<string, { title: string; subtitle: string }> = {
+    processing: {
+      title: 'Order processing',
+      subtitle: `Your order #${shortId} is being prepared.`,
+    },
+    shipped: {
+      title: 'Order shipped',
+      subtitle: `Your order #${shortId} is on its way.`,
+    },
+    delivered: {
+      title: 'Order delivered',
+      subtitle: `Your order #${shortId} has been delivered. Easy 7-day returns are available from your account.`,
+    },
+    cancelled: {
+      title: 'Order cancelled',
+      subtitle: `Your order #${shortId} has been cancelled. Contact us if you have questions.`,
+    },
   }
 
   const intro = messages[status]
@@ -201,8 +253,8 @@ export function buildOrderEmail(
   return {
     subject: `Order ${status} — ${shortId}`,
     html: layout(
-      `Order ${status}`,
-      `<p style="margin:0 0 12px">${intro}</p>${details}`,
+      intro.title,
+      `${buildStatusBanner(intro.title, intro.subtitle)}${items}${details}`,
       { label: 'View order', href: accountUrl },
     ),
   }
@@ -217,39 +269,54 @@ export function buildReturnEmail(
   const shortId = orderIdShort(orderId)
   const reason = escapeHtml(String(record.reason ?? ''))
   const accountUrl = `${siteUrl}/account/returns`
-  const orderDetails = record.order ? buildOrderDetailsBlock(record) : ''
+  const items = record.order ? buildOrderItemsSection(record, siteUrl) : ''
+  const orderDetails = record.order
+    ? buildOrderDetailsBlock(record, siteUrl, { includeItems: false })
+    : ''
 
-  const messages: Record<string, { subject: string; body: string }> = {
+  const messages: Record<string, { subject: string; title: string; subtitle: string; reason?: boolean }> = {
     requested: {
       subject: `Return request received — ${shortId}`,
-      body: `<p style="margin:0 0 12px">We received your return request for order <strong>#${shortId}</strong>.</p>
-             <p style="margin:0 0 8px"><strong>Reason:</strong> ${reason}</p>
-             <p style="margin:0">We will review within 48 hours.</p>`,
+      title: 'Return request received',
+      subtitle: `We received your return request for order #${shortId}. We will review within 48 hours.`,
+      reason: true,
     },
     approved: {
       subject: `Return approved — ${shortId}`,
-      body: `<p style="margin:0">Your return for order <strong>#${shortId}</strong> has been approved. Pickup will be arranged shortly.</p>`,
+      title: 'Return approved',
+      subtitle: `Your return for order #${shortId} has been approved. Pickup will be arranged shortly.`,
     },
     picked_up: {
       subject: `Return picked up — ${shortId}`,
-      body: `<p style="margin:0">Your return item for order <strong>#${shortId}</strong> has been picked up. Refund will be processed in 7–10 business days.</p>`,
+      title: 'Return picked up',
+      subtitle: `Your return item for order #${shortId} has been picked up. Refund will be processed in 7–10 business days.`,
     },
     refunded: {
       subject: `Refund processed — ${shortId}`,
-      body: `<p style="margin:0">Your refund for order <strong>#${shortId}</strong> has been processed. It may take 5–7 business days to reflect in your account.</p>`,
+      title: 'Refund processed',
+      subtitle: `Your refund for order #${shortId} has been processed. It may take 5–7 business days to reflect in your account.`,
     },
     rejected: {
       subject: `Return update — ${shortId}`,
-      body: `<p style="margin:0">Your return request for order <strong>#${shortId}</strong> could not be approved. Please contact customer care for help.</p>`,
+      title: 'Return update',
+      subtitle: `Your return request for order #${shortId} could not be approved. Please contact customer care for help.`,
     },
   }
 
   const msg = messages[status]
   if (!msg) return null
 
+  const reasonHtml = msg.reason
+    ? `<p style="margin:12px 0 0;font-size:13px;color:#555"><strong>Reason:</strong> ${reason}</p>`
+    : ''
+
   return {
     subject: msg.subject,
-    html: layout(msg.subject, `${msg.body}${orderDetails}`, { label: 'Track return', href: accountUrl }),
+    html: layout(
+      msg.title,
+      `${buildStatusBanner(msg.title, msg.subtitle)}${reasonHtml}${items}${orderDetails}`,
+      { label: 'Track return', href: accountUrl },
+    ),
   }
 }
 

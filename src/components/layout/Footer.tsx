@@ -30,6 +30,7 @@ const quickLinkRoutes: Record<string, string> = {
   Cart: '/cart',
   Wishlist: '/wishlist',
   Checkout: '/checkout',
+  Sitemap: '/sitemap',
 }
 
 export default function Footer() {

@@ -72,7 +72,7 @@ export default function AdminAnalyticsPage() {
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1fr_320px]">
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <AnalyticsStatCard
               label="Page Visits"
@@ -90,7 +90,9 @@ export default function AdminAnalyticsPage() {
           <AnalyticsProductViews products={productViews} />
         </div>
 
-        <AnalyticsRecentActivity />
+        <div className="min-w-0">
+          <AnalyticsRecentActivity />
+        </div>
       </div>
     </div>
   )

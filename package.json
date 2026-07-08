@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy:email": "npx supabase functions deploy send-status-email --project-ref qfxcqsmayfwisnsruoab",
+    "deploy:email": "npx supabase functions deploy send-status-email --no-verify-jwt --project-ref qfxcqsmayfwisnsruoab",
     "deploy:functions": "npx supabase functions deploy --project-ref qfxcqsmayfwisnsruoab",
     "sync:vercel-env": "powershell -ExecutionPolicy Bypass -File scripts/sync-vercel-env.ps1",
     "test": "vitest",

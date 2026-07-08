@@ -33,8 +33,8 @@ function toDbRecord(
     subtotal: record.subtotal,
     shipping: record.shipping,
     total: record.total,
-    payment_method: record.payment_method,
-    payment_status: record.payment_status,
+    payment_method: record.payment_method ?? record.paymentMethod,
+    payment_status: record.payment_status ?? record.paymentStatus,
     created_at: record.createdAt ?? record.created_at,
     status_updated_at: record.statusUpdatedAt ?? record.status_updated_at,
   }

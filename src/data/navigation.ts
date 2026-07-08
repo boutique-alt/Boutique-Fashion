@@ -57,7 +57,7 @@ export const footerSupport = [
   'Terms Of Use',
 ]
 
-export const footerQuickLinks = ['My Account', 'Cart', 'Wishlist', 'Checkout']
+export const footerQuickLinks = ['My Account', 'Cart', 'Wishlist', 'Checkout', 'Sitemap']
 
 export const footerCategories = [
   { label: 'Dresses', href: '/dress/one-piece' },

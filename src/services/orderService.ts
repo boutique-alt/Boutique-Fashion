@@ -5,6 +5,7 @@ import type { Order, OrderBilling, PaymentMethod, PaymentStatus } from '../types
 import { isOrderStatusLocked } from '../types/order'
 import type { CartItem } from '../context/StoreContext'
 import { getSupabaseForAdminData } from './adminDataClient'
+import { notifyStatusEmail } from './emailNotificationService'
 
 let ordersCache: Order[] | null = null
 
@@ -125,6 +126,8 @@ export async function createOrder(params: {
   const { error } = await client.from('orders').insert(row)
   if (error) throw new Error(error.message ?? 'Failed to create order')
 
+  notifyStatusEmail({ table: 'orders', record: row, event: 'INSERT' })
+
   // Insert into order_items table for normalized analytics
   const orderItemsData = params.items.map(item => ({
     order_id: id,
@@ -164,5 +167,11 @@ export async function updateOrderStatus(id: string, status: Order['status']): Pr
 
   if (error) return false
   ordersCache = (ordersCache ?? []).map((o) => (o.id === id ? updated : o))
+  notifyStatusEmail({
+    table: 'orders',
+    record: { ...updated, user_email: order.billing.email },
+    oldRecord: { ...order, user_email: order.billing.email },
+    event: 'UPDATE',
+  })
   return true
 }

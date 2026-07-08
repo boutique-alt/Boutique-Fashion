@@ -31,6 +31,7 @@ const AdminProductPreviewPage = lazy(() => import('./pages/admin/AdminProductPre
 const AdminAnalyticsPage = lazy(() => import('./pages/admin/AdminAnalyticsPage'))
 const AdminReturnsPage = lazy(() => import('./pages/admin/AdminReturnsPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const SitemapPage = lazy(() => import('./pages/SitemapPage'))
 
 function PageLoader() {
   return (
@@ -73,6 +74,7 @@ export default function App() {
             <Route path="account/orders" element={<AccountOrdersPage />} />
             <Route path="account/returns" element={<AccountReturnsPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="sitemap" element={<SitemapPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, Navigate } from 'react-router-dom'
-import { BarChart3, LayoutDashboard, LogOut, Mail, Package, RotateCcw, Shirt, Store } from 'lucide-react'
+import { BarChart3, LayoutDashboard, LogOut, Mail, Package, RotateCcw, Shirt, Store, Menu, X } from 'lucide-react'
 import { isSupabaseConfigured } from '../../config/env'
 import { adminLogout, getLastAdminSyncError, verifyAdminSession } from '../../services/adminService'
 import { getUnreadContactCount, loadContactMessages } from '../../services/contactService'
@@ -23,6 +23,7 @@ const navItems = [
 export default function AdminLayout() {
   const [checked, setChecked] = useState(false)
   const [authed, setAuthed] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [, setTick] = useState(0)
 
   useEffect(() => {
@@ -62,14 +63,49 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-cream-dark">
-      <aside className="flex w-60 shrink-0 flex-col border-r border-accent bg-cream">
-        <div className="border-b border-accent px-5 py-6">
-          <div className="flex items-center gap-2">
-            <Store size={20} className="text-maroon" />
-            <span className="font-serif text-sm font-medium text-charcoal">BF Admin</span>
+    <div className="flex min-h-screen flex-col bg-cream-dark md:flex-row">
+      {/* Mobile Header */}
+      <header className="flex h-14 shrink-0 items-center justify-between border-b border-accent bg-cream px-4 md:hidden">
+        <div className="flex items-center gap-2">
+          <Store size={20} className="text-maroon" />
+          <span className="font-serif text-sm font-medium text-charcoal">BF Admin</span>
+        </div>
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="text-charcoal p-1 rounded hover:bg-cream-dark"
+          aria-label="Open Menu"
+        >
+          <Menu size={24} />
+        </button>
+      </header>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-charcoal/50 backdrop-blur-sm md:hidden" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside 
+        className={`fixed inset-y-0 left-0 z-50 flex w-60 shrink-0 flex-col border-r border-accent bg-cream transition-transform duration-200 ease-in-out md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <div className="flex items-center justify-between border-b border-accent px-5 py-6">
+          <div>
+            <div className="flex items-center gap-2">
+              <Store size={20} className="text-maroon" />
+              <span className="font-serif text-sm font-medium text-charcoal">BF Admin</span>
+            </div>
+            <p className="mt-1 text-[10px] tracking-wide text-charcoal/40 uppercase">Dashboard</p>
           </div>
-          <p className="mt-1 text-[10px] tracking-wide text-charcoal/40 uppercase">Dashboard</p>
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="md:hidden text-charcoal/60 hover:text-maroon"
+            aria-label="Close Menu"
+          >
+            <X size={20} />
+          </button>
         </div>
 
         <nav className="flex-1 space-y-1 p-4">
@@ -78,7 +114,7 @@ export default function AdminLayout() {
               key={to}
               to={to}
               end={end}
-              onClick={() => setTick((t) => t + 1)}
+              onClick={() => { setTick((t) => t + 1); setIsMobileMenuOpen(false) }}
               className={({ isActive }) =>
                 `flex items-center justify-between rounded px-3 py-2.5 text-xs font-medium tracking-[0.08em] uppercase transition-colors ${
                   isActive
