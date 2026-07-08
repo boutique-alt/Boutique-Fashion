@@ -1,11 +1,27 @@
+import { upiPaymentDetails } from '../data/payment'
+
+const PLACEHOLDER_UPI_ID = 'boutique@upi'
+
+function resolveUpiId(): string {
+  const value = (import.meta.env.VITE_UPI_ID as string | undefined)?.trim()
+  if (value && value !== PLACEHOLDER_UPI_ID) return value
+  return upiPaymentDetails.upiId
+}
+
+function resolveUpiPayeeName(): string {
+  const value = (import.meta.env.VITE_UPI_PAYEE_NAME as string | undefined)?.trim()
+  if (value && value !== 'Boutique Fashion') return value
+  return upiPaymentDetails.payeeName
+}
+
 export const env = {
   razorpayKeyId: import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined,
   adminEmail: (import.meta.env.VITE_ADMIN_EMAIL as string | undefined) ?? '',
   adminPassword: (import.meta.env.VITE_ADMIN_PASSWORD as string | undefined) ?? '',
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL as string | undefined,
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined,
-  upiId: (import.meta.env.VITE_UPI_ID as string | undefined) ?? '',
-  upiPayeeName: (import.meta.env.VITE_UPI_PAYEE_NAME as string | undefined) ?? '',
+  upiId: resolveUpiId(),
+  upiPayeeName: resolveUpiPayeeName(),
 }
 
 export const isRazorpayConfigured = () => Boolean(env.razorpayKeyId)

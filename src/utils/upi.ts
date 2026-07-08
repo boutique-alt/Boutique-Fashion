@@ -1,12 +1,12 @@
 export function buildUpiPaymentLink(upiId: string, payeeName: string, amount: number): string {
-  const params = new URLSearchParams({
-    pa: upiId,
-    pn: payeeName,
-    am: amount.toFixed(2),
-    cu: 'INR',
-    tn: 'Boutique Fashion Order',
-  })
-  return `upi://pay?${params.toString()}`
+  const params = [
+    `pa=${upiId.trim()}`,
+    `pn=${encodeURIComponent(payeeName.trim())}`,
+    `am=${amount.toFixed(2)}`,
+    'cu=INR',
+    `tn=${encodeURIComponent('Boutique Fashion Order')}`,
+  ].join('&')
+  return `upi://pay?${params}`
 }
 
 import QRCode from 'qrcode'
