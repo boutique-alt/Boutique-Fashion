@@ -14,10 +14,14 @@ export default function SEO({
   type = "website" 
 }: SEOProps) {
   const fullTitle = `${title} | Boutique Fashion`
+  const canonicalUrl = typeof window !== 'undefined' 
+    ? `https://boutique-fashion.vercel.app${window.location.pathname}`
+    : 'https://boutique-fashion.vercel.app'
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
+      <link rel="canonical" href={canonicalUrl} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta property="og:title" content={fullTitle} />
