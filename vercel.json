@@ -1,4 +1,18 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/store",
+      "destination": "/shop/all",
+      "permanent": true
+    },
+    {
+      "source": "/sale",
+      "destination": "/shop/all",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
