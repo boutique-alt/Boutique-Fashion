@@ -105,6 +105,14 @@ export const allCategories: CategoryConfig[] = [
     products: [],
     parent: { label: 'Collection', href: '/bridal' },
   },
+  {
+    slug: 'groom',
+    title: 'Groom',
+    description: 'Premium sherwanis and silk ethnic wear for grooms.',
+    count: 0,
+    products: [],
+    parent: { label: 'Collection', href: '/bridal/groom' },
+  },
 ]
 
 export const dressCategories = allCategories.filter((c) =>

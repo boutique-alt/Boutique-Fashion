@@ -13,6 +13,7 @@ const fallbackImages: Record<string, string> = {
   blouse: blouseCategoryImage,
   mens: mensCategoryImage,
   bridal: blouseCategoryImage,
+  groom: mensCategoryImage,
 }
 
 export function getCategoryHref(cat: CategoryConfig): string {

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Truck, RotateCcw, ChevronDown, ChevronUp, Mail, Phone, Sparkles, Share2 } from 'lucide-react'
+import { Truck, RotateCcw, ChevronDown, ChevronUp, Mail, Phone, Sparkles, Share2, ShieldCheck, Award, Lock } from 'lucide-react'
 import type { ProductDetail } from '../../data/productCatalog'
 import type { ProductAddon } from '../../types/adminProduct'
 import { useStore } from '../../context/StoreContext'
@@ -226,6 +226,22 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
           >
             <Share2 size={18} strokeWidth={1.5} />
           </button>
+        </div>
+
+        {/* E-E-A-T Trust Badges */}
+        <div className="mt-2 grid grid-cols-3 gap-2 border-t border-accent/40 pt-5 text-center">
+          <div className="flex flex-col items-center gap-1.5">
+            <ShieldCheck size={20} className="text-maroon" strokeWidth={1.5} />
+            <span className="text-[9px] font-bold uppercase tracking-widest text-charcoal/60">Secure Checkout</span>
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <Award size={20} className="text-maroon" strokeWidth={1.5} />
+            <span className="text-[9px] font-bold uppercase tracking-widest text-charcoal/60">Premium Quality</span>
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <Lock size={20} className="text-maroon" strokeWidth={1.5} />
+            <span className="text-[9px] font-bold uppercase tracking-widest text-charcoal/60">Privacy Protected</span>
+          </div>
         </div>
       </div>
 

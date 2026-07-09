@@ -37,17 +37,26 @@ export default function Header() {
 
   const iconClass = 'text-charcoal/80 transition-colors hover:text-maroon'
   const navLinkClass = (active: boolean) =>
-    `flex items-center gap-0.5 whitespace-nowrap text-[13px] transition-colors lg:text-sm ${
-      active ? 'text-maroon' : 'text-charcoal/85 hover:text-maroon'
+    `flex items-center gap-0.5 whitespace-nowrap text-[11px] uppercase tracking-widest transition-colors lg:text-xs ${
+      active ? 'text-maroon font-medium' : 'text-charcoal/80 hover:text-maroon'
     }`
+
+  const [logoError, setLogoError] = useState(false)
 
   const logo = (
     <Link to="/" className="flex shrink-0 flex-col items-center">
-      <img
-        src={brandAssets.logo}
-        alt={brand.name}
-        className="h-11 w-auto object-contain md:h-14"
-      />
+      {!logoError ? (
+        <img
+          src={brandAssets.logo}
+          alt={brand.name}
+          onError={() => setLogoError(true)}
+          className="h-10 w-auto object-contain md:h-12"
+        />
+      ) : (
+        <span className="font-serif text-xl font-medium tracking-widest text-charcoal md:text-2xl uppercase">
+          {brand.name}
+        </span>
+      )}
     </Link>
   )
 
@@ -63,17 +72,17 @@ export default function Header() {
         onMouseLeave={() => setActiveDropdown(null)}
       >
         <Link to={item.href ?? '/'} className={navLinkClass(active)}>
-          {Icon && <Icon size={14} strokeWidth={1.5} />}
+          {Icon && <Icon size={14} strokeWidth={1} />}
           {navDisplayLabel(item.label)}
-          {item.children && <ChevronDown size={12} className="mt-px" />}
+          {item.children && <ChevronDown size={12} className="mt-px" strokeWidth={1} />}
         </Link>
         {item.children && activeDropdown === item.label && (
-          <div className="glass-panel absolute left-1/2 top-full z-50 min-w-[200px] -translate-x-1/2 py-3 shadow-lg">
+          <div className="glass-panel absolute left-1/2 top-full z-50 min-w-[200px] -translate-x-1/2 py-4 shadow-none">
             {item.children.map((child) => (
               <Link
                 key={child.label}
                 to={child.href}
-                className="block px-5 py-2 text-xs tracking-wide text-charcoal/70 transition-colors hover:bg-white/50 hover:text-maroon"
+                className="block px-6 py-2.5 text-[11px] uppercase tracking-widest text-charcoal/70 transition-colors hover:bg-cream-dark/30 hover:text-maroon"
               >
                 {child.label}
               </Link>

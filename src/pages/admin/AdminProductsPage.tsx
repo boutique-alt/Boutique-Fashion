@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AlertTriangle, Plus, X } from 'lucide-react'
+import { AlertTriangle, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { isSupabaseConfigured } from '../../config/env'
 import AdminProductCard from '../../components/admin/AdminProductCard'
 import ProductForm from '../../components/admin/ProductForm'
@@ -17,12 +17,16 @@ import {
 } from '../../services/productService'
 import type { AdminProductInput } from '../../types/adminProduct'
 
+const PAGE_SIZE = 24
+
 export default function AdminProductsPage() {
   const { products, version } = useProductCatalog()
   const [editing, setEditing] = useState<ProductDetail | null>(null)
   const [adding, setAdding] = useState(false)
   const [saveError, setSaveError] = useState('')
   const [catalogWarning, setCatalogWarning] = useState('')
+  const [page, setPage] = useState(1)
+  
   const { sorted, setSort } = useSortedProducts(products as ProductDetail[])
 
   useEffect(() => {
@@ -86,9 +90,11 @@ export default function AdminProductsPage() {
   }
 
   const showForm = adding || editing
+  const totalPages = Math.ceil(sorted.length / PAGE_SIZE)
+  const paginatedProducts = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-6 md:p-8 flex flex-col min-h-full">
       {catalogWarning && (
         <div className="mb-6 flex items-start gap-3 border border-gold/40 bg-gold/10 px-4 py-3 text-sm text-charcoal">
           <AlertTriangle size={18} className="mt-0.5 shrink-0 text-gold" />
@@ -103,22 +109,24 @@ export default function AdminProductsPage() {
             Same view as your shop — edit or delete from each card
           </p>
         </div>
-        {!showForm && (
-          <button
-            type="button"
-            onClick={() => { setSaveError(''); setAdding(true) }}
-            className="flex items-center gap-2 bg-maroon px-5 py-2.5 text-xs font-medium tracking-[0.15em] text-cream uppercase hover:bg-maroon-light"
-          >
-            <Plus size={14} />
-            Add Product
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          {!showForm && (
+            <button
+              type="button"
+              onClick={() => { setSaveError(''); setAdding(true) }}
+              className="flex items-center gap-2 bg-maroon px-5 py-2.5 text-xs font-medium tracking-[0.15em] text-cream uppercase hover:bg-maroon-light"
+            >
+              <Plus size={14} />
+              Add Product
+            </button>
+          )}
+        </div>
       </div>
 
-      <CategoryToolbar total={products.length} onSortChange={setSort} />
+      <CategoryToolbar total={products.length} onSortChange={(sort) => { setSort(sort); setPage(1); }} />
 
-      <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-        {sorted.map((product) => (
+      <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 flex-1 content-start">
+        {paginatedProducts.map((product) => (
           <AdminProductCard
             key={(product as ProductDetail).slug}
             product={product as ProductDetail}
@@ -127,6 +135,39 @@ export default function AdminProductsPage() {
           />
         ))}
       </div>
+
+      {/* Pagination Bottom */}
+      {totalPages > 1 && (
+        <div className="mt-8 flex justify-center items-center gap-2">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="p-2 border border-accent bg-cream disabled:opacity-50 hover:bg-cream-dark transition-colors"
+          >
+            <ChevronLeft size={16} className="text-charcoal" />
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              className={`min-w-[32px] h-8 px-2 flex items-center justify-center text-sm font-mono border ${
+                p === page ? 'border-maroon bg-maroon text-cream' : 'border-accent bg-cream text-charcoal hover:bg-cream-dark'
+              } transition-colors`}
+            >
+              {p}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page >= totalPages}
+            className="p-2 border border-accent bg-cream disabled:opacity-50 hover:bg-cream-dark transition-colors"
+          >
+            <ChevronRight size={16} className="text-charcoal" />
+          </button>
+        </div>
+      )}
 
       {showForm && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-charcoal/40 p-4 backdrop-blur-sm">

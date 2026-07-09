@@ -7,11 +7,11 @@ interface SectionHeadingProps {
 export default function SectionHeading({ title, subtitle, align = 'center' }: SectionHeadingProps) {
   return (
     <div className={`mb-10 ${align === 'center' ? 'text-center' : 'text-left'}`}>
-      <h2 className="font-serif text-3xl font-medium tracking-wide text-charcoal md:text-4xl lg:text-5xl">
+      <h2 className="font-serif text-3xl font-normal uppercase tracking-widest text-maroon md:text-4xl lg:text-5xl">
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-2 font-sans text-sm tracking-widest text-charcoal/60 uppercase">
+        <p className="mt-4 font-sans text-[11px] tracking-[0.2em] text-charcoal/70 uppercase">
           {subtitle}
         </p>
       )}

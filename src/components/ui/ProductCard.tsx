@@ -48,7 +48,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
             <video
               ref={videoRef}
               src={videoSrc}
-              className="h-full w-full object-contain object-center"
+              className="h-full w-full object-cover object-top"
               muted
               loop
               playsInline
@@ -59,7 +59,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               <img
                 src={product.image}
                 alt={product.name}
-                className={`h-full w-full object-contain object-center transition-transform duration-500 ease-out group-hover:scale-[1.03] ${product.images && product.images.length > 1 ? 'group-hover:opacity-0 transition-opacity' : ''}`}
+                className={`h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03] ${product.images && product.images.length > 1 ? 'group-hover:opacity-0 transition-opacity' : ''}`}
                 loading="lazy"
                 decoding="async"
               />
@@ -67,7 +67,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
                 <img
                   src={product.images[1]}
                   alt={`${product.name} alternate`}
-                  className="absolute inset-0 h-full w-full object-contain object-center opacity-0 transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:opacity-100"
+                  className="absolute inset-0 h-full w-full object-cover object-top opacity-0 transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:opacity-100"
                   loading="lazy"
                   decoding="async"
                 />
@@ -84,28 +84,33 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               -{discount}%
             </span>
           )}
-          <span className="absolute right-2 bottom-2 flex h-8 w-8 items-center justify-center rounded-full bg-cream/90 text-charcoal opacity-0 shadow-sm transition-opacity duration-300 group-hover:opacity-100">
+          <span className="absolute right-3 bottom-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-charcoal opacity-0 shadow-none transition-opacity duration-300 group-hover:opacity-100">
             <ArrowUpRight size={14} />
           </span>
         </div>
-        <div className="mt-3 space-y-1.5 px-0.5">
-          <h3 className="font-sans text-[13px] leading-snug text-charcoal/85 line-clamp-2 transition-colors group-hover:text-maroon">
+        <div className="mt-3 px-1 text-left">
+          <h3 className="font-sans text-[11px] font-medium uppercase tracking-wide text-charcoal/70 line-clamp-1 transition-colors group-hover:text-maroon">
             {product.name}
           </h3>
-          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <p className="text-[13px] text-charcoal">
-              MRP. {product.price.toLocaleString('en-IN')} INR
-            </p>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="font-sans text-[14px] font-bold text-charcoal">
+              ₹{product.price.toLocaleString('en-IN')}
+            </span>
             {product.originalPrice && (
-              <p className="text-[11px] text-charcoal/40 line-through">
-                MRP. {product.originalPrice.toLocaleString('en-IN')} INR
-              </p>
+              <span className="font-sans text-[11px] text-charcoal/40 line-through">
+                ₹{product.originalPrice.toLocaleString('en-IN')}
+              </span>
+            )}
+            {discount && (
+              <span className="font-sans text-[10px] font-bold text-maroon">
+                ({discount}% OFF)
+              </span>
             )}
           </div>
         </div>
       </Link>
       {slug && (
-        <div className="absolute right-2 top-2 z-10 rounded-full bg-cream/90 p-1.5 shadow-sm">
+        <div className="absolute right-3 top-3 z-10 rounded-full bg-white/80 p-2 backdrop-blur-sm shadow-none transition-transform hover:scale-105">
           <WishlistButton slug={slug} />
         </div>
       )}

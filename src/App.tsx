@@ -56,7 +56,7 @@ export default function App() {
             <Route path="privacy-policy" element={<LegalDocumentPage variant="privacy" />} />
             <Route path="fabric" element={<FabricPage />} />
             <Route path="bridal" element={<BridalPage />} />
-            <Route path="bridal/women" element={<CategoryPage slug="blouse" />} />
+            <Route path="bridal/women" element={<BridalPage />} />
             <Route path="bridal/groom" element={<CategoryPage slug="mens" />} />
             <Route path="dress" element={<DressPage />} />
             <Route path="dress/:category" element={<CategoryPage />} />

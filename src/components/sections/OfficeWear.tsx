@@ -10,7 +10,7 @@ export default function OfficeWear() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="mb-8 text-center md:mb-10">
           <h2 className="font-serif text-2xl font-medium tracking-wide text-charcoal md:text-3xl lg:text-4xl">
-            Exclusive designer Grooms collection
+            Exclusive Designer Grooms Collection
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-4">

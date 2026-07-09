@@ -27,6 +27,7 @@ export const aboutStory = {
   paragraphs: [
     'Boutique Fashion began as a family dream — to bring together the warmth of home and the elegance of fine craftsmanship under one roof. What started with a small collection of handpicked outfits has grown into a trusted destination for women and men who value quality, comfort, and personal style.',
     'Every piece we curate carries the care of a family business: attentive stitching, premium fabrics, and designs that celebrate individuality. From everyday wear to wedding and festive collections, we are here to help you look and feel your best.',
+    'Our lead designer and founder, Mahua, along with our team of artisans, meticulously oversees the hand-block printing, delicate embroidery, and sustainable sourcing processes. We are not just sellers; we are fashion experts with years of experience, ensuring that every piece meets the highest industry standards of quality and craftsmanship.',
   ],
 }
 

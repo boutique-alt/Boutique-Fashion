@@ -8,6 +8,7 @@ import SEO from '../components/ui/SEO'
 import ProductCard from '../components/ui/ProductCard'
 import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
 import { useProductCatalog } from '../hooks/useProductCatalog'
+import { useRecentlyViewed } from '../hooks/useRecentlyViewed'
 import { productPath } from '../utils/productSlug'
 
 export default function ProductPage() {
@@ -33,6 +34,13 @@ export default function ProductPage() {
 
   const related = getRelatedProducts(product)
   const { prev, next } = getAdjacentProducts(slug!)
+  
+  const viewedSlugs = useRecentlyViewed(product.slug)
+  const recentlyViewed = viewedSlugs
+    .filter(s => s !== product.slug)
+    .map(s => getProductBySlug(s))
+    .filter(Boolean)
+    .slice(0, 4)
 
   return (
     <main key={slug}>
@@ -81,6 +89,21 @@ export default function ProductPage() {
             <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {recentlyViewed.length > 0 && (
+        <section className="border-t border-accent bg-cream py-16 md:py-20">
+          <div className="mx-auto max-w-7xl px-4 md:px-6">
+            <h2 className="mb-10 text-center font-serif text-2xl font-medium text-charcoal md:text-3xl">
+              Recently Viewed
+            </h2>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+              {recentlyViewed.map((p) => (
+                <ProductCard key={p!.id} product={p!} />
               ))}
             </div>
           </div>

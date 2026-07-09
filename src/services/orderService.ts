@@ -66,6 +66,27 @@ export async function loadOrders(): Promise<Order[]> {
   return ordersCache
 }
 
+export async function loadOrdersPaginated(page: number, pageSize: number): Promise<{ orders: Order[], total: number }> {
+  if (!isSupabaseConfigured()) {
+    return { orders: [], total: 0 }
+  }
+
+  const adminClient = await getSupabaseForAdminData()
+  if (!adminClient) return { orders: [], total: 0 }
+
+  const start = (page - 1) * pageSize
+  const end = start + pageSize - 1
+
+  const { data, count } = await adminClient
+    .from('orders')
+    .select('id, user_id, user_email, items, billing, subtotal, shipping, total, payment_method, payment_status, status, razorpay_payment_id, razorpay_order_id, payment_screenshot_url, status_updated_at, created_at', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(start, end)
+
+  const orders = data ? (data as DbOrder[]).map(mapOrder) : []
+  return { orders, total: count || 0 }
+}
+
 export function getOrders(): Order[] {
   return ordersCache ?? []
 }

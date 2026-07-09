@@ -1,21 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700&family=Roboto+Slab:wght@400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700&family=Whisper&family=Poppins:wght@400;500;600&display=swap');
 @import 'tailwindcss';
 
 @theme {
-  --font-serif: 'Roboto Slab', Georgia, serif;
-  --font-sans: 'Roboto', system-ui, sans-serif;
-  --font-accent: 'Lato', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-accent: 'Outfit', system-ui, sans-serif;
   --font-script: 'Whisper', cursive;
-  --color-cream: #ffffff;
-  --color-cream-dark: #f5f5f5;
-  --color-maroon: #2f4799;
-  --color-maroon-light: #3d5ab5;
+  --color-cream: #f8f4f4;
+  --color-cream-dark: #f0ebeb;
+  --color-maroon: #884a4d;
+  --color-maroon-light: #9e5b5e;
   --color-gold: #ca6d6f;
   --color-gold-light: #e08a8c;
-  --color-charcoal: #121216;
-  --color-teal: #2f4799;
-  --color-indigo-craft: #1e3266;
-  --color-accent: #dddddd;
+  --color-charcoal: #854143; 
+  --color-teal: #884a4d;
+  --color-indigo-craft: #6b3e41;
+  --color-accent: #eadddd;
 }
 
 .site-header {
@@ -23,16 +22,15 @@
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.97);
+  background: rgba(255, 255, 255, 0.98);
   border-bottom: 1px solid var(--color-accent);
-  box-shadow: 0 4px 24px rgba(47, 71, 153, 0.06);
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.85);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--color-accent);
 }
 
 * {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { brandAssets, heroSlides } from '../../data/products'
+import CategoryStrip from './CategoryStrip'
 
 export default function Hero() {
   const [current, setCurrent] = useState(0)
@@ -38,9 +39,11 @@ export default function Hero() {
 
   return (
     <section
-      className="relative w-full overflow-x-hidden"
+      className="relative w-full overflow-x-hidden transition-colors duration-700"
       style={{ backgroundColor: slide.bgColor }}
     >
+      <CategoryStrip />
+
       <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white/20 to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white/20 to-transparent" />
 
@@ -64,9 +67,8 @@ export default function Hero() {
               transition={{ duration: 0.45 }}
               className="order-2 md:order-1"
             >
-              <div className="mb-6 flex items-center gap-4">
-                <span className="h-px w-12 bg-maroon/50 md:w-16" />
-                <p className="font-script text-[2rem] leading-none text-maroon drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+              <div className="mb-4">
+                <p className="text-[11px] uppercase tracking-[0.25em] text-maroon font-medium">
                   {slide.tag}
                 </p>
               </div>
@@ -81,16 +83,16 @@ export default function Hero() {
                   {slide.description}
                 </p>
               )}
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="mt-10 flex flex-wrap gap-4">
                 <Link
                   to={slide.href}
-                  className="rounded-full bg-maroon px-8 py-3.5 text-[11px] font-medium tracking-[0.2em] text-cream uppercase shadow-md transition-all hover:bg-maroon-light hover:shadow-lg md:text-xs"
+                  className="rounded-none bg-charcoal px-10 py-4 text-[11px] font-medium tracking-[0.2em] text-white uppercase transition-all hover:bg-black md:text-xs"
                 >
                   {slide.cta}
                 </Link>
                 <Link
                   to="/shop/all"
-                  className="rounded-full border border-charcoal/15 bg-white/40 px-8 py-3.5 text-[11px] font-medium tracking-[0.2em] text-charcoal uppercase backdrop-blur-sm transition-all hover:border-maroon hover:text-maroon md:text-xs"
+                  className="rounded-none border border-charcoal px-10 py-4 text-[11px] font-medium tracking-[0.2em] text-charcoal uppercase transition-all hover:bg-charcoal hover:text-white md:text-xs"
                 >
                   Shop All
                 </Link>

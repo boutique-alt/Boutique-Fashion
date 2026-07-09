@@ -100,12 +100,12 @@ export const features = [
 ]
 
 export const instagramPosts = [
-  { id: 1, caption: 'Grace never goes out of style', image: '/images/assets/prod-2.png' },
-  { id: 2, caption: 'Elegance woven with tradition', image: '/images/assets/1.png' },
-  { id: 3, caption: 'Sophisticated craftsmanship meets everyday elegance', image: kurtaCoordCategoryImage },
-  { id: 4, caption: 'Elegance in Every Thread', image: '/images/assets/4.png' },
-  { id: 5, caption: 'Sunshine, style, and timeless elegance', image: '/images/assets/home-ban-2.png' },
-  { id: 6, caption: 'Heritage meets contemporary', image: dressCategoryImage },
+  { id: 1, caption: 'Grace never goes out of style', image: dressCategoryImage },
+  { id: 2, caption: 'Elegance woven with tradition', image: kurtaCoordCategoryImage },
+  { id: 3, caption: 'Sophisticated craftsmanship meets everyday elegance', image: blouseProducts[0]?.image || dressCategoryImage },
+  { id: 4, caption: 'Elegance in Every Thread', image: mensProducts[0]?.image || kurtaCoordCategoryImage },
+  { id: 5, caption: 'Sunshine, style, and timeless elegance', image: dressProducts[1]?.image || dressCategoryImage },
+  { id: 6, caption: 'Heritage meets contemporary', image: kurtaCoordProducts[2]?.image || kurtaCoordCategoryImage },
 ]
 
 export const brandAssets = {

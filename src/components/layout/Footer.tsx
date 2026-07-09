@@ -35,15 +35,15 @@ const quickLinkRoutes: Record<string, string> = {
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal text-cream">
+    <footer className="bg-gold text-cream">
       <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div>
             <h3 className="mb-5 font-serif text-lg tracking-widest">CUSTOMER SUPPORT</h3>
             <ul className="space-y-2.5">
               {footerSupport.map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-cream/60 transition-colors hover:text-gold">
+                  <a href="#" className="text-sm text-cream/60 transition-colors hover:text-charcoal">
                     {item}
                   </a>
                 </li>
@@ -55,18 +55,8 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footerQuickLinks.map((item) => (
                 <li key={item}>
-                  <Link to={quickLinkRoutes[item] ?? '#'} className="text-sm text-cream/60 transition-colors hover:text-gold">
+                  <Link to={quickLinkRoutes[item] ?? '#'} className="text-sm text-cream/60 transition-colors hover:text-charcoal">
                     {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <h3 className="mb-5 mt-8 font-serif text-lg tracking-widest">CATEGORIES</h3>
-            <ul className="space-y-2.5">
-              {footerCategories.map((item) => (
-                <li key={item.label}>
-                  <Link to={item.href} className="text-sm text-cream/60 transition-colors hover:text-gold">
-                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -75,12 +65,12 @@ export default function Footer() {
           <div>
             <h3 className="mb-5 font-serif text-lg tracking-widest">CONTACT US</h3>
             <p className="mb-2 text-sm text-cream/60">
-              <Link to="/contact-us" className="transition-colors hover:text-gold">Find our location. Visit Our Store</Link>
+              <Link to="/contact-us" className="transition-colors hover:text-charcoal">Find our location. Visit Our Store</Link>
             </p>
-            <a href={`tel:${brand.phone.replace(/\s/g, '')}`} className="block text-sm text-gold transition-colors hover:text-gold-light">
+            <a href={`tel:${brand.phone.replace(/\s/g, '')}`} className="block text-sm text-cream transition-colors hover:text-charcoal">
               {brand.phone}
             </a>
-            <a href={`mailto:${brand.email}`} className="mt-2 block text-sm text-cream/60 transition-colors hover:text-gold">
+            <a href={`mailto:${brand.email}`} className="mt-2 block text-sm text-cream/60 transition-colors hover:text-charcoal">
               {brand.email}
             </a>
             <div className="mt-6 flex gap-4">
@@ -103,6 +93,18 @@ export default function Footer() {
             <p className="mt-4 text-sm text-cream/60">
               <strong className="text-cream/80">Hours:</strong> {brand.hours}
             </p>
+          </div>
+          <div>
+            <h3 className="mb-5 font-serif text-lg tracking-widest">CATEGORIES</h3>
+            <ul className="space-y-2.5">
+              {footerCategories.map((item) => (
+                <li key={item.label}>
+                  <Link to={item.href} className="text-sm text-cream/60 transition-colors hover:text-charcoal">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
         <div className="mt-12 border-t border-cream/10 pt-8 text-center">

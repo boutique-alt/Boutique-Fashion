@@ -14,7 +14,7 @@ export default function SummerSale() {
   return (
     <section className="py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionProductGrid title="Best selling Products" products={bestSellers} limit={4} />
+        <SectionProductGrid title="Best Selling Products" products={bestSellers} limit={4} />
         <div className="mt-10 text-center">
           <Link
             to="/shop/all"

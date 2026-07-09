@@ -2,39 +2,28 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Mail, Package, Users } from 'lucide-react'
 import { isSupabaseConfigured } from '../../config/env'
-import { getContactMessages, getUnreadContactCount, loadContactMessages } from '../../services/contactService'
-import { getOrders, loadOrders } from '../../services/orderService'
-import { getAllProfiles } from '../../services/profileService'
-import type { UserProfile } from '../../types/user'
+import { getAdminStats, type AdminStats } from '../../services/adminStatsService'
 
 export default function AdminDashboardPage() {
-  const [profiles, setProfiles] = useState<UserProfile[]>([])
+  const [statsData, setStatsData] = useState<AdminStats | null>(null)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    Promise.all([
-      loadOrders(),
-      loadContactMessages(),
-      getAllProfiles().then(setProfiles),
-    ]).finally(() => setReady(true))
+    getAdminStats()
+      .then(setStatsData)
+      .finally(() => setReady(true))
   }, [])
 
-  const orders = getOrders()
-  const messages = getContactMessages()
-  const unread = getUnreadContactCount()
-  const paidOrders = orders.filter((o) => o.paymentStatus === 'paid').length
-  const revenue = orders
-    .filter((o) => o.paymentStatus === 'paid')
-    .reduce((sum, o) => sum + o.total, 0)
+  if (!ready || !statsData) return null
+
+  const { totalOrders, paidOrders, revenue, totalMessages, unreadMessages, totalCustomers } = statsData
 
   const stats = [
-    { label: 'Total Orders', value: orders.length, icon: Package, href: '/admin/orders' },
+    { label: 'Total Orders', value: totalOrders, icon: Package, href: '/admin/orders' },
     { label: 'Paid Orders', value: paidOrders, icon: Package, href: '/admin/orders' },
-    { label: 'Messages', value: messages.length, icon: Mail, href: '/admin/messages', badge: unread },
-    { label: 'Customers', value: profiles.length, icon: Users, href: '/admin/orders' },
+    { label: 'Messages', value: totalMessages, icon: Mail, href: '/admin/messages', badge: unreadMessages },
+    { label: 'Customers', value: totalCustomers, icon: Users, href: '/admin/orders' },
   ]
-
-  if (!ready) return null
 
   return (
     <div className="p-6 md:p-8">
