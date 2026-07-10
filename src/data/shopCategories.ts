@@ -55,7 +55,7 @@ export const shopCategoryOptions: ShopCategory[] = [
   onePiece && buildShopCategory(onePiece, undefined, 'Jamdani Edit', '/dress/one-piece', ['one-piece']),
   kurta && buildShopCategory(kurta, undefined, 'Ajrakh & Daboo Handblock', '/dress/kurta-set', ['kurta-set', 'coord-set']),
   blouse && buildShopCategory(blouse, undefined, 'Bridal Edit', '/bridal/women', ['blouse']),
-  mens && buildShopCategory(mens, undefined, 'Silk (Masura, Modal)', '/bridal/groom', ['mens']),
+  mens && buildShopCategory(mens, undefined, 'Mashru, Modal', '/bridal/groom', ['mens']),
 ].filter(Boolean) as ShopCategory[]
 
 export const shopCategoryCheckboxOptions = shopCategoryOptions

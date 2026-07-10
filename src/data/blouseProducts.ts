@@ -10,6 +10,8 @@ export const blouseProducts: Product[] = [
     name: 'Ajrakh Sleeveless V-Neck Cropped Blouse',
     price: 2300,
     image: IMG(1),
+    isNew: true,
+    isBestSeller: true,
     href: 'https://boutiquefashion.shop/product/blue-designer-silk-blouse-with-back-design/',
   },
   {
@@ -41,6 +43,7 @@ export const blouseProducts: Product[] = [
     name: 'Black Kalamkari Square Neck Blouse',
     price: 2200,
     image: IMG(5),
+    isNew: true,
     href: 'https://boutiquefashion.shop/product/black-kalamkari-square-neck-blouse/',
   },
   {
@@ -62,6 +65,7 @@ export const blouseProducts: Product[] = [
     name: 'Ajrakh Indigo Short Sleeve Blouse',
     price: 2150,
     image: IMG(8),
+    isBestSeller: true,
     href: 'https://boutiquefashion.shop/product/ajrakh-indigo-short-sleeve-blouse/',
   },
   {

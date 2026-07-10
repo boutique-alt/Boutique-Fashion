@@ -26,15 +26,12 @@ function normalizeId(id: string): string {
 export function getVisibleShopCategories(): ShopCategory[] {
   const products = getAllProductDetails()
 
-  return shopCategoryOptions
-    .map((cat) => {
-      const owner = products.find((product) =>
-        product.shopCategorySelections?.some((id) => normalizeId(id) === cat.id),
-      )
-      if (!owner?.image) return null
-      return { ...cat, image: owner.image }
-    })
-    .filter((cat): cat is ShopCategory => cat !== null)
+  return shopCategoryOptions.map((cat) => {
+    const owner = products.find((product) =>
+      product.shopCategorySelections?.some((id) => normalizeId(id) === cat.id),
+    )
+    return { ...cat, image: owner?.image || cat.image }
+  })
 }
 
 export function countShopCategoryProducts(
