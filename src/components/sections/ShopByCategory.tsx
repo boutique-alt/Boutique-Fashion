@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowUpRight } from 'lucide-react'
+
 import { countShopCategoryProducts } from '../../services/shopCategoryService'
 import { useProductCatalog } from '../../hooks/useProductCatalog'
 import { useShopCategories } from '../../hooks/useShopCategories'
