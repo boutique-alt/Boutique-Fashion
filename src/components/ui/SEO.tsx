@@ -5,13 +5,17 @@ interface SEOProps {
   description?: string
   keywords?: string
   type?: string
+  image?: string
+  schema?: Record<string, any> | Record<string, any>[]
 }
 
 export default function SEO({ 
   title, 
   description = "Boutique Fashion – Discover elegant, premium clothing.", 
   keywords = "boutique, fashion, clothing, dresses",
-  type = "website" 
+  type = "website",
+  image = "/images/about/team-hero.png",
+  schema
 }: SEOProps) {
   const fullTitle = `${title} | Boutique Fashion`
   const canonicalUrl = typeof window !== 'undefined' 
@@ -27,9 +31,16 @@ export default function SEO({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:image" content={image.startsWith('http') ? image : `https://boutiquefashion.shop${image.startsWith('/') ? image : `/${image}`}`} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
+      {schema && (
+        <script type="application/ld+json">
+          {JSON.stringify(schema)}
+        </script>
+      )}
     </Helmet>
   )
 }

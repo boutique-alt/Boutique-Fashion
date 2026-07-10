@@ -14,9 +14,31 @@ import InTheNews from '../components/sections/InTheNews'
 import SEO from '../components/ui/SEO'
 
 export default function HomePage() {
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Boutique Fashion",
+    "image": "https://boutiquefashion.shop/images/about/team-hero.png",
+    "url": "https://boutiquefashion.shop",
+    "telephone": "+918777708573",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "36/C, T.N.Bhiswas Road, Kolkata",
+      "addressLocality": "Kolkata",
+      "addressRegion": "WB",
+      "postalCode": "700035",
+      "addressCountry": "IN"
+    },
+    "priceRange": "$$"
+  }
+
   return (
     <main>
-      <SEO title="Where Comfort meets Confidence" description="Discover premium boutique fashion, exclusive clothing, and accessories at Boutique Fashion." />
+      <SEO 
+        title="Where Comfort meets Confidence" 
+        description="Discover premium boutique fashion, exclusive clothing, and accessories at Boutique Fashion." 
+        schema={localBusinessSchema}
+      />
       <Hero />
       <SummerSale />
       <NewArrival />

@@ -7,6 +7,8 @@ import AdminProductCard from '../../components/admin/AdminProductCard'
 import { getProductBySlug, getRelatedProducts } from '../../data/productCatalog'
 import { useProductCatalog } from '../../hooks/useProductCatalog'
 import { productPath } from '../../utils/productSlug'
+import { fetchProductDetails } from '../../services/productService'
+
 export default function AdminProductPreviewPage() {
   const { slug } = useParams<{ slug: string }>()
   useProductCatalog()
@@ -14,6 +16,9 @@ export default function AdminProductPreviewPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    if (slug) {
+      void fetchProductDetails(slug)
+    }
   }, [slug])
 
   if (!product) {

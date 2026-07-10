@@ -29,10 +29,12 @@ export function subscribeProductCatalog(listener: () => void): () => void {
   return () => catalogListeners.delete(listener)
 }
 
-function notifyCatalogChanged(): void {
+function notifyCatalogChanged(broadcast = true): void {
   catalogVersion += 1
   catalogListeners.forEach((listener) => listener())
-  catalogChannel?.postMessage(catalogVersion)
+  if (broadcast) {
+    catalogChannel?.postMessage(catalogVersion)
+  }
 }
 
 async function requireAdminCloudSession(): Promise<void> {
@@ -149,7 +151,7 @@ async function fetchAllProducts(): Promise<{ rows: DbProduct[]; error?: string }
   while (true) {
     const { data, error } = await client
       .from('products')
-      .select('*')
+      .select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, created_at, updated_at')
       .order('created_at', { ascending: false })
       .range(from, from + PRODUCTS_PAGE_SIZE - 1)
 
@@ -172,7 +174,7 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
     lastHydrationError = import.meta.env.PROD
       ? 'Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY on Vercel, then redeploy.'
       : undefined
-    notifyCatalogChanged()
+    notifyCatalogChanged(false)
     return { ok: !lastHydrationError, error: lastHydrationError, adminProductCount: 0 }
   }
 
@@ -192,7 +194,7 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
   if (errors.length > 0) {
     lastHydrationError = errors.join('; ')
     console.error('[catalog] hydration failed:', lastHydrationError)
-    notifyCatalogChanged()
+    notifyCatalogChanged(false)
     return {
       ok: false,
       error: lastHydrationError,
@@ -206,7 +208,7 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
     ? mapOverrides(overridesRes.data as { slug: string; override_data: ProductOverride }[])
     : {}
   lastHydrationError = undefined
-  notifyCatalogChanged()
+  notifyCatalogChanged(false)
   return { ok: true, adminProductCount: productsCache.length }
 }
 
@@ -380,3 +382,37 @@ export const adminCategoryOptions = allCategories.map((cat) => ({
   slug: cat.slug,
   label: adminCategoryLabels[cat.slug] ?? cat.title,
 }))
+
+export async function fetchProductDetails(slugOrId: string): Promise<void> {
+  if (!isSupabaseConfigured()) return
+
+  const client = getSupabase()
+  const isId = slugOrId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)
+  
+  const { data, error } = await client
+    .from('products')
+    .select('id, description, short_description, sizes, fabric, wash_care, product_details')
+    .eq(isId ? 'id' : 'slug', slugOrId)
+    .maybeSingle()
+
+  if (error || !data) return
+
+  if (productsCache) {
+    productsCache = productsCache.map((p) => {
+      if (p.id === data.id || p.slug === slugOrId) {
+        return {
+          ...p,
+          description: data.description ?? p.description,
+          shortDescription: data.short_description ?? p.shortDescription,
+          sizes: data.sizes ?? p.sizes,
+          fabric: data.fabric ?? p.fabric,
+          washCare: data.wash_care ?? p.washCare,
+          productDetails: data.product_details ?? p.productDetails,
+        }
+      }
+      return p
+    })
+    notifyCatalogChanged(false)
+  }
+}
+

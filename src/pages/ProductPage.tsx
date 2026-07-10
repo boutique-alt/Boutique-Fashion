@@ -6,6 +6,7 @@ import ProductPurchase from '../components/product/ProductPurchase'
 import SEO from '../components/ui/SEO'
 
 import ProductCard from '../components/ui/ProductCard'
+import { fetchProductDetails } from '../services/productService'
 import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed'
@@ -18,6 +19,9 @@ export default function ProductPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    if (slug) {
+      void fetchProductDetails(slug)
+    }
   }, [slug])
 
   if (!product && version === 0) {
@@ -42,11 +46,55 @@ export default function ProductPage() {
     .filter(Boolean)
     .slice(0, 4)
 
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.image.startsWith('http') ? product.image : `https://boutiquefashion.shop${product.image}`,
+    "description": product.shortDescription || product.name,
+    "sku": product.sku || `SKU-${product.id}`,
+    "offers": {
+      "@type": "Offer",
+      "url": `https://boutiquefashion.shop${productPath(product.slug)}`,
+      "priceCurrency": "INR",
+      "price": product.price,
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://boutiquefashion.shop/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Shop",
+        "item": "https://boutiquefashion.shop/shop/all"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": product.name,
+        "item": `https://boutiquefashion.shop${productPath(product.slug)}`
+      }
+    ]
+  }
+
   return (
     <main key={slug}>
       <SEO 
         title={product.name}
         description={product.shortDescription || `Buy ${product.name} at Boutique Fashion.`}
+        image={product.image}
+        schema={[productSchema, breadcrumbSchema]}
       />
       {(prev || next) && (
         <div className="border-b border-accent bg-cream-dark/40">
