@@ -193,7 +193,8 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         
         <button
           onClick={() => {
-            const message = encodeURIComponent(`Hi, I have a query about this product:\n\n${product.name}\nhttps://boutiquefashion.shop/product/${product.slug}`);
+            const shareUrl = `https://boutiquefashion.shop/api/share?slug=${product.slug}&name=${encodeURIComponent(product.name)}&image=${encodeURIComponent(product.image)}`;
+            const message = encodeURIComponent(`Hi, I have a query about this product:\n\n${product.name}\n${shareUrl}`);
             window.open(`https://wa.me/918334816333?text=${message}`, '_blank', 'noopener,noreferrer');
           }}
           className="flex w-full items-center justify-center gap-2 bg-[#25D366] py-3.5 text-[15px] tracking-wide text-white uppercase transition-colors hover:bg-[#128C7E] rounded-sm shadow-sm font-medium"
