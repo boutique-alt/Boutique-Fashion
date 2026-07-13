@@ -120,7 +120,7 @@ export default function ProductPage() {
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
-            <div className="lg:sticky lg:top-24">
+            <div className="static lg:sticky lg:top-24 z-10">
               <ProductGallery images={product.images} name={product.name} />
             </div>
             <ProductPurchase product={product} />

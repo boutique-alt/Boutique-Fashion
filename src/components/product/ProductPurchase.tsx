@@ -190,7 +190,21 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         >
           Add to Cart
         </button>
-
+        
+        <button
+          onClick={() => {
+            const message = encodeURIComponent(`Hi, I have a query about this product:\n\n${product.name}\nhttps://boutiquefashion.shop/product/${product.slug}`);
+            window.open(`https://wa.me/918334816333?text=${message}`, '_blank', 'noopener,noreferrer');
+          }}
+          className="flex w-full items-center justify-center gap-2 bg-[#25D366] py-3.5 text-[15px] tracking-wide text-white uppercase transition-colors hover:bg-[#128C7E] rounded-sm shadow-sm font-medium"
+        >
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+            <path d="M16 2C8.268 2 2 8.268 2 16c0 2.462.666 4.77 1.83 6.754L2 30l7.478-1.796A13.93 13.93 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="white" />
+            <path d="M16 4.5C9.649 4.5 4.5 9.649 4.5 16c0 2.21.638 4.271 1.74 6.013l.28.446-1.19 4.343 4.46-1.17.43.254A11.45 11.45 0 0016 27.5c6.351 0 11.5-5.149 11.5-11.5S22.351 4.5 16 4.5z" fill="#25D366" />
+            <path d="M21.965 19.22c-.29-.146-1.716-.847-1.981-.944-.265-.097-.458-.146-.651.146-.193.29-.748.944-.916 1.138-.169.193-.338.218-.628.073-.29-.146-1.225-.452-2.333-1.44-.862-.769-1.444-1.719-1.613-2.01-.169-.29-.018-.447.127-.592.13-.13.29-.34.435-.51.145-.168.193-.29.29-.483.096-.193.048-.362-.024-.508-.073-.145-.651-1.57-.892-2.148-.234-.563-.472-.486-.651-.495l-.556-.01c-.193 0-.507.073-.772.362-.266.29-1.013.99-1.013 2.415s1.037 2.8 1.182 2.993c.145.193 2.04 3.115 4.943 4.368.69.298 1.229.476 1.648.61.693.22 1.323.189 1.821.114.555-.083 1.716-.701 1.957-1.378.24-.676.24-1.256.169-1.378-.072-.121-.264-.193-.554-.338z" fill="white" />
+          </svg>
+          Ask on WhatsApp
+        </button>
         
         <div className="flex justify-center items-center gap-2.5 text-sm font-semibold text-maroon pt-1">
           <Truck size={18} className="shrink-0" />
