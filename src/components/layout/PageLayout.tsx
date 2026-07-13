@@ -6,6 +6,7 @@ import Footer from './Footer'
 import SearchDrawer from '../search/SearchDrawer'
 import CartDrawer from '../cart/CartDrawer'
 import PageVisitTracker from '../analytics/PageVisitTracker'
+import WhatsAppButton from '../ui/WhatsAppButton'
 
 export default function PageLayout() {
   const { pathname } = useLocation()
@@ -46,6 +47,7 @@ export default function PageLayout() {
       <Footer />
       <SearchDrawer />
       <CartDrawer />
+      <WhatsAppButton />
     </>
   )
 }

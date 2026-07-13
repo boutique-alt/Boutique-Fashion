@@ -10,6 +10,7 @@ export const kurtaCoordProducts: Product[] = [
     name: 'White Crop Top & Blue Handblock Skirt Coord Set',
     price: 2200,
     image: IMG(1),
+    isBestSeller: true,
     href: 'https://boutiquefashion.shop/product/white-crop-top-blue-handblock-skirt-coord-set/',
   },
   {
@@ -24,6 +25,7 @@ export const kurtaCoordProducts: Product[] = [
     name: 'Charcoal Top & Folk Art Print Skirt Coord Set',
     price: 2300,
     image: IMG(3),
+    isNew: true,
     href: 'https://boutiquefashion.shop/product/charcoal-top-folk-art-print-skirt-coord-set/',
   },
   {
@@ -49,6 +51,8 @@ export const kurtaCoordProducts: Product[] = [
     name: 'Lime Green Embroidered Kurta with Mustard Trousers',
     price: 1800,
     image: IMG(6),
+    isBestSeller: true,
+    isNew: true,
     href: 'https://boutiquefashion.shop/product/lime-green-embroidered-kurta-mustard-trousers/',
   },
   {
@@ -70,6 +74,7 @@ export const kurtaCoordProducts: Product[] = [
     name: 'Chocolate Brown Embroidered Kurta Set',
     price: 1850,
     image: IMG(9),
+    isBestSeller: true,
     href: 'https://boutiquefashion.shop/product/chocolate-brown-embroidered-kurta-set/',
   },
   {

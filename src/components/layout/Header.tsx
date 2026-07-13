@@ -53,8 +53,8 @@ export default function Header() {
           className="h-10 w-auto object-contain md:h-12"
         />
       ) : (
-        <span className="font-serif text-xl font-medium tracking-widest text-charcoal md:text-2xl uppercase">
-          {brand.name}
+        <span className="font-serif text-base sm:text-lg font-medium tracking-widest text-charcoal md:text-2xl uppercase whitespace-nowrap flex flex-col items-center">
+          <span className="leading-tight text-center">{brand.name}</span>
         </span>
       )}
     </Link>
@@ -127,7 +127,7 @@ export default function Header() {
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
-          <div className="absolute left-1/2 -translate-x-1/2">{logo}</div>
+          <div className="absolute left-1/2 -translate-x-1/2 w-[60%] sm:w-auto flex justify-center">{logo}</div>
           <div className="flex items-center gap-3">
             <button onClick={() => setSearchOpen(true)} className={iconClass} aria-label="Search">
               <Search size={20} strokeWidth={1.5} />
