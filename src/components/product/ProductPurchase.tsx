@@ -5,6 +5,7 @@ import type { ProductAddon } from '../../types/adminProduct'
 import { useStore } from '../../context/StoreContext'
 import WishlistButton from '../wishlist/WishlistButton'
 import { brand } from '../../data/navigation'
+import { trackAddToCart } from '../../utils/analytics'
 
 interface ProductPurchaseProps {
   product: ProductDetail
@@ -63,6 +64,15 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
       size,
       quantity,
     })
+    
+    trackAddToCart({
+      id: product.id,
+      name: product.name + (selectedAddons ? ` (+ ${selectedAddons})` : ''),
+      price: totalPrice,
+      category: product.categoryLabel,
+      fabric: product.fabric,
+    }, quantity)
+
     setSizeError(false)
   }
 

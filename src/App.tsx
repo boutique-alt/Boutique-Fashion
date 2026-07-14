@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import PageLayout from './components/layout/PageLayout'
 import AdminLayout from './components/admin/AdminLayout'
 import ScrollToTop from './components/layout/ScrollToTop'
+import AnalyticsTracker from './components/layout/AnalyticsTracker'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -46,6 +47,7 @@ export default function App() {
     <HelmetProvider>
       <BrowserRouter>
         <ScrollToTop />
+        <AnalyticsTracker />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route element={<PageLayout />}>
@@ -58,6 +60,7 @@ export default function App() {
             <Route path="bridal" element={<BridalPage />} />
             <Route path="bridal/women" element={<BridalPage />} />
             <Route path="bridal/groom" element={<CategoryPage slug="mens" />} />
+            <Route path="groom" element={<Navigate to="/bridal/groom" replace />} />
             <Route path="dress" element={<DressPage />} />
             <Route path="dress/:category" element={<CategoryPage />} />
             <Route path="shop" element={<Navigate to="/dress" replace />} />

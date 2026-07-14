@@ -37,7 +37,7 @@ export default function Footer() {
   return (
     <footer className="bg-gold text-cream">
       <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
           <div>
             <h3 className="mb-5 font-serif text-lg tracking-widest">CUSTOMER SUPPORT</h3>
             <ul className="space-y-2.5">
@@ -93,18 +93,6 @@ export default function Footer() {
             <p className="mt-4 text-sm text-cream/60">
               <strong className="text-cream/80">Hours:</strong> {brand.hours}
             </p>
-          </div>
-          <div>
-            <h3 className="mb-5 font-serif text-lg tracking-widest">CATEGORIES</h3>
-            <ul className="space-y-2.5">
-              {footerCategories.map((item) => (
-                <li key={item.label}>
-                  <Link to={item.href} className="text-sm text-cream/60 transition-colors hover:text-charcoal">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
         <div className="mt-12 border-t border-cream/10 pt-8 text-center">

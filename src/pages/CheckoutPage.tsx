@@ -10,6 +10,7 @@ import { getOrCreateProfile } from '../services/profileService'
 import { initiateRazorpayPayment } from '../services/razorpay'
 import type { PaymentMethod } from '../types/order'
 import TrustBadges from '../components/trust/TrustBadges'
+import { trackPurchase } from '../utils/analytics'
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart, user, authReady } = useStore()
@@ -85,6 +86,9 @@ export default function CheckoutPage() {
       paymentScreenshotUrl,
       accountEmail,
     })
+    
+    trackPurchase(cart, cartTotal, paymentMethod)
+
     clearCart()
     setPlacedViaUpi(paymentMethod === 'upi')
     setPlaced(true)

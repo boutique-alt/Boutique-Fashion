@@ -4,6 +4,7 @@ import { ArrowUpRight } from 'lucide-react'
 import type { Product } from '../../data/products'
 import { slugFromHref, productPath } from '../../utils/productSlug'
 import WishlistButton from '../wishlist/WishlistButton'
+import { trackProductClick } from '../../utils/analytics'
 
 interface ProductCardProps {
   product: Product & { slug?: string; newArrivalVideo?: string }
@@ -42,7 +43,11 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
 
   return (
     <div className="group relative">
-      <Link to={to} className="block">
+      <Link
+        to={to}
+        className="block"
+        onClick={() => trackProductClick(product)}
+      >
         <div className="relative aspect-[480/638] overflow-hidden bg-[#f4f4f4]">
           {videoSrc ? (
             <video

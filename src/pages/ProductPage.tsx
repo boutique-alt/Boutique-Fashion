@@ -11,6 +11,7 @@ import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../da
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed'
 import { productPath } from '../utils/productSlug'
+import { trackProductView } from '../utils/analytics'
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -23,6 +24,12 @@ export default function ProductPage() {
       void fetchProductDetails(slug)
     }
   }, [slug])
+
+  useEffect(() => {
+    if (product) {
+      trackProductView(product)
+    }
+  }, [product])
 
   if (!product && version === 0) {
     return (
