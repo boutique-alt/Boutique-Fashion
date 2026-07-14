@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { brand, footerSupport, footerQuickLinks, footerCategories } from '../../data/navigation'
+import { brand, footerSupport, footerQuickLinks } from '../../data/navigation'
 
 function InstagramIcon() {
   return (

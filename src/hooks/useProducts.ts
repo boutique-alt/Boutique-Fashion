@@ -69,7 +69,7 @@ export function useProducts(options: UseProductsOptions = {}) {
         const overrides = getProductOverrides()
         const deleted = getDeletedSlugs()
 
-        let mapped = (data || []).map(mapProduct).map(p => {
+        let mapped = ((data as any[]) || []).map(row => mapProduct(row as any)).map(p => {
           const override = overrides[p.slug]
           if (!override) return p
           return {
