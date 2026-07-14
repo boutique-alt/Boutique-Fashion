@@ -34,7 +34,7 @@ export function useProducts(options: UseProductsOptions = {}) {
         const from = pageIndex * pageSize
         const to = from + pageSize - 1
 
-        let query = client.from('products').select('*')
+        let query = client.from('products').select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, created_at, updated_at')
 
         if (options.categorySlug) {
           query = query.eq('category_slug', options.categorySlug)
