@@ -27,20 +27,12 @@ export default function AppBootstrap({ children }: { children: ReactNode }) {
 
     void loadCatalog().finally(() => setReady(true))
 
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') {
-        void hydrateProductStore()
-      }
-    }
-    document.addEventListener('visibilitychange', onVisible)
-
     const onCatalogMessage = () => {
       void hydrateProductStore()
     }
     catalogChannel?.addEventListener('message', onCatalogMessage)
 
     return () => {
-      document.removeEventListener('visibilitychange', onVisible)
       catalogChannel?.removeEventListener('message', onCatalogMessage)
     }
   }, [])
