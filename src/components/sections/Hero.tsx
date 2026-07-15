@@ -52,7 +52,7 @@ export default function Hero() {
           src={brandAssets.logo}
           alt=""
           aria-hidden
-          className="h-14 w-auto opacity-[0.07] mix-blend-multiply md:h-20 md:opacity-[0.1]"
+          className="h-16 w-auto rounded-xl opacity-[0.05] mix-blend-multiply md:h-24 lg:h-32 md:opacity-[0.08]"
         />
       </div>
 

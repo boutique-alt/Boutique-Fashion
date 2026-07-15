@@ -50,7 +50,8 @@ export default function Header() {
           src={brandAssets.logo}
           alt={brand.name}
           onError={() => setLogoError(true)}
-          className="h-10 w-auto object-contain md:h-12"
+          className="h-12 w-12 shrink-0 rounded-xl border border-maroon/10 object-cover shadow-sm sm:h-16 sm:w-16 md:h-20 md:w-20"
+          style={{ imageRendering: 'high-quality' }}
         />
       ) : (
         <span className="font-serif text-base sm:text-lg font-medium tracking-widest text-charcoal md:text-2xl uppercase whitespace-nowrap flex flex-col items-center">
@@ -118,8 +119,8 @@ export default function Header() {
 
   return (
     <header className="site-header">
-      <div className="mx-auto max-w-7xl px-4 pt-3 pb-2 md:px-8 md:pt-3 md:pb-2">
-        <div className="relative flex items-center justify-between md:hidden">
+      <div className="mx-auto max-w-7xl px-4 py-3 md:px-8 md:py-4">
+        <div className="relative flex min-h-[44px] items-center justify-between md:hidden">
           <button
             className="text-charcoal"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -137,15 +138,13 @@ export default function Header() {
         </div>
 
         <div className="hidden md:block">
-          <div className="relative grid grid-cols-[1fr_auto_1fr] items-center">
-            <div aria-hidden />
-            <div className="justify-self-center">{logo}</div>
+          <div className="relative grid grid-cols-[auto_1fr_auto] gap-x-8 items-center">
+            <div className="justify-self-start">{logo}</div>
+            <nav className="flex flex-nowrap items-center justify-center gap-x-4 lg:gap-x-6">
+              {navItems}
+            </nav>
             <div className="justify-self-end">{actions}</div>
           </div>
-
-          <nav className="mt-2 flex flex-nowrap items-center justify-center gap-x-4 lg:gap-x-6">
-            {navItems}
-          </nav>
         </div>
       </div>
 
