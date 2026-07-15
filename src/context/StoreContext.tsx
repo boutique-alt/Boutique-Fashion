@@ -113,7 +113,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
     const timer = setTimeout(() => {
       void saveUserCart(userId, cart).catch(() => {})
-    }, 400)
+    }, 2000)
     return () => clearTimeout(timer)
   }, [cart, userId])
 
@@ -125,7 +125,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
     const timer = setTimeout(() => {
       void saveUserWishlist(userId, wishlist).catch(() => {})
-    }, 400)
+    }, 2000)
     return () => clearTimeout(timer)
   }, [wishlist, userId])
 

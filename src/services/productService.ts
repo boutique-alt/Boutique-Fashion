@@ -34,6 +34,9 @@ function notifyCatalogChanged(broadcast = true): void {
   catalogListeners.forEach((listener) => listener())
   if (broadcast) {
     catalogChannel?.postMessage(catalogVersion)
+    try {
+      localStorage.removeItem('bf_catalog_cache')
+    } catch (e) {}
   }
 }
 
@@ -178,6 +181,23 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
     return { ok: !lastHydrationError, error: lastHydrationError, adminProductCount: 0 }
   }
 
+  try {
+    const cached = localStorage.getItem('bf_catalog_cache')
+    if (cached) {
+      const { timestamp, products, deleted, overrides } = JSON.parse(cached)
+      if (Date.now() - timestamp < 5 * 60 * 1000) {
+        productsCache = products
+        deletedCache = deleted
+        overridesCache = overrides
+        lastHydrationError = undefined
+        notifyCatalogChanged(false)
+        return { ok: true, adminProductCount: productsCache?.length ?? 0 }
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+
   const client = getSupabase()
   const [productsRes, hiddenRes, overridesRes] = await Promise.all([
     fetchAllProducts(),
@@ -208,6 +228,18 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
     ? mapOverrides(overridesRes.data as { slug: string; override_data: ProductOverride }[])
     : {}
   lastHydrationError = undefined
+
+  try {
+    localStorage.setItem('bf_catalog_cache', JSON.stringify({
+      timestamp: Date.now(),
+      products: productsCache,
+      deleted: deletedCache,
+      overrides: overridesCache
+    }))
+  } catch (e) {
+    // ignore
+  }
+
   notifyCatalogChanged(false)
   return { ok: true, adminProductCount: productsCache.length }
 }
