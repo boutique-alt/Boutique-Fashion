@@ -51,7 +51,6 @@ export default function Header() {
           alt={brand.name}
           onError={() => setLogoError(true)}
           className="h-12 w-12 shrink-0 rounded-xl border border-maroon/10 object-cover shadow-sm sm:h-16 sm:w-16 md:h-20 md:w-20"
-          style={{ imageRendering: 'high-quality' }}
         />
       ) : (
         <span className="font-serif text-base sm:text-lg font-medium tracking-widest text-charcoal md:text-2xl uppercase whitespace-nowrap flex flex-col items-center">
