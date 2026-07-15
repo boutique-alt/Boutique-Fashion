@@ -6,6 +6,7 @@ import ProductPurchase from '../components/product/ProductPurchase'
 import SEO from '../components/ui/SEO'
 
 import ProductCard from '../components/ui/ProductCard'
+import AnimatedGrid from '../components/ui/AnimatedGrid'
 import { fetchProductDetails } from '../services/productService'
 import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
 import { useProductCatalog } from '../hooks/useProductCatalog'
@@ -141,11 +142,11 @@ export default function ProductPage() {
             <h2 className="mb-10 text-center font-serif text-2xl font-medium text-charcoal md:text-3xl">
               Related Products
             </h2>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+            <AnimatedGrid className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
-            </div>
+            </AnimatedGrid>
           </div>
         </section>
       )}
@@ -156,11 +157,11 @@ export default function ProductPage() {
             <h2 className="mb-10 text-center font-serif text-2xl font-medium text-charcoal md:text-3xl">
               Recently Viewed
             </h2>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+            <AnimatedGrid className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
               {recentlyViewed.map((p) => (
                 <ProductCard key={p!.id} product={p!} />
               ))}
-            </div>
+            </AnimatedGrid>
           </div>
         </section>
       )}

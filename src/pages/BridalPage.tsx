@@ -1,5 +1,6 @@
 import { Sparkles } from 'lucide-react'
 import ProductCard from '../components/ui/ProductCard'
+import AnimatedGrid from '../components/ui/AnimatedGrid'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import SEO from '../components/ui/SEO'
 import { useProductCatalog } from '../hooks/useProductCatalog'

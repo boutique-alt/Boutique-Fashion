@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Layers } from 'lucide-react'
 import ProductCard from '../components/ui/ProductCard'
+import AnimatedGrid from '../components/ui/AnimatedGrid'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets, aboutPillars } from '../data/about'
 import SEO from '../components/ui/SEO'
@@ -74,11 +75,11 @@ export default function FabricPage() {
         <section className="py-16 border-t border-accent bg-[#FCFAFA]">
           <div className="mx-auto max-w-7xl px-4 md:px-6">
             <h3 className="font-serif text-2xl text-center text-charcoal mb-10">Shop Our Premium Fabrics</h3>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+            <AnimatedGrid className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
               {fabricProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
-            </div>
+            </AnimatedGrid>
           </div>
         </section>
       )}

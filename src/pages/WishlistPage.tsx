@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import ProductCard from '../components/ui/ProductCard'
+import AnimatedGrid from '../components/ui/AnimatedGrid'
 import { useStore } from '../context/StoreContext'
 import { getProductsBySlugs } from '../data/productCatalog'
 
@@ -24,11 +25,11 @@ export default function WishlistPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+            <AnimatedGrid className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
-            </div>
+            </AnimatedGrid>
           )}
         </div>
       </section>

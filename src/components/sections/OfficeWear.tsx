@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import ProductCard from '../ui/ProductCard'
+import AnimatedGrid from '../ui/AnimatedGrid'
 import { mensCollectionProducts } from '../../data/products'
 
 export default function OfficeWear() {
@@ -13,11 +14,11 @@ export default function OfficeWear() {
             Exclusive Designer Grooms Collection
           </h2>
         </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+        <AnimatedGrid className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-4">
           {displayedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
-        </div>
+        </AnimatedGrid>
         <div className="mt-10 text-center">
           <Link
             to="/bridal/groom"

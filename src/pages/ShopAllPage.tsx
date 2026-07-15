@@ -1,5 +1,6 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import ProductCard from '../components/ui/ProductCard'
+import AnimatedGrid from '../components/ui/AnimatedGrid'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getShopPageProducts, getShopResultRange, getShopTotalPages } from '../data/shop'
 import { useProductCatalog } from '../hooks/useProductCatalog'
@@ -37,11 +38,11 @@ export default function ShopAllPage() {
             Showing {range.from}–{range.to} of {range.total} results
           </div>
           <CategoryToolbar total={range.total} onSortChange={setSort} />
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+          <AnimatedGrid className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
             {sorted.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </div>
+          </AnimatedGrid>
           {getShopTotalPages() > 1 && (
             <div className="mt-12 flex items-center justify-center gap-2">
               {Array.from({ length: getShopTotalPages() }, (_, i) => i + 1).map((p) => (

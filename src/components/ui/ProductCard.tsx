@@ -64,7 +64,9 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               <img
                 src={product.image}
                 alt={product.name}
-                className={`h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03] ${product.images && product.images.length > 1 ? 'group-hover:opacity-0 transition-opacity' : ''}`}
+                className={`h-full w-full object-cover object-top transition-all duration-500 ease-out group-hover:scale-[1.03] ${
+                  product.images && product.images.length > 1 ? 'group-hover:opacity-0' : ''
+                }`}
                 loading="lazy"
                 decoding="async"
               />
