@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { brandAssets, mensCollectionProducts } from '../../data/products'
+import { mensCollectionProducts } from '../../data/products'
 
 export default function ExclusiveSarees() {
   return (

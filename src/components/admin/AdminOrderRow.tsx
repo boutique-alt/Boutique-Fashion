@@ -140,8 +140,8 @@ export default function AdminOrderRow({ order, onSaved }: AdminOrderRowProps) {
                       )}
                       <div className="flex-1 flex flex-col justify-center">
                         <p className="text-sm font-medium text-charcoal">{item.name}</p>
-                        {item.selectedSize && (
-                          <p className="text-xs text-charcoal/60">Size: {item.selectedSize}</p>
+                        {item.size && (
+                          <p className="text-xs text-charcoal/60">Size: {item.size}</p>
                         )}
                         <p className="text-xs text-charcoal/60">Qty: {item.quantity}</p>
                       </div>
