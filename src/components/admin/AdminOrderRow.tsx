@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, Fragment } from 'react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { updateOrderStatus } from '../../services/orderService'
 import type { Order, OrderStatus } from '../../types/order'
 import { isOrderStatusLocked } from '../../types/order'
@@ -16,6 +17,7 @@ export default function AdminOrderRow({ order, onSaved }: AdminOrderRowProps) {
   const [draftStatus, setDraftStatus] = useState<OrderStatus>(order.status)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
+  const [expanded, setExpanded] = useState(false)
 
   const hasChanges = draftStatus !== order.status
 
@@ -36,8 +38,9 @@ export default function AdminOrderRow({ order, onSaved }: AdminOrderRowProps) {
   }
 
   return (
-    <tr className="border-t border-accent">
-      <td className="px-4 py-3 font-mono text-xs text-charcoal/70">
+    <Fragment>
+      <tr className="border-t border-accent">
+        <td className="px-4 py-3 font-mono text-xs text-charcoal/70">
         {order.id.slice(0, 12)}…
       </td>
       <td className="px-4 py-3">
@@ -97,9 +100,84 @@ export default function AdminOrderRow({ order, onSaved }: AdminOrderRowProps) {
           </div>
         )}
       </td>
-      <td className="px-4 py-3 text-xs text-charcoal/50">
-        {new Date(order.createdAt).toLocaleDateString('en-IN')}
-      </td>
-    </tr>
+        <td className="px-4 py-3 text-xs text-charcoal/50">
+          {new Date(order.createdAt).toLocaleDateString('en-IN')}
+        </td>
+        <td className="px-4 py-3">
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="flex items-center gap-1 text-xs font-medium text-maroon hover:text-maroon-light transition-colors"
+          >
+            {expanded ? (
+              <>
+                Hide <ChevronUp size={14} />
+              </>
+            ) : (
+              <>
+                View <ChevronDown size={14} />
+              </>
+            )}
+          </button>
+        </td>
+      </tr>
+      {expanded && (
+        <tr className="bg-cream-dark/30 border-b border-accent">
+          <td colSpan={8} className="p-4 md:p-6">
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex-1">
+                <h4 className="font-serif text-charcoal mb-3">Order Items</h4>
+                <div className="space-y-4">
+                  {order.items.map((item, idx) => (
+                    <div key={idx} className="flex gap-4 border-b border-accent/50 pb-4 last:border-0 last:pb-0">
+                      {item.image && (
+                        <div className="h-16 w-12 flex-shrink-0 overflow-hidden bg-cream-dark">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 flex flex-col justify-center">
+                        <p className="text-sm font-medium text-charcoal">{item.name}</p>
+                        {item.selectedSize && (
+                          <p className="text-xs text-charcoal/60">Size: {item.selectedSize}</p>
+                        )}
+                        <p className="text-xs text-charcoal/60">Qty: {item.quantity}</p>
+                      </div>
+                      <div className="text-right flex flex-col justify-center">
+                        <p className="text-sm font-medium text-charcoal">₹{(item.price * item.quantity).toLocaleString('en-IN')}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex-1 space-y-6">
+                <div>
+                  <h4 className="font-serif text-charcoal mb-3">Customer Details</h4>
+                  <div className="text-sm text-charcoal/80 space-y-1">
+                    <p><span className="font-medium">Name:</span> {order.billing.firstName} {order.billing.lastName}</p>
+                    <p><span className="font-medium">Email:</span> {order.billing.email}</p>
+                    <p><span className="font-medium">Phone:</span> {order.billing.phone}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-serif text-charcoal mb-3">Pickup / Delivery Location</h4>
+                  <div className="text-sm text-charcoal/80 space-y-1">
+                    <p>{order.billing.address}</p>
+                    <p>{order.billing.city}, {order.billing.state} {order.billing.pincode}</p>
+                    {order.billing.notes && (
+                      <p className="mt-2 text-charcoal/60 italic">Notes: {order.billing.notes}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      )}
+    </Fragment>
   )
 }

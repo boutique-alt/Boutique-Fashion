@@ -416,3 +416,68 @@ export async function fetchProductDetails(slugOrId: string): Promise<void> {
   }
 }
 
+export async function createBulkAdminProducts(inputs: AdminProductInput[]): Promise<{ successful: number, failed: { index: number, reason: string, name: string }[] }> {
+  if (!isSupabaseConfigured()) {
+    throw new Error('Supabase is not configured')
+  }
+
+  const failed: { index: number, reason: string, name: string }[] = []
+  const newProducts: AdminProduct[] = []
+  const dbRows = []
+  const now = new Date().toISOString()
+
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i]
+    try {
+      const baseSlug = slugify(input.name) || 'product'
+      const slug = uniqueSlug(baseSlug)
+      const meta = categoryMeta(input.categorySlug)
+      
+      const row = productToDb({ slug, ...input, ...meta })
+      const id = crypto.randomUUID()
+      
+      const product: AdminProduct = {
+        id,
+        slug,
+        ...input,
+        ...meta,
+        createdAt: now,
+        updatedAt: now,
+      }
+      
+      dbRows.push({
+        ...row,
+        id,
+        created_at: now,
+        updated_at: now,
+      })
+      newProducts.push(product)
+    } catch (err) {
+      failed.push({
+        index: i,
+        reason: err instanceof Error ? err.message : 'Unknown error',
+        name: input.name
+      })
+    }
+  }
+
+  if (dbRows.length > 0) {
+    await requireAdminCloudSession()
+    
+    // Split into chunks if necessary (e.g. 100 per request)
+    const chunkSize = 100
+    for (let i = 0; i < dbRows.length; i += chunkSize) {
+      const chunk = dbRows.slice(i, i + chunkSize)
+      const { error } = await getSupabaseAdmin().from('products').insert(chunk)
+      if (error) {
+        throw new Error(error.message)
+      }
+    }
+
+    productsCache = [...newProducts, ...(productsCache ?? [])]
+    notifyCatalogChanged()
+  }
+
+  return { successful: newProducts.length, failed }
+}
+

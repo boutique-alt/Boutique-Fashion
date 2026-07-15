@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { brandAssets } from '../../data/products'
+import { brandAssets, mensCollectionProducts } from '../../data/products'
 
 export default function ExclusiveSarees() {
   return (
@@ -21,14 +21,40 @@ export default function ExclusiveSarees() {
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
-        <div className="flex items-center justify-center">
-          <img
-            src={brandAssets.mensExclusiveBanner}
-            alt="Men's Exclusive Collection"
-            loading="lazy"
-            decoding="async"
-            className="max-h-[480px] w-full object-contain object-center md:max-h-[520px]"
-          />
+        <div className="relative h-[380px] w-full sm:h-[460px] md:h-[540px]">
+          {mensCollectionProducts[0] && (
+            <div className="absolute left-0 top-[5%] z-10 h-[75%] w-[60%] overflow-hidden rounded-xl shadow-md transition-all duration-500 hover:z-40 hover:scale-[1.03] hover:shadow-xl">
+              <img
+                src={mensCollectionProducts[0].image}
+                alt={mensCollectionProducts[0].name}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+          )}
+          {mensCollectionProducts[1] && (
+            <div className="absolute bottom-[5%] right-[5%] z-20 h-[65%] w-[55%] overflow-hidden rounded-xl border-4 border-[#f7f4ef] shadow-lg transition-all duration-500 hover:z-40 hover:scale-[1.03] hover:shadow-2xl">
+              <img
+                src={mensCollectionProducts[1].image}
+                alt={mensCollectionProducts[1].name}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+          )}
+          {mensCollectionProducts[2] && (
+            <div className="absolute right-0 top-0 z-30 h-[45%] w-[40%] overflow-hidden rounded-xl border-4 border-[#f7f4ef] shadow-xl transition-all duration-500 hover:z-40 hover:scale-[1.03] hover:shadow-2xl">
+              <img
+                src={mensCollectionProducts[2].image}
+                alt={mensCollectionProducts[2].name}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>

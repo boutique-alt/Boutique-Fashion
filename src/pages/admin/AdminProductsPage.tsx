@@ -3,6 +3,7 @@ import { AlertTriangle, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { isSupabaseConfigured } from '../../config/env'
 import AdminProductCard from '../../components/admin/AdminProductCard'
 import ProductForm from '../../components/admin/ProductForm'
+import BulkUploadModal from '../../components/admin/BulkUploadModal'
 import CategoryToolbar, { useSortedProducts } from '../../components/shop/CategoryToolbar'
 import { type ProductDetail } from '../../data/productCatalog'
 import { useProductCatalog } from '../../hooks/useProductCatalog'
@@ -26,6 +27,7 @@ export default function AdminProductsPage() {
   const [saveError, setSaveError] = useState('')
   const [catalogWarning, setCatalogWarning] = useState('')
   const [page, setPage] = useState(1)
+  const [showBulkModal, setShowBulkModal] = useState(false)
   
   const { sorted, setSort } = useSortedProducts(products as ProductDetail[])
 
@@ -111,14 +113,23 @@ export default function AdminProductsPage() {
         </div>
         <div className="flex items-center gap-4">
           {!showForm && (
-            <button
-              type="button"
-              onClick={() => { setSaveError(''); setAdding(true) }}
-              className="flex items-center gap-2 bg-maroon px-5 py-2.5 text-xs font-medium tracking-[0.15em] text-cream uppercase hover:bg-maroon-light"
-            >
-              <Plus size={14} />
-              Add Product
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => setShowBulkModal(true)}
+                className="flex items-center gap-2 border border-accent px-5 py-2.5 text-xs font-medium tracking-[0.15em] text-charcoal uppercase hover:border-maroon hover:text-maroon"
+              >
+                Bulk Upload
+              </button>
+              <button
+                type="button"
+                onClick={() => { setSaveError(''); setAdding(true) }}
+                className="flex items-center gap-2 bg-maroon px-5 py-2.5 text-xs font-medium tracking-[0.15em] text-cream uppercase hover:bg-maroon-light"
+              >
+                <Plus size={14} />
+                Add Product
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -188,6 +199,15 @@ export default function AdminProductsPage() {
             />
           </div>
         </div>
+      )}
+
+      {showBulkModal && (
+        <BulkUploadModal
+          onClose={() => setShowBulkModal(false)}
+          onSuccess={() => {
+            // Data refreshes via catalog listener in the background
+          }}
+        />
       )}
     </div>
   )

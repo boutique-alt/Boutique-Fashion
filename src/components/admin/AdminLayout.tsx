@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, Navigate } from 'react-router-dom'
-import { BarChart3, LayoutDashboard, LogOut, Mail, Package, RotateCcw, Shirt, Store, Menu, X } from 'lucide-react'
+import { BarChart3, LayoutDashboard, LogOut, Mail, Package, RotateCcw, Shirt, Store, Menu, X, Image } from 'lucide-react'
 import { isSupabaseConfigured } from '../../config/env'
 import { adminLogout, getLastAdminSyncError, verifyAdminSession } from '../../services/adminService'
 import { getUnreadContactCount, loadContactMessages } from '../../services/contactService'
@@ -18,6 +18,7 @@ const navItems = [
   { to: '/admin/messages', label: 'Messages', icon: Mail, end: false },
   { to: '/admin/returns', label: 'Returns', icon: RotateCcw, end: false },
   { to: '/admin/analytics', label: 'Analytics', icon: BarChart3, end: false },
+  { to: '/admin/media', label: 'Media', icon: Image, end: false },
 ]
 
 export default function AdminLayout() {

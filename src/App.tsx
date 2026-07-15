@@ -30,6 +30,7 @@ const AdminMessagesPage = lazy(() => import('./pages/admin/AdminMessagesPage'))
 const AdminProductsPage = lazy(() => import('./pages/admin/AdminProductsPage'))
 const AdminProductPreviewPage = lazy(() => import('./pages/admin/AdminProductPreviewPage'))
 const AdminAnalyticsPage = lazy(() => import('./pages/admin/AdminAnalyticsPage'))
+const AdminMediaPage = lazy(() => import('./pages/admin/AdminMediaPage'))
 const AdminReturnsPage = lazy(() => import('./pages/admin/AdminReturnsPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const SitemapPage = lazy(() => import('./pages/SitemapPage'))
@@ -89,6 +90,7 @@ export default function App() {
             <Route path="products/preview/:slug" element={<AdminProductPreviewPage />} />
             <Route path="messages" element={<AdminMessagesPage />} />
             <Route path="analytics" element={<AdminAnalyticsPage />} />
+            <Route path="media" element={<AdminMediaPage />} />
             <Route path="returns" element={<AdminReturnsPage />} />
           </Route>
         </Routes>

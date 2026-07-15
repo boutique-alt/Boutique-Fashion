@@ -8,7 +8,7 @@ export default function ExclusiveCollections() {
     <section className="bg-[#fafafa] pb-12 md:pb-20">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <AnimatedGrid className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-          {exclusiveCollectionProducts.map((product) => (
+          {exclusiveCollectionProducts.slice(0, 4).map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </AnimatedGrid>

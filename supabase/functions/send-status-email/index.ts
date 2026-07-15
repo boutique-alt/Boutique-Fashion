@@ -6,6 +6,7 @@ import {
   getRecipientEmail,
   type EmailContent,
 } from './templates.ts'
+import { generateInvoicePdf } from './pdfGenerator.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -194,7 +195,7 @@ function resolveEmailContent(
   return null
 }
 
-async function sendViaResend(to: string, content: EmailContent): Promise<string[]> {
+async function sendViaResend(to: string, content: EmailContent, attachments?: any[]): Promise<string[]> {
   const apiKey = getEnv('RESEND_API_KEY')
   if (!apiKey) throw new Error('RESEND_API_KEY is not configured')
 
@@ -216,6 +217,7 @@ async function sendViaResend(to: string, content: EmailContent): Promise<string[
       ...(bcc ? { bcc } : {}),
       subject: content.subject,
       html: content.html,
+      ...(attachments && attachments.length > 0 ? { attachments } : {}),
     }),
   })
 
@@ -266,7 +268,31 @@ serve(async (req) => {
       return jsonResponse({ error: 'Recipient email missing' }, 400)
     }
 
-    const bcc = await sendViaResend(to, content)
+    let attachments: any[] | undefined = undefined;
+    try {
+      if (table === 'orders') {
+        const paymentMethod = record.payment_method || record.paymentMethod;
+        const status = record.status;
+        
+        const shouldAttachPdf = 
+          (paymentMethod === 'razorpay' && event === 'INSERT') || 
+          (paymentMethod === 'cod' && event === 'INSERT') ||
+          (paymentMethod === 'upi' && event === 'UPDATE' && status === 'processing');
+          
+        if (shouldAttachPdf) {
+          const pdfBase64 = await generateInvoicePdf(record, siteUrl);
+          attachments = [{
+            filename: `Invoice_${record.id?.toString().slice(0, 8)}.pdf`,
+            content: pdfBase64
+          }];
+        }
+      }
+    } catch (pdfErr) {
+      console.error('Failed to generate PDF invoice:', pdfErr);
+      // Continue sending the email even if PDF generation fails
+    }
+
+    const bcc = await sendViaResend(to, content, attachments)
     return jsonResponse({ sent: true, to, bcc, subject: content.subject })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'

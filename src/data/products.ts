@@ -68,18 +68,18 @@ export interface HeroSlide {
 
 export const heroSlides: HeroSlide[] = [
   {
-    tag: 'Summer Collections',
-    title: 'Premium Summer Kurtis &',
+    tag: 'Exclusive Collections',
+    title: 'Premium Kurtis &',
     subtitle: 'Indo-Western Collection',
     description:
-      'Discover breathable summer kurtis, elegant indo-western outfits, and ready-to-wear sarees designed for modern women.',
+      'Discover breathable kurtis, elegant indo-western outfits, and ready-to-wear sarees designed for modern women.',
     image: `${M3}/prod-1-1.png`,
     cta: 'Explore Collection',
     href: '/dress/one-piece',
     bgColor: '#e8d9d0',
   },
   {
-    tag: 'Summer Collections',
+    tag: 'Exclusive Collections',
     title: 'Refined Menswear &',
     subtitle: 'Handblock Shirts',
     description:

@@ -14,7 +14,7 @@ export default function NewArrival() {
   return (
     <section className="py-12 md:py-20">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionProductGrid title="New Arrival" products={newArrivals} limit={4} showVideo />
+        <SectionProductGrid title="New Arrivals" products={newArrivals} limit={4} showVideo />
         <div className="mt-10 text-center">
           <Link
             to="/shop/all"

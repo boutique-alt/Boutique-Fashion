@@ -47,7 +47,7 @@ export default function FabricPage() {
             <img
               src={aboutAssets.image2}
               alt="Premium fabrics at Boutique Fashion"
-              className="aspect-[4/3] w-full object-cover"
+              className="w-full h-auto rounded"
             />
             <div>
               <h3 className="font-serif text-2xl text-charcoal">Our Fabric Range</h3>

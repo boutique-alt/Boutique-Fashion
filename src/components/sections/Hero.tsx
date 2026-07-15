@@ -61,20 +61,20 @@ export default function Hero() {
           <AnimatePresence mode="wait">
             <motion.div
               key={`text-${current}`}
-              initial={{ opacity: 0, x: -24 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 24 }}
-              transition={{ duration: 0.45 }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="order-2 md:order-1"
             >
-              <div className="mb-4">
-                <p className="text-[11px] uppercase tracking-[0.25em] text-maroon font-medium">
+              <div className="mb-6">
+                <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-maroon font-semibold">
                   {slide.tag}
                 </p>
               </div>
-              <h1 className="font-serif text-[1.875rem] font-medium leading-[1.12] tracking-tight text-charcoal sm:text-4xl lg:text-[2.875rem]">
+              <h1 className="font-serif text-3xl font-light leading-[1.15] tracking-wide text-charcoal sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                 {slide.title}
-                <span className="mt-1 block font-light text-charcoal/90">{slide.subtitle}</span>
+                <span className="mt-2 block font-medium italic text-charcoal/90">{slide.subtitle}</span>
               </h1>
               <p className="sr-only">{slide.title} {slide.subtitle}</p>
               <div className="mt-5 h-px w-16 bg-maroon/30" />
@@ -86,15 +86,17 @@ export default function Hero() {
               <div className="mt-10 flex flex-wrap gap-4">
                 <Link
                   to={slide.href}
-                  className="rounded-none bg-charcoal px-10 py-4 text-[11px] font-medium tracking-[0.2em] text-white uppercase transition-all hover:bg-black md:text-xs"
+                  className="group relative overflow-hidden rounded-none border border-charcoal px-10 py-3.5 text-[10px] font-medium tracking-[0.25em] text-charcoal uppercase transition-all duration-500 hover:text-white md:text-[11px]"
                 >
-                  {slide.cta}
+                  <span className="relative z-10">{slide.cta}</span>
+                  <div className="absolute inset-0 -z-0 h-full w-0 bg-charcoal transition-all duration-500 ease-out group-hover:w-full" />
                 </Link>
                 <Link
                   to="/shop/all"
-                  className="rounded-none border border-charcoal px-10 py-4 text-[11px] font-medium tracking-[0.2em] text-charcoal uppercase transition-all hover:bg-charcoal hover:text-white md:text-xs"
+                  className="group relative overflow-hidden rounded-none border border-transparent px-8 py-3.5 text-[10px] font-medium tracking-[0.25em] text-charcoal/70 uppercase transition-all duration-500 hover:text-charcoal md:text-[11px]"
                 >
-                  Shop All
+                  <span className="relative z-10">Shop All</span>
+                  <div className="absolute bottom-2 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-charcoal transition-all duration-500 ease-out group-hover:w-1/2" />
                 </Link>
               </div>
             </motion.div>
@@ -105,10 +107,10 @@ export default function Hero() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`img-${current}`}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  transition={{ duration: 0.5 }}
+                  initial={{ opacity: 0, scale: 0.96, filter: 'blur(8px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 1.04, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
                   className="flex h-full w-full items-start justify-center pt-2 md:items-center md:pt-0"
                 >
                   <img

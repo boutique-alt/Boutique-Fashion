@@ -59,6 +59,7 @@ export default function AdminOrdersPage() {
                 <th className="px-4 py-3">Payment</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Details</th>
               </tr>
             </thead>
             <tbody>
