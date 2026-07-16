@@ -5,91 +5,115 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 const carouselItems = [
   {
     id: 1,
-    title: "Green Embroidered Suit Set",
-    subtitle: "With bright pink dupatta",
-    image: "/images/suit-set/01.png",
+    title: "Floral Dress with Jacket",
+    subtitle: "Cream and red handblock",
+    image: "/images/suit-set/new_01.png",
     link: "/shop/all",
-    bgColor: "#588157" // Deep Sage Green
+    bgColor: "#8b1c1c" // Deep Red
   },
   {
     id: 2,
-    title: "Teal Blue Suit Set",
-    subtitle: "With printed beige dupatta",
-    image: "/images/suit-set/02.png",
+    title: "Dual-Tone Printed Dress",
+    subtitle: "Red and blue motifs",
+    image: "/images/suit-set/new_02.jpg",
     link: "/shop/all",
-    bgColor: "#1d4e89" // Deep Teal
+    bgColor: "#1a5b8f" // Bright Blue
   },
   {
     id: 3,
-    title: "Navy Blue Suit Set",
-    subtitle: "With maroon printed dupatta",
-    image: "/images/suit-set/03.png",
+    title: "Rust Geometric Co-ord",
+    subtitle: "With white tribal motifs",
+    image: "/images/suit-set/new_03.jpg",
     link: "/shop/all",
-    bgColor: "#1e293b" // Navy Blue
+    bgColor: "#b05229" // Rust Orange
   },
   {
     id: 4,
-    title: "Mustard Yellow Suit Set",
-    subtitle: "With dark printed dupatta",
-    image: "/images/suit-set/04.png",
+    title: "Blue Geometric Co-ord",
+    subtitle: "With white tribal motifs",
+    image: "/images/suit-set/new_04.jpg",
     link: "/shop/all",
-    bgColor: "#b4841a" // Mustard
+    bgColor: "#236ca9" // Bright Blue
   },
   {
     id: 5,
-    title: "Red Embroidered Suit Set",
-    subtitle: "With printed beige dupatta",
-    image: "/images/suit-set/05.png",
-    link: "/shop/all",
-    bgColor: "#991b1b" // Deep Red
-  },
-  {
-    id: 6,
-    title: "Terracotta Suit Set",
-    subtitle: "With geometric dupatta",
-    image: "/images/suit-set/06.png",
-    link: "/shop/all",
-    bgColor: "#9a3412" // Terracotta
-  },
-  {
-    id: 7,
-    title: "Cream Floral Suit Set",
-    subtitle: "With elegant floral dupatta",
-    image: "/images/suit-set/07.png",
-    link: "/shop/all",
-    bgColor: "#a39485" // Warm Grey/Beige
-  },
-  {
-    id: 8,
     title: "Brick Red Printed Set",
     subtitle: "With matching dupatta",
-    image: "/images/suit-set/08.png",
+    image: "/images/suit-set/new_05.jpg",
     link: "/shop/all",
     bgColor: "#7f1d1d" // Brick Red
   },
   {
-    id: 9,
-    title: "White Coord Set",
-    subtitle: "With delicate embroidery",
-    image: "/images/suit-set/09.png",
+    id: 6,
+    title: "Black Velvet Lehengha",
+    subtitle: "With gold foil print skirt",
+    image: "/images/suit-set/new_06.jpg",
     link: "/shop/all",
-    bgColor: "#a3b18a" // Soft Sage for contrast
+    bgColor: "#171717" // Deep Black
+  },
+  {
+    id: 7,
+    title: "Deep Purple Silk Suit",
+    subtitle: "With bright pink dupatta",
+    image: "/images/suit-set/new_07.jpg",
+    link: "/shop/all",
+    bgColor: "#3b0764" // Deep Purple
+  },
+  {
+    id: 8,
+    title: "Crimson Red Anarkali",
+    subtitle: "With heavy embroidered jacket",
+    image: "/images/suit-set/new_08.jpg",
+    link: "/shop/all",
+    bgColor: "#7f1d1d" // Deep Crimson
+  },
+  {
+    id: 9,
+    title: "Plum Silk Kurta Set",
+    subtitle: "With sheer organza palazzo",
+    image: "/images/suit-set/new_09.jpg",
+    link: "/shop/all",
+    bgColor: "#4c1d95" // Plum
   },
   {
     id: 10,
-    title: "Off-White Suit Set",
-    subtitle: "With olive green dupatta",
-    image: "/images/suit-set/10.png",
+    title: "Magenta Sharara Set",
+    subtitle: "With intricate mirror work",
+    image: "/images/suit-set/new_10.jpg",
     link: "/shop/all",
-    bgColor: "#606c38" // Olive Green
+    bgColor: "#9d174d" // Deep Magenta
   },
   {
     id: 11,
-    title: "Brown Embroidered Suit Set",
-    subtitle: "With printed light dupatta",
-    image: "/images/suit-set/11.png",
+    title: "Yellow Embroidered Lehenga",
+    subtitle: "With delicate floral motifs",
+    image: "/images/suit-set/new_11.jpg",
     link: "/shop/all",
-    bgColor: "#5c4033" // Dark Brown
+    bgColor: "#ca8a04" // Gold Yellow
+  },
+  {
+    id: 12,
+    title: "Yellow Silk Anarkali",
+    subtitle: "With floral organza dupatta",
+    image: "/images/suit-set/new_12.jpg",
+    link: "/shop/all",
+    bgColor: "#eab308" // Bright Yellow
+  },
+  {
+    id: 13,
+    title: "Maroon Georgette Suit",
+    subtitle: "With intricate zari border",
+    image: "/images/suit-set/new_13.jpg",
+    link: "/shop/all",
+    bgColor: "#500724" // Deep Maroon
+  },
+  {
+    id: 14,
+    title: "Mint Green Palazzo Set",
+    subtitle: "With embellished jacket",
+    image: "/images/suit-set/new_14.jpg",
+    link: "/shop/all",
+    bgColor: "#86efac" // Soft Mint Green
   }
 ]
 
