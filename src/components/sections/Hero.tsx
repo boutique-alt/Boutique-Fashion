@@ -7,6 +7,13 @@ import CategoryStrip from './CategoryStrip'
 
 export default function Hero() {
   const [current, setCurrent] = useState(0)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval> | undefined
@@ -80,26 +87,26 @@ export default function Hero() {
           <AnimatePresence mode="wait">
             <motion.div
               key={`text-${current}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              initial={isMobile ? { opacity: 0 } : { opacity: 0, x: -20 }}
+              animate={isMobile ? { opacity: 1 } : { opacity: 1, x: 0 }}
+              exit={isMobile ? { opacity: 0 } : { opacity: 0, x: 20 }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               className="order-2 md:order-1 md:relative z-10"
             >
               <div className="absolute top-6 left-4 max-w-[55%] z-20 md:static md:max-w-none">
                 <div className="mb-4 md:mb-6">
-                  <p className="text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-maroon font-semibold inline-block">
+                  <p className="text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-white drop-shadow-md md:drop-shadow-none md:text-maroon font-semibold inline-block">
                     {slide.tag}
                   </p>
                 </div>
-                <h1 className="font-serif text-2xl sm:text-3xl font-light leading-[1.15] tracking-wide text-charcoal md:text-5xl lg:text-[3.25rem]">
+                <h1 className="font-serif text-2xl sm:text-3xl font-light leading-[1.15] tracking-wide text-white drop-shadow-md md:drop-shadow-none md:text-charcoal md:text-5xl lg:text-[3.25rem]">
                   {slide.title}
-                  <span className="mt-1 md:mt-2 block font-medium italic text-charcoal/90">{slide.subtitle}</span>
+                  <span className="mt-1 md:mt-2 block font-medium italic text-white/90 md:text-charcoal/90">{slide.subtitle}</span>
                 </h1>
                 <p className="sr-only">{slide.title} {slide.subtitle}</p>
-                <div className="mt-3 md:mt-5 h-px w-12 md:w-16 bg-maroon/30" />
+                <div className="mt-3 md:mt-5 h-px w-12 md:w-16 bg-white/60 md:bg-maroon/30" />
                 {slide.description && (
-                  <p className="mt-3 md:mt-5 max-w-md font-accent text-xs sm:text-sm font-light leading-[1.6] md:leading-[1.8] tracking-wide text-charcoal/80 md:text-[15px]">
+                  <p className="mt-3 md:mt-5 max-w-md font-accent text-xs sm:text-sm font-light leading-[1.6] md:leading-[1.8] tracking-wide text-white/90 drop-shadow-md md:drop-shadow-none md:text-charcoal/80 md:text-[15px]">
                     {slide.description}
                   </p>
                 )}
