@@ -137,7 +137,7 @@ export default function CoverflowCarousel() {
 
   return (
     <section className="relative w-full overflow-hidden bg-stone-50 py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
+      <div className="mx-auto w-full px-4 md:max-w-none md:px-12 lg:px-24">
         <div className="mb-12 text-center">
           <h2 className="font-serif text-3xl font-light tracking-wide text-charcoal md:text-4xl">
             The Boutiqtian's Edit
@@ -147,10 +147,10 @@ export default function CoverflowCarousel() {
           </p>
         </div>
 
-        <div className="relative mx-auto flex h-[400px] w-full max-w-5xl items-center justify-center md:h-[500px]">
+        <div className="relative mx-auto flex h-[400px] w-full max-w-5xl items-center justify-center md:h-[550px] lg:h-[650px] md:max-w-none">
           {/* Dynamic Background Circle */}
           <div 
-            className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-1000 ease-in-out md:h-[550px] md:w-[550px]"
+            className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-1000 ease-in-out md:h-[850px] md:w-[850px] lg:h-[1000px] lg:w-[1000px]"
             style={{ backgroundColor: carouselItems[currentIndex].bgColor }}
           />
           
@@ -187,9 +187,9 @@ export default function CoverflowCarousel() {
                   duration: 0.8, 
                   ease: [0.32, 0.72, 0, 1]
                 }}
-                className="absolute left-1/2 top-0 flex h-full w-[220px] flex-col items-center justify-center md:w-[280px]"
+                className="absolute left-1/2 top-0 flex h-full w-[220px] flex-col items-center justify-center md:w-[360px] lg:w-[440px]"
               >
-                <div className={`relative h-[280px] w-full overflow-hidden rounded-2xl border-[6px] border-white bg-accent shadow-xl transition-all duration-500 md:h-[380px] md:border-[8px] ${isCenter ? 'shadow-black/20' : 'shadow-black/5'}`}>
+                <div className={`relative h-[280px] w-full overflow-hidden rounded-2xl border-[6px] border-white bg-accent shadow-xl transition-all duration-500 md:h-[480px] lg:h-[550px] md:border-[10px] ${isCenter ? 'shadow-black/20' : 'shadow-black/5'}`}>
                   <img
                     src={item.image}
                     alt={item.title}
