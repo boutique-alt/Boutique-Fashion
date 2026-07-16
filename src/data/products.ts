@@ -73,7 +73,7 @@ export const heroSlides: HeroSlide[] = [
     subtitle: 'Indo-Western Collection',
     description:
       'Discover breathable kurtis, elegant indo-western outfits, and ready-to-wear sarees designed for modern women.',
-    image: `${M3}/prod-1-1.png`,
+    image: '/images/assets/hero-banner-1.jpg',
     cta: 'Explore Collection',
     href: '/dress/one-piece',
     bgColor: '#e8d9d0',
