@@ -33,9 +33,9 @@ export const aboutStory = {
 
 export const aboutTimeline = [
   {
-    year: '1978',
-    title: 'Real State Development',
-    text: 'Started real state development.',
+    year: '2018',
+    title: 'The Journey Begins',
+    text: 'Started the journey of Boutique Fashion.',
   },
   {
     year: '2020',

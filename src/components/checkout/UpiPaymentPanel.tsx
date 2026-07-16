@@ -53,7 +53,7 @@ export default function UpiPaymentPanel({ amount, screenshotUrl, onScreenshotCha
       </div>
 
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-        <div className="shrink-0 rounded border border-accent bg-white p-3">
+        <div className="shrink-0 rounded border border-accent bg-accent p-3">
           {qrUrl ? (
             <img
               src={qrUrl}

@@ -41,7 +41,7 @@ export default function UpiScreenshotUpload({ value, onChange }: UpiScreenshotUp
             className="h-28 w-24 shrink-0 border border-accent object-cover"
           />
         ) : (
-          <div className="flex h-28 w-24 shrink-0 items-center justify-center border border-dashed border-accent bg-white text-[10px] text-charcoal/40">
+          <div className="flex h-28 w-24 shrink-0 items-center justify-center border border-dashed border-accent bg-accent text-[10px] text-charcoal/40">
             No image
           </div>
         )}
@@ -50,7 +50,7 @@ export default function UpiScreenshotUpload({ value, onChange }: UpiScreenshotUp
             type="button"
             disabled={uploading}
             onClick={() => inputRef.current?.click()}
-            className="inline-flex items-center gap-2 border border-accent bg-white px-3 py-2 text-xs font-medium tracking-wide text-charcoal uppercase transition-colors hover:border-maroon hover:text-maroon disabled:opacity-60"
+            className="inline-flex items-center gap-2 border border-accent bg-accent px-3 py-2 text-xs font-medium tracking-wide text-charcoal uppercase transition-colors hover:border-maroon hover:text-maroon disabled:opacity-60"
           >
             <ImagePlus size={14} />
             {uploading ? 'Uploading...' : value ? 'Change Screenshot' : 'Upload Screenshot'}

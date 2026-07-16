@@ -124,7 +124,7 @@ export default function AdminMediaPage() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-maroon border-t-transparent"></div>
         </div>
       ) : media.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-accent bg-white/50 p-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-accent bg-accent/50 p-12 text-center">
           <ImagePlus size={48} className="mb-4 text-charcoal/20" />
           <h3 className="mb-2 font-serif text-xl text-charcoal">No Images Yet</h3>
           <p className="mb-6 text-sm text-charcoal/60 max-w-md">
@@ -140,7 +140,7 @@ export default function AdminMediaPage() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {media.map((item) => (
-            <div key={item.id} className="group relative overflow-hidden rounded border border-accent bg-white shadow-sm hover:shadow-md transition-shadow">
+            <div key={item.id} className="group relative overflow-hidden rounded border border-accent bg-accent shadow-sm hover:shadow-md transition-shadow">
               <div className="aspect-square bg-cream-dark relative">
                 <img 
                   src={item.url} 
@@ -150,7 +150,7 @@ export default function AdminMediaPage() {
                 />
                 <button
                   onClick={() => handleDelete(item.id)}
-                  className="absolute top-2 right-2 p-1.5 bg-white/90 text-red-600 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                  className="absolute top-2 right-2 p-1.5 bg-accent/90 text-red-600 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
                   title="Delete"
                 >
                   <Trash2 size={14} />

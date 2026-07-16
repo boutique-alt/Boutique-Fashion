@@ -42,7 +42,7 @@ export default function WatchAndBuy() {
 
   return (
     <section
-      className="watch-and-buy overflow-hidden bg-white"
+      className="watch-and-buy overflow-hidden bg-accent"
       style={{
         paddingTop: 20,
         paddingBottom: 20,
@@ -65,7 +65,7 @@ export default function WatchAndBuy() {
         <button
           type="button"
           onClick={() => scrollBy(-1)}
-          className="absolute top-1/2 left-2 z-10 hidden h-24 w-12 -translate-y-1/2 items-center justify-center rounded-md bg-white/90 text-[#343434] shadow-md transition hover:bg-white md:flex"
+          className="absolute top-1/2 left-2 z-10 hidden h-24 w-12 -translate-y-1/2 items-center justify-center rounded-md bg-accent/90 text-[#343434] shadow-md transition hover:bg-accent md:flex"
           style={{ boxShadow: '0px 0px 5px 0px #B0B0B0' }}
           aria-label="Scroll left"
         >
@@ -74,7 +74,7 @@ export default function WatchAndBuy() {
         <button
           type="button"
           onClick={() => scrollBy(1)}
-          className="absolute top-1/2 right-2 z-10 hidden h-24 w-12 -translate-y-1/2 items-center justify-center rounded-md bg-white/90 text-[#343434] shadow-md transition hover:bg-white md:flex"
+          className="absolute top-1/2 right-2 z-10 hidden h-24 w-12 -translate-y-1/2 items-center justify-center rounded-md bg-accent/90 text-[#343434] shadow-md transition hover:bg-accent md:flex"
           style={{ boxShadow: '0px 0px 5px 0px #B0B0B0' }}
           aria-label="Scroll right"
         >

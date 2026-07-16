@@ -229,7 +229,7 @@ export default function BulkUploadModal({ onClose, onSuccess }: BulkUploadModalP
             <div className="space-y-6">
               <div className="text-sm text-charcoal/80 space-y-3">
                 <p>Upload a <strong>.csv</strong> or <strong>.xlsx</strong> (Excel) file to add multiple products at once.</p>
-                <p className="text-xs text-charcoal/60 bg-white/50 p-3 border border-accent rounded">
+                <p className="text-xs text-charcoal/60 bg-accent/50 p-3 border border-accent rounded">
                   <strong>Important:</strong> Image columns must now contain URLs. Use the <strong>Media Gallery</strong> to get your image URLs before uploading!
                 </p>
                 <button 
@@ -243,7 +243,7 @@ export default function BulkUploadModal({ onClose, onSuccess }: BulkUploadModalP
 
               <div className="max-w-xs mx-auto">
                 <div 
-                  className="border-2 border-dashed border-accent rounded p-6 text-center flex flex-col items-center justify-center bg-white/50 cursor-pointer hover:bg-white transition-colors h-[160px]"
+                  className="border-2 border-dashed border-accent rounded p-6 text-center flex flex-col items-center justify-center bg-accent/50 cursor-pointer hover:bg-accent transition-colors h-[160px]"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <input 

@@ -151,7 +151,7 @@ export default function WatchAndBuyPlayer({
                 <img
                   src={item.productImage}
                   alt=""
-                  className="h-16 w-12 shrink-0 rounded object-cover bg-white"
+                  className="h-16 w-12 shrink-0 rounded object-cover bg-accent"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="line-clamp-2 text-sm leading-snug text-white">{item.productName}</p>
@@ -177,7 +177,7 @@ export default function WatchAndBuyPlayer({
                 <Link
                   to={item.href}
                   onClick={onClose}
-                  className="flex-1 rounded border border-white bg-white py-3 text-center text-[11px] font-semibold tracking-[0.15em] text-[#343434] uppercase"
+                  className="flex-1 rounded border border-white bg-accent py-3 text-center text-[11px] font-semibold tracking-[0.15em] text-[#343434] uppercase"
                 >
                   More Info
                 </Link>
@@ -191,7 +191,7 @@ export default function WatchAndBuyPlayer({
         {items.map((v, i) => (
           <span
             key={v.id}
-            className={`h-1 rounded-full transition-all ${i === activeIndex ? 'w-4 bg-white' : 'w-1 bg-white/40'}`}
+            className={`h-1 rounded-full transition-all ${i === activeIndex ? 'w-4 bg-accent' : 'w-1 bg-accent/40'}`}
           />
         ))}
       </div>

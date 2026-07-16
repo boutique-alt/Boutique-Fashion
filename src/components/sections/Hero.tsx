@@ -130,7 +130,7 @@ export default function Hero() {
         <div className="mt-8 flex items-center justify-center gap-4 md:mt-10">
           <button
             onClick={() => setCurrent((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-white/60 text-charcoal backdrop-blur-sm transition-colors hover:border-maroon hover:text-maroon"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-accent/60 text-charcoal backdrop-blur-sm transition-colors hover:border-maroon hover:text-maroon"
             aria-label="Previous slide"
           >
             <ChevronLeft size={18} />
@@ -149,7 +149,7 @@ export default function Hero() {
           </div>
           <button
             onClick={() => setCurrent((prev) => (prev + 1) % heroSlides.length)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-white/60 text-charcoal backdrop-blur-sm transition-colors hover:border-maroon hover:text-maroon"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-accent/60 text-charcoal backdrop-blur-sm transition-colors hover:border-maroon hover:text-maroon"
             aria-label="Next slide"
           >
             <ChevronRight size={18} />

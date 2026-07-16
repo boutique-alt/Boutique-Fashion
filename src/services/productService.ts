@@ -154,7 +154,7 @@ async function fetchAllProducts(): Promise<{ rows: DbProduct[]; error?: string }
   while (true) {
     const { data, error } = await client
       .from('products')
-      .select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, created_at, updated_at')
+      .select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, created_at, updated_at, new_arrival_video')
       .order('created_at', { ascending: false })
       .range(from, from + PRODUCTS_PAGE_SIZE - 1)
 
@@ -423,7 +423,7 @@ export async function fetchProductDetails(slugOrId: string): Promise<void> {
   
   const { data, error } = await client
     .from('products')
-    .select('id, description, short_description, sizes, fabric, wash_care, product_details')
+    .select('id, description, short_description, sizes, fabric, wash_care, product_details, new_arrival_video')
     .eq(isId ? 'id' : 'slug', slugOrId)
     .maybeSingle()
 

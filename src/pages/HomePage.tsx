@@ -12,6 +12,7 @@ import CustomerReviewGallery from '../components/sections/CustomerReviewGallery'
 import CustomerReviews from '../components/sections/CustomerReviews'
 import InTheNews from '../components/sections/InTheNews'
 import SEO from '../components/ui/SEO'
+import CoverflowCarousel from '../components/sections/CoverflowCarousel'
 
 export default function HomePage() {
   const localBusinessSchema = {
@@ -40,6 +41,7 @@ export default function HomePage() {
         schema={localBusinessSchema}
       />
       <Hero />
+      <CoverflowCarousel />
       <SummerSale />
       <NewArrival />
       <CeremonialEdit />

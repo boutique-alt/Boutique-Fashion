@@ -114,7 +114,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
       </div>
 
       {/* Box 2: Price Block */}
-      <div className="border border-accent/80 bg-white p-5 rounded-md shadow-sm">
+      <div className="border border-accent/80 bg-accent p-5 rounded-md shadow-sm">
         <p className="text-[11px] font-bold text-charcoal/50 uppercase tracking-widest">Regular price</p>
         <p className="font-serif text-2xl font-bold text-maroon mt-1.5">
           MRP ₹{totalPrice.toLocaleString('en-IN')} INR
@@ -123,7 +123,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
       </div>
 
       {/* Box 3: Size & Quantity Selector */}
-      <div className="bg-white rounded-md shadow-sm">
+      <div className="bg-accent rounded-md shadow-sm">
         <div className="flex items-center gap-3 mb-4 px-1">
           <p className="text-[15px] font-medium text-maroon">Size</p>
           <div className="w-[1px] h-4 bg-maroon/30"></div>
@@ -141,8 +141,8 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
               }}
               className={`min-w-[3rem] h-10 rounded-sm border px-3 py-1.5 text-[14px] font-medium tracking-wide transition-all uppercase shadow-sm ${
                 size === s
-                  ? 'border-maroon text-maroon bg-white ring-1 ring-maroon'
-                  : 'border-accent/40 text-maroon hover:border-maroon hover:shadow bg-white'
+                  ? 'border-maroon text-maroon bg-accent ring-1 ring-maroon'
+                  : 'border-accent/40 text-maroon hover:border-maroon hover:shadow bg-accent'
               }`}
             >
               {s}
@@ -272,7 +272,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
       </div>
 
       {/* Box 6: Accordions Group */}
-      <div className="flex flex-col gap-4 bg-white rounded-md p-4 shadow-sm border border-accent/40 mt-2">
+      <div className="flex flex-col gap-4 bg-accent rounded-md p-4 shadow-sm border border-accent/40 mt-2">
         
         {/* Product Details accordion */}
         <div className="border border-accent/40 rounded-sm">
@@ -389,7 +389,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
       </div>
 
       {/* Box 7: Contact & Boutique */}
-      <div className="border border-accent/80 bg-white p-5 rounded-md shadow-sm divide-y divide-accent/40">
+      <div className="border border-accent/80 bg-accent p-5 rounded-md shadow-sm divide-y divide-accent/40">
 
         <div className="pb-5">
           <h2 className="text-xs font-bold tracking-widest uppercase mb-3 text-charcoal/80">Contact Us</h2>
@@ -444,7 +444,7 @@ function AddonCard({ addon, checked, disabled, onChange }: AddonCardProps) {
       className={`flex cursor-pointer flex-col p-4 rounded-md border transition-all shadow-sm ${
         checked
           ? 'border-maroon bg-maroon/5'
-          : 'border-accent/80 bg-white hover:border-maroon/40'
+          : 'border-accent/80 bg-accent hover:border-maroon/40'
       } ${disabled ? 'cursor-default' : ''}`}
     >
       <div className="flex items-start gap-3">

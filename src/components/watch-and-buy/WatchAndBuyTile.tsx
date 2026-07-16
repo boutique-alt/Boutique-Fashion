@@ -56,7 +56,7 @@ export default function WatchAndBuyTile({ item, onClick }: WatchAndBuyTileProps)
       style={{ margin: '25px 10px' }}
     >
       <div
-        className="overflow-hidden rounded-xl bg-white"
+        className="overflow-hidden rounded-xl bg-accent"
         style={{ boxShadow: '0px 0px 5px 0px #B0B0B0' }}
       >
         <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#f0f0f0]">

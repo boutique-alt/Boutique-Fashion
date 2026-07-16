@@ -148,7 +148,7 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="border-t border-accent bg-white px-4 py-4 md:hidden">
+        <div className="border-t border-accent bg-accent px-4 py-4 md:hidden">
           {mainNav.map((item) => {
             const Icon = item.icon ? navIcons[item.icon] : null
             return (

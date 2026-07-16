@@ -91,7 +91,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               -{discount}%
             </span>
           )}
-          <span className="absolute right-3 bottom-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-charcoal opacity-0 shadow-none transition-opacity duration-300 group-hover:opacity-100">
+          <span className="absolute right-3 bottom-3 flex h-8 w-8 items-center justify-center rounded-full bg-accent text-charcoal opacity-0 shadow-none transition-opacity duration-300 group-hover:opacity-100">
             <ArrowUpRight size={14} />
           </span>
         </div>
@@ -117,7 +117,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
         </div>
       </Link>
       {slug && (
-        <div className="absolute right-3 top-3 z-10 rounded-full bg-white/80 p-2 backdrop-blur-sm shadow-none transition-transform hover:scale-105">
+        <div className="absolute right-3 top-3 z-10 rounded-full bg-accent/80 p-2 backdrop-blur-sm shadow-none transition-transform hover:scale-105">
           <WishlistButton slug={slug} />
         </div>
       )}

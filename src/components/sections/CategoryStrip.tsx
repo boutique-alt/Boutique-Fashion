@@ -17,7 +17,7 @@ export default function CategoryStrip() {
   })
 
   return (
-    <div className="relative w-full z-10 before:absolute before:inset-0 before:bg-white/40 before:backdrop-blur-md before:-z-10 border-b border-charcoal/5">
+    <div className="relative w-full z-10 before:absolute before:inset-0 before:bg-accent/40 before:backdrop-blur-md before:-z-10 border-b border-charcoal/5">
       {/* Top Tabs */}
       <div className="mx-auto flex max-w-7xl justify-center gap-8 px-8 pt-3">
         {['WOMEN', 'MEN'].map((tab) => (
