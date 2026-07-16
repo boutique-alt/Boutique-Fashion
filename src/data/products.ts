@@ -3,7 +3,7 @@ import { dressCategoryImage, dressProducts } from './dressProducts'
 import { kurtaCoordCategoryImage, kurtaCoordProducts } from './kurtaCoordProducts'
 import { mensExclusiveBanner, mensProducts } from './mensProducts'
 
-const BF = 'https://boutiquefashion.shop/wp-content/uploads'
+
 
 export interface Product {
   id: string
@@ -52,7 +52,6 @@ export const exclusiveCollectionProducts: Product[] = [
 
 export const mensCollectionProducts: Product[] = mens
 
-const M3 = `${BF}/2026/03`
 
 export interface HeroSlide {
   tag: string
