@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const carouselItems = [
@@ -111,34 +111,6 @@ export default function CoverflowCarousel() {
     setCurrentIndex((prev) => (prev - 1 + carouselItems.length) % carouselItems.length)
   }
 
-  const getVisibleItems = () => {
-    const total = carouselItems.length
-    const items = []
-    
-    // Previous (Left)
-    items.push({
-      ...carouselItems[(currentIndex - 1 + total) % total],
-      position: -1,
-      zIndex: 0
-    })
-    
-    // Current (Center)
-    items.push({
-      ...carouselItems[currentIndex],
-      position: 0,
-      zIndex: 10
-    })
-    
-    // Next (Right)
-    items.push({
-      ...carouselItems[(currentIndex + 1) % total],
-      position: 1,
-      zIndex: 0
-    })
-
-    return items
-  }
-
   return (
     <section className="relative w-full overflow-hidden bg-stone-50 py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -167,7 +139,6 @@ export default function CoverflowCarousel() {
             if (diff > Math.floor(total / 2)) diff -= total;
             
             const isCenter = diff === 0;
-            const isVisible = Math.abs(diff) <= 2;
             
             // Calculate exact position percentages
             let xPos = '-50%';
