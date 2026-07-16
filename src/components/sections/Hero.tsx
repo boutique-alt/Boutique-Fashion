@@ -58,7 +58,7 @@ export default function Hero() {
             <img
               src={slide.image}
               alt={slide.title}
-              className="h-full w-full object-cover object-[75%_center] md:object-center"
+              className="h-full w-full object-cover object-right md:object-center"
               style={{ objectPosition: slide.objectPosition }}
               fetchPriority={current === 0 ? 'high' : 'low'}
               decoding="async"
@@ -75,7 +75,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-10 pt-6 md:px-6 md:pb-14 md:pt-10 lg:pb-16 lg:pt-12 w-full">
+      <div className="md:relative z-10 mx-auto max-w-7xl px-4 pb-10 pt-6 md:px-6 md:pb-14 md:pt-10 lg:pb-16 lg:pt-12 w-full">
         <div className="grid items-center gap-10 md:grid-cols-2 md:gap-10 lg:gap-16">
           <AnimatePresence mode="wait">
             <motion.div
@@ -84,25 +84,27 @@ export default function Hero() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="order-2 md:order-1 relative z-10"
+              className="order-2 md:order-1 md:relative z-10"
             >
-              <div className="mb-6">
-                <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-maroon font-semibold inline-block">
-                  {slide.tag}
-                </p>
+              <div className="absolute top-6 left-4 max-w-[55%] z-20 md:static md:max-w-none">
+                <div className="mb-4 md:mb-6">
+                  <p className="text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-maroon font-semibold inline-block">
+                    {slide.tag}
+                  </p>
+                </div>
+                <h1 className="font-serif text-2xl sm:text-3xl font-light leading-[1.15] tracking-wide text-charcoal md:text-5xl lg:text-[3.25rem]">
+                  {slide.title}
+                  <span className="mt-1 md:mt-2 block font-medium italic text-charcoal/90">{slide.subtitle}</span>
+                </h1>
+                <p className="sr-only">{slide.title} {slide.subtitle}</p>
+                <div className="mt-3 md:mt-5 h-px w-12 md:w-16 bg-maroon/30" />
+                {slide.description && (
+                  <p className="mt-3 md:mt-5 max-w-md font-accent text-xs sm:text-sm font-light leading-[1.6] md:leading-[1.8] tracking-wide text-charcoal/80 md:text-[15px]">
+                    {slide.description}
+                  </p>
+                )}
               </div>
-              <h1 className="font-serif text-3xl font-light leading-[1.15] tracking-wide text-charcoal sm:text-4xl md:text-5xl lg:text-[3.25rem]">
-                {slide.title}
-                <span className="mt-2 block font-medium italic text-charcoal/90">{slide.subtitle}</span>
-              </h1>
-              <p className="sr-only">{slide.title} {slide.subtitle}</p>
-              <div className="mt-5 h-px w-16 bg-maroon/30" />
-              {slide.description && (
-                <p className="mt-5 max-w-md font-accent text-sm font-light leading-[1.8] tracking-wide text-charcoal/80 md:text-[15px]">
-                  {slide.description}
-                </p>
-              )}
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-4 md:mt-10 flex flex-wrap gap-4 relative z-10">
                 <Link
                   to={slide.href}
                   className="group relative overflow-hidden rounded-none border border-charcoal px-10 py-3.5 text-[10px] font-medium tracking-[0.25em] text-charcoal uppercase transition-all duration-500 hover:text-white md:text-[11px]"

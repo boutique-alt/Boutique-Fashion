@@ -73,7 +73,7 @@ export const heroSlides: HeroSlide[] = [
     subtitle: 'Indo-Western Collection',
     description:
       'Discover breathable kurtis, elegant indo-western outfits, and ready-to-wear sarees designed for modern women.',
-    image: '/images/assets/hero-banner-1.jpg',
+    image: '/images/assets/hero-banner-1.png',
     cta: 'Explore Collection',
     href: '/dress/one-piece',
     bgColor: '#e8d9d0',
@@ -84,11 +84,10 @@ export const heroSlides: HeroSlide[] = [
     subtitle: 'Handblock Shirts',
     description:
       'Premium cotton shirts with artisanal handblock prints — crafted for comfort, character, and everyday elegance.',
-    image: `${M3}/hero-scaled.png`,
+    image: '/images/assets/hero-banner-2.png',
     cta: 'View Collection',
     href: '/mens',
     bgColor: '#e8d9d0',
-    objectPosition: 'center top',
   },
 ]
 
