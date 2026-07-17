@@ -60,26 +60,35 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               preload="metadata"
             />
           ) : (
-            <>
+            <div className="flex h-full w-full snap-x snap-mandatory overflow-x-auto scrollbar-hide md:block">
               <img
                 src={product.image}
                 alt={product.name}
-                className={`h-full w-full object-cover object-top transition-all duration-500 ease-out group-hover:scale-[1.03] ${
-                  product.images && product.images.length > 1 ? 'group-hover:opacity-0' : ''
+                className={`h-full w-full flex-shrink-0 snap-start object-cover object-top transition-all duration-500 ease-out md:group-hover:scale-[1.03] ${
+                  product.images && product.images.length > 1 ? 'md:group-hover:opacity-0' : ''
                 }`}
                 loading="lazy"
                 decoding="async"
               />
               {product.images && product.images.length > 1 && (
-                <img
-                  src={product.images[1]}
-                  alt={`${product.name} alternate`}
-                  className="absolute inset-0 h-full w-full object-cover object-top opacity-0 transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:opacity-100"
-                  loading="lazy"
-                  decoding="async"
-                />
+                <>
+                  <img
+                    src={product.images[1]}
+                    alt={`${product.name} alternate`}
+                    className="absolute inset-0 hidden h-full w-full object-cover object-top opacity-0 transition-all duration-500 ease-out md:block md:group-hover:scale-[1.03] md:group-hover:opacity-100"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <img
+                    src={product.images[1]}
+                    alt={`${product.name} alternate mobile`}
+                    className="h-full w-full flex-shrink-0 snap-start object-cover object-top md:hidden"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </>
               )}
-            </>
+            </div>
           )}
           {product.isNew && (
             <span className="absolute left-2 top-2 bg-charcoal px-2 py-0.5 text-[9px] font-medium tracking-widest text-cream uppercase">
