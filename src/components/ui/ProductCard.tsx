@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import type { Product } from '../../data/products'
@@ -41,6 +41,27 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
     return () => observer.disconnect()
   }, [videoSrc])
 
+  const [showAlt, setShowAlt] = useState(false)
+
+  useEffect(() => {
+    if (!product.images || product.images.length <= 1) return
+
+    const delay = Math.random() * 2000
+    let interval: ReturnType<typeof setInterval>
+
+    const timeout = setTimeout(() => {
+      setShowAlt(true)
+      interval = setInterval(() => {
+        setShowAlt(prev => !prev)
+      }, 4000)
+    }, delay)
+
+    return () => {
+      clearTimeout(timeout)
+      clearInterval(interval)
+    }
+  }, [product.images])
+
   return (
     <div className="group relative">
       <Link
@@ -60,33 +81,28 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               preload="metadata"
             />
           ) : (
-            <div className="flex h-full w-full snap-x snap-mandatory overflow-x-auto scrollbar-hide md:block">
+            <div className="relative h-full w-full">
               <img
                 src={product.image}
                 alt={product.name}
-                className={`h-full w-full flex-shrink-0 snap-start object-cover object-top transition-all duration-500 ease-out md:group-hover:scale-[1.03] ${
-                  product.images && product.images.length > 1 ? 'md:group-hover:opacity-0' : ''
+                className={`h-full w-full object-cover object-top transition-all duration-700 ease-in-out md:group-hover:scale-[1.03] ${
+                  product.images && product.images.length > 1 
+                    ? `md:group-hover:opacity-0 ${showAlt ? 'max-md:opacity-0' : 'max-md:opacity-100'}`
+                    : ''
                 }`}
                 loading="lazy"
                 decoding="async"
               />
               {product.images && product.images.length > 1 && (
-                <>
-                  <img
-                    src={product.images[1]}
-                    alt={`${product.name} alternate`}
-                    className="absolute inset-0 hidden h-full w-full object-cover object-top opacity-0 transition-all duration-500 ease-out md:block md:group-hover:scale-[1.03] md:group-hover:opacity-100"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <img
-                    src={product.images[1]}
-                    alt={`${product.name} alternate mobile`}
-                    className="h-full w-full flex-shrink-0 snap-start object-cover object-top md:hidden"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </>
+                <img
+                  src={product.images[1]}
+                  alt={`${product.name} alternate`}
+                  className={`absolute inset-0 h-full w-full object-cover object-top transition-all duration-700 ease-in-out md:opacity-0 md:group-hover:scale-[1.03] md:group-hover:opacity-100 ${
+                    showAlt ? 'max-md:opacity-100 max-md:scale-[1.03]' : 'max-md:opacity-0'
+                  }`}
+                  loading="lazy"
+                  decoding="async"
+                />
               )}
             </div>
           )}
