@@ -47,20 +47,21 @@ export default function Hero() {
   return (
     <>
       <section
-        className="relative w-full overflow-x-hidden transition-colors duration-700 min-h-[360px] md:min-h-[500px] md:aspect-video flex flex-col md:justify-center"
+        className="relative w-full overflow-x-hidden transition-colors duration-700 min-h-[400px] md:min-h-[500px] md:aspect-video flex flex-col md:justify-center"
         style={{ backgroundColor: slide.bgColor }}
       >
         <div className="absolute top-0 inset-x-0 z-30">
           <CategoryStrip />
         </div>
+
         <AnimatePresence mode="wait">
           <motion.div
-            key={`bg-${current}`}
+            key={current}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.9 }}
-            className="absolute inset-0 w-full h-full z-0"
+            transition={{ duration: 1 }}
+            className="absolute inset-0 z-10"
           >
             <img
               src={slide.image}
@@ -72,18 +73,14 @@ export default function Hero() {
              loading="lazy" />
           </motion.div>
         </AnimatePresence>
-        <div className="absolute inset-0 bg-black/25 z-10 pointer-events-none md:hidden" />
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center pt-4 md:pt-6 z-10">
-        <img
-          src={brandAssets.logo}
-          alt=""
-          aria-hidden
-          className="h-16 w-auto rounded-xl opacity-[0.05] mix-blend-multiply md:h-24 lg:h-32 md:opacity-[0.08]"
-         loading="lazy" />
-      </div>
+        <div className="absolute inset-0 z-10 bg-black/25 md:hidden" />
 
-      <div className="relative z-20 mx-auto max-w-7xl px-4 pb-6 pt-[130px] md:px-6 md:pb-14 md:pt-36 lg:pb-16 lg:pt-36 w-full">
+        <div className="absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-charcoal/20 to-transparent z-10 hidden md:block" />
+
+        <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-cream to-transparent z-20 pointer-events-none" />
+
+      <div className="relative z-20 mx-auto max-w-7xl px-4 pb-6 pt-[160px] md:px-6 md:pb-14 md:pt-36 lg:pb-16 lg:pt-36 w-full">
         <div className="grid items-center gap-10 md:grid-cols-2 md:gap-10 lg:gap-16">
           <AnimatePresence mode="wait">
             <motion.div

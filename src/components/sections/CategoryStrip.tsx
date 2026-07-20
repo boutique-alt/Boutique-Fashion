@@ -39,8 +39,8 @@ export default function CategoryStrip() {
       <div className="mx-auto flex max-w-7xl items-start overflow-x-auto px-4 py-4 scrollbar-hide md:justify-center md:px-6">
         {/* Custom "My Feed" style icon based on reference */}
         <div className="group flex shrink-0 flex-col items-center gap-2">
-          <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full border-[3px] border-[#b5db90] bg-[#fff5f5] p-1">
-            <span className="font-sans text-2xl font-bold tracking-tight text-charcoal">MY</span>
+          <div className="flex h-[64px] w-[64px] md:h-[72px] md:w-[72px] items-center justify-center rounded-full border-[3px] border-[#b5db90] bg-[#fff5f5] p-1">
+            <span className="font-sans text-xl md:text-2xl font-bold tracking-tight text-charcoal">MY</span>
           </div>
           <span className="font-sans text-[9px] font-bold uppercase tracking-wider text-white drop-shadow-md">
             MY FEED
