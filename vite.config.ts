@@ -18,6 +18,20 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), tailwindcss(), ViteImageOptimizer({})],
+    build: {
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
+      cssMinify: true,
+      sourcemap: false,
+    },
+    esbuild: {
+      legalComments: 'none' as const,
+    } as any,
     test: {
       environment: 'jsdom',
       globals: true,

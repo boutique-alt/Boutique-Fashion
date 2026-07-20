@@ -7,7 +7,7 @@ const carouselItems = [
     id: 1,
     title: "Floral Dress with Jacket",
     subtitle: "Cream and red handblock",
-    image: "/images/suit-set/new_01.png",
+    image: "/images/suit-set/new_01.webp",
     link: "/shop/all",
     bgColor: "#8b1c1c" // Deep Red
   },
@@ -15,7 +15,7 @@ const carouselItems = [
     id: 2,
     title: "Dual-Tone Printed Dress",
     subtitle: "Red and blue motifs",
-    image: "/images/suit-set/new_02.jpg",
+    image: "/images/suit-set/new_02.webp",
     link: "/shop/all",
     bgColor: "#1a5b8f" // Bright Blue
   },
@@ -23,7 +23,7 @@ const carouselItems = [
     id: 3,
     title: "Rust Geometric Co-ord",
     subtitle: "With white tribal motifs",
-    image: "/images/suit-set/new_03.jpg",
+    image: "/images/suit-set/new_03.webp",
     link: "/shop/all",
     bgColor: "#b05229" // Rust Orange
   },
@@ -31,7 +31,7 @@ const carouselItems = [
     id: 4,
     title: "Blue Geometric Co-ord",
     subtitle: "With white tribal motifs",
-    image: "/images/suit-set/new_04.jpg",
+    image: "/images/suit-set/new_04.webp",
     link: "/shop/all",
     bgColor: "#236ca9" // Bright Blue
   },
@@ -39,7 +39,7 @@ const carouselItems = [
     id: 5,
     title: "Brick Red Printed Set",
     subtitle: "With matching dupatta",
-    image: "/images/suit-set/new_05.jpg",
+    image: "/images/suit-set/new_05.webp",
     link: "/shop/all",
     bgColor: "#7f1d1d" // Brick Red
   },
@@ -47,7 +47,7 @@ const carouselItems = [
     id: 6,
     title: "Black Velvet Lehengha",
     subtitle: "With gold foil print skirt",
-    image: "/images/suit-set/new_06.jpg",
+    image: "/images/suit-set/new_06.webp",
     link: "/shop/all",
     bgColor: "#171717" // Deep Black
   },
@@ -55,7 +55,7 @@ const carouselItems = [
     id: 7,
     title: "Deep Purple Silk Suit",
     subtitle: "With bright pink dupatta",
-    image: "/images/suit-set/new_07.jpg",
+    image: "/images/suit-set/new_07.webp",
     link: "/shop/all",
     bgColor: "#3b0764" // Deep Purple
   },
@@ -63,7 +63,7 @@ const carouselItems = [
     id: 8,
     title: "Crimson Red Anarkali",
     subtitle: "With heavy embroidered jacket",
-    image: "/images/suit-set/new_08.jpg",
+    image: "/images/suit-set/new_08.webp",
     link: "/shop/all",
     bgColor: "#7f1d1d" // Deep Crimson
   },
@@ -71,7 +71,7 @@ const carouselItems = [
     id: 9,
     title: "Plum Silk Kurta Set",
     subtitle: "With sheer organza palazzo",
-    image: "/images/suit-set/new_09.jpg",
+    image: "/images/suit-set/new_09.webp",
     link: "/shop/all",
     bgColor: "#4c1d95" // Plum
   },
@@ -79,7 +79,7 @@ const carouselItems = [
     id: 10,
     title: "Magenta Sharara Set",
     subtitle: "With intricate mirror work",
-    image: "/images/suit-set/new_10.jpg",
+    image: "/images/suit-set/new_10.webp",
     link: "/shop/all",
     bgColor: "#9d174d" // Deep Magenta
   },
@@ -87,7 +87,7 @@ const carouselItems = [
     id: 11,
     title: "Yellow Embroidered Lehenga",
     subtitle: "With delicate floral motifs",
-    image: "/images/suit-set/new_11.jpg",
+    image: "/images/suit-set/new_11.webp",
     link: "/shop/all",
     bgColor: "#ca8a04" // Gold Yellow
   },
@@ -95,7 +95,7 @@ const carouselItems = [
     id: 12,
     title: "Yellow Silk Anarkali",
     subtitle: "With floral organza dupatta",
-    image: "/images/suit-set/new_12.jpg",
+    image: "/images/suit-set/new_12.webp",
     link: "/shop/all",
     bgColor: "#eab308" // Bright Yellow
   },
@@ -103,7 +103,7 @@ const carouselItems = [
     id: 13,
     title: "Maroon Georgette Suit",
     subtitle: "With intricate zari border",
-    image: "/images/suit-set/new_13.jpg",
+    image: "/images/suit-set/new_13.webp",
     link: "/shop/all",
     bgColor: "#500724" // Deep Maroon
   },
@@ -111,7 +111,7 @@ const carouselItems = [
     id: 14,
     title: "Mint Green Palazzo Set",
     subtitle: "With embellished jacket",
-    image: "/images/suit-set/new_14.jpg",
+    image: "/images/suit-set/new_14.webp",
     link: "/shop/all",
     bgColor: "#86efac" // Soft Mint Green
   }
@@ -194,7 +194,7 @@ export default function CoverflowCarousel() {
                     src={item.image}
                     alt={item.title}
                     className="h-full w-full object-cover"
-                  />
+                   loading="lazy" />
                   {isCenter && (
                     <motion.div 
                       initial={{ opacity: 0, y: 20 }}

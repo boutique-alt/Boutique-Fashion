@@ -2,12 +2,14 @@ import { Link } from 'react-router-dom'
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { productPath } from '../utils/productSlug'
+import SEO from '../components/ui/SEO'
 
 export default function CartPage() {
   const { cart, cartTotal, updateCartQty, removeFromCart, clearCart } = useStore()
 
   return (
     <main>
+      <SEO title="Shopping Cart" description="View and manage the items in your shopping cart at Boutique Fashion." robots="noindex, nofollow" />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
           {cart.length === 0 ? (
@@ -36,7 +38,7 @@ export default function CartPage() {
                   <li key={item.key} className="grid gap-4 py-6 md:grid-cols-[2fr_1fr_1fr_1fr_auto] md:items-center md:gap-4">
                     <div className="flex gap-4">
                       <Link to={productPath(item.slug)}>
-                        <img src={item.image} alt={item.name} className="h-28 w-20 object-cover" />
+                        <img src={item.image} alt={item.name} className="h-28 w-20 object-cover"  loading="lazy" />
                       </Link>
                       <div>
                         <Link

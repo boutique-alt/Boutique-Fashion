@@ -49,7 +49,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
             src={gallery[active]}
             alt={name}
             className="h-full w-full object-cover object-top transition-opacity duration-300"
-          />
+           loading="lazy" />
         </div>
       </div>
     </div>

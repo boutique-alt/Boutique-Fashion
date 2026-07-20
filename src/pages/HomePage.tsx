@@ -19,7 +19,7 @@ export default function HomePage() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Boutique Fashion",
-    "image": "https://boutiquefashion.shop/images/about/team-hero.png",
+    "image": "https://boutiquefashion.shop/images/about/team-hero.webp",
     "url": "https://boutiquefashion.shop",
     "telephone": "+918777708573",
     "address": {

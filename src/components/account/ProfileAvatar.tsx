@@ -25,7 +25,7 @@ export default function ProfileAvatar({ name, avatarUrl, onChange }: ProfileAvat
       <div className="relative">
         <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-accent bg-cream-dark">
           {avatarUrl ? (
-            <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
+            <img src={avatarUrl} alt={name} className="h-full w-full object-cover"  loading="lazy" />
           ) : (
             <User size={36} className="text-maroon/60" />
           )}

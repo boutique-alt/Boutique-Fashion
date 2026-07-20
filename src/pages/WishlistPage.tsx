@@ -4,6 +4,7 @@ import ProductCard from '../components/ui/ProductCard'
 import AnimatedGrid from '../components/ui/AnimatedGrid'
 import { useStore } from '../context/StoreContext'
 import { getProductsBySlugs } from '../data/productCatalog'
+import SEO from '../components/ui/SEO'
 
 export default function WishlistPage() {
   const { wishlist } = useStore()
@@ -11,6 +12,7 @@ export default function WishlistPage() {
 
   return (
     <main>
+      <SEO title="My Wishlist" description="View your saved items and favorite boutique dresses at Boutique Fashion." />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           {products.length === 0 ? (

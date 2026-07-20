@@ -28,7 +28,7 @@ export default function DressPage() {
                   src={cat.products[0]?.image}
                   alt={cat.title}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+                 loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p className="text-xs tracking-[0.2em] text-gold uppercase">{cat.count} Products</p>

@@ -36,7 +36,7 @@ export default function ProductImageUpload({ value, onChange }: ProductImageUplo
             src={value}
             alt=""
             className="h-20 w-16 shrink-0 border border-accent object-cover"
-          />
+           loading="lazy" />
         ) : (
           <div className="flex h-20 w-16 shrink-0 items-center justify-center border border-dashed border-accent bg-cream-dark text-[10px] text-charcoal/40">
             No image

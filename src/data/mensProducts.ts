@@ -1,6 +1,6 @@
 import type { Product } from './products'
 
-const IMG = (n: number) => `/images/mens/${String(n).padStart(2, '0')}.png`
+const IMG = (n: number) => `/images/mens/${String(n).padStart(2, '0')}.webp`
 
 export const mensCategoryImage = IMG(1)
 export const mensExclusiveBanner = IMG(11)
@@ -18,7 +18,7 @@ export const mensProducts: Product[] = [
     name: 'Terracotta Floral Block Print Shirt',
     price: 1100,
     image: IMG(2),
-    images: ["/images/mens/brown-bagru-handblock-shirt-1.png","/images/mens/brown-bagru-handblock-shirt-2.png"],
+    images: ["/images/mens/brown-bagru-handblock-shirt-1.webp","/images/mens/brown-bagru-handblock-shirt-2.webp"],
     href: 'https://boutiquefashion.shop/product/brown-bagru-handblock-shirt/',
   },
   {
@@ -49,7 +49,7 @@ export const mensProducts: Product[] = [
     name: 'Elephant Motif Cotton Shirt',
     price: 1200,
     image: IMG(6),
-    images: ["/images/mens/elephant-motif-white-handblock-shirt-1.png","/images/mens/elephant-motif-white-handblock-shirt-2.jpg"],
+    images: ["/images/mens/elephant-motif-white-handblock-shirt-1.webp","/images/mens/elephant-motif-white-handblock-shirt-2.webp"],
     href: 'https://boutiquefashion.shop/product/elephant-motif-white-handblock-shirt/',
   },
   {
@@ -68,7 +68,7 @@ export const mensProducts: Product[] = [
     originalPrice: 1699,
     onSale: true,
     image: IMG(8),
-    images: ["/images/mens/black-abstract-handblock-cotton-shirt-1.png","/images/mens/black-abstract-handblock-cotton-shirt-2.png"],
+    images: ["/images/mens/black-abstract-handblock-cotton-shirt-1.webp","/images/mens/black-abstract-handblock-cotton-shirt-2.webp"],
     href: 'https://boutiquefashion.shop/product/black-abstract-handblock-cotton-shirt/',
   },
   {
@@ -78,7 +78,7 @@ export const mensProducts: Product[] = [
     originalPrice: 1499,
     onSale: true,
     image: IMG(9),
-    images: ["/images/mens/cotton-bagru-handblock-mauve-shirt-1.png","/images/mens/cotton-bagru-handblock-mauve-shirt-2.png"],
+    images: ["/images/mens/cotton-bagru-handblock-mauve-shirt-1.webp","/images/mens/cotton-bagru-handblock-mauve-shirt-2.webp"],
     href: 'https://boutiquefashion.shop/product/cotton-bagru-handblock-mauve-shirt/',
   },
   {
@@ -95,7 +95,7 @@ export const mensProducts: Product[] = [
     originalPrice: 1699,
     onSale: true,
     image: IMG(11),
-    images: ["/images/mens/forest-inspired-tiger-handblock-print-shirt-1.png","/images/mens/forest-inspired-tiger-handblock-print-shirt-2.png"],
+    images: ["/images/mens/forest-inspired-tiger-handblock-print-shirt-1.webp","/images/mens/forest-inspired-tiger-handblock-print-shirt-2.webp"],
     href: 'https://boutiquefashion.shop/product/forest-inspired-tiger-handblock-print-shirt/',
   },
   {
@@ -112,7 +112,7 @@ export const mensProducts: Product[] = [
     originalPrice: 1499,
     onSale: true,
     image: IMG(13),
-    images: ["/images/mens/classic-maroon-square-motif-cotton-shirt-1.png","/images/mens/classic-maroon-square-motif-cotton-shirt-2.png"],
+    images: ["/images/mens/classic-maroon-square-motif-cotton-shirt-1.webp","/images/mens/classic-maroon-square-motif-cotton-shirt-2.webp"],
     href: 'https://boutiquefashion.shop/product/classic-maroon-square-motif-cotton-shirt/',
   },
   {
@@ -120,7 +120,7 @@ export const mensProducts: Product[] = [
     name: 'Fish Motif Cotton Shirt',
     price: 899,
     image: IMG(14),
-    images: ["/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-1.png","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-2.png","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-3.png","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-4.png","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-5.png"],
+    images: ["/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-1.webp","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-2.webp","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-3.webp","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-4.webp","/images/mens/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear-5.webp"],
     href: 'https://boutiquefashion.shop/product/premium-cotton-handblock-fish-motif-shirt-for-men-breathable-ethnic-casual-wear/',
   },
   {
@@ -130,7 +130,7 @@ export const mensProducts: Product[] = [
     originalPrice: 1399,
     onSale: true,
     image: IMG(15),
-    images: ["/images/mens/indigo-handblock-cotton-shirt-1.png"],
+    images: ["/images/mens/indigo-handblock-cotton-shirt-1.webp"],
     href: 'https://boutiquefashion.shop/product/indigo-handblock-cotton-shirt/',
   },
   {

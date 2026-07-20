@@ -1,6 +1,6 @@
 import type { Product } from './products'
 
-const IMG = (n: number) => `/images/blouse/${String(n).padStart(2, '0')}.png`
+const IMG = (n: number) => `/images/blouse/${String(n).padStart(2, '0')}.webp`
 
 export const blouseCategoryImage = IMG(11)
 
@@ -35,7 +35,7 @@ export const blouseProducts: Product[] = [
     name: 'Green Kalamkari Square Neck Blouse',
     price: 2400,
     image: IMG(4),
-    images: ["/images/blouse/peach-sea-waves-designer-blouse-1.png","/images/blouse/peach-sea-waves-designer-blouse-2.png","/images/blouse/peach-sea-waves-designer-blouse-3.png","/images/blouse/peach-sea-waves-designer-blouse-4.png","/images/blouse/peach-sea-waves-designer-blouse-5.png","/images/blouse/peach-sea-waves-designer-blouse-6.png","/images/blouse/peach-sea-waves-designer-blouse-7.png","/images/blouse/peach-sea-waves-designer-blouse-8.png","/images/blouse/peach-sea-waves-designer-blouse-9.png","/images/blouse/peach-sea-waves-designer-blouse-10.png"],
+    images: ["/images/blouse/peach-sea-waves-designer-blouse-1.webp","/images/blouse/peach-sea-waves-designer-blouse-2.webp","/images/blouse/peach-sea-waves-designer-blouse-3.webp","/images/blouse/peach-sea-waves-designer-blouse-4.webp","/images/blouse/peach-sea-waves-designer-blouse-5.webp","/images/blouse/peach-sea-waves-designer-blouse-6.webp","/images/blouse/peach-sea-waves-designer-blouse-7.webp","/images/blouse/peach-sea-waves-designer-blouse-8.webp","/images/blouse/peach-sea-waves-designer-blouse-9.webp","/images/blouse/peach-sea-waves-designer-blouse-10.webp"],
     href: 'https://boutiquefashion.shop/product/peach-sea-waves-designer-blouse/',
   },
   {

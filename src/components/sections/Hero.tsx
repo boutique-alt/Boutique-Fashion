@@ -46,13 +46,13 @@ export default function Hero() {
 
   return (
     <>
-      <div className="w-full relative z-20 transition-colors duration-700" style={{ backgroundColor: slide.bgColor }}>
-        <CategoryStrip />
-      </div>
       <section
-        className="relative w-full overflow-x-hidden transition-colors duration-700 min-h-[500px] md:aspect-video flex flex-col md:justify-center"
+        className="relative w-full overflow-x-hidden transition-colors duration-700 min-h-[360px] md:min-h-[500px] md:aspect-video flex flex-col md:justify-center"
         style={{ backgroundColor: slide.bgColor }}
       >
+        <div className="absolute top-0 inset-x-0 z-30">
+          <CategoryStrip />
+        </div>
         <AnimatePresence mode="wait">
           <motion.div
             key={`bg-${current}`}
@@ -60,18 +60,19 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.9 }}
-            className="relative w-full aspect-[4/3] sm:aspect-video md:absolute md:inset-0 md:aspect-auto z-0"
+            className="absolute inset-0 w-full h-full z-0"
           >
             <img
               src={slide.image}
               alt={slide.title}
-              className="h-full w-full object-cover object-right md:object-center"
-              style={{ objectPosition: slide.objectPosition }}
+              className="h-full w-full object-cover md:object-center"
+              style={{ objectPosition: isMobile ? (slide.mobileObjectPosition || 'center') : (slide.objectPosition || 'center') }}
               fetchPriority={current === 0 ? 'high' : 'low'}
               decoding="async"
-            />
+             loading="lazy" />
           </motion.div>
         </AnimatePresence>
+        <div className="absolute inset-0 bg-black/25 z-10 pointer-events-none md:hidden" />
 
       <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center pt-4 md:pt-6 z-10">
         <img
@@ -79,10 +80,10 @@ export default function Hero() {
           alt=""
           aria-hidden
           className="h-16 w-auto rounded-xl opacity-[0.05] mix-blend-multiply md:h-24 lg:h-32 md:opacity-[0.08]"
-        />
+         loading="lazy" />
       </div>
 
-      <div className="md:relative z-10 mx-auto max-w-7xl px-4 pb-10 pt-6 md:px-6 md:pb-14 md:pt-10 lg:pb-16 lg:pt-12 w-full">
+      <div className="relative z-20 mx-auto max-w-7xl px-4 pb-6 pt-[130px] md:px-6 md:pb-14 md:pt-36 lg:pb-16 lg:pt-36 w-full">
         <div className="grid items-center gap-10 md:grid-cols-2 md:gap-10 lg:gap-16">
           <AnimatePresence mode="wait">
             <motion.div
@@ -93,38 +94,38 @@ export default function Hero() {
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               className="order-2 md:order-1 md:relative z-10"
             >
-              <div className="absolute top-6 left-4 max-w-[55%] z-20 md:static md:max-w-none">
+              <div className="relative z-20 max-w-[85%] md:max-w-none">
                 <div className="mb-4 md:mb-6">
-                  <p className="text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-white drop-shadow-md md:drop-shadow-none md:text-maroon font-semibold inline-block">
+                  <p className="text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-white drop-shadow-md font-semibold inline-block">
                     {slide.tag}
                   </p>
                 </div>
-                <h1 className="font-serif text-2xl sm:text-3xl font-light leading-[1.15] tracking-wide text-white drop-shadow-md md:drop-shadow-none md:text-charcoal md:text-5xl lg:text-[3.25rem]">
+                <h1 className="font-serif text-2xl sm:text-3xl font-light leading-[1.15] tracking-wide text-white drop-shadow-md md:text-5xl lg:text-[3.25rem]">
                   {slide.title}
-                  <span className="mt-1 md:mt-2 block font-medium italic text-white/90 md:text-charcoal/90">{slide.subtitle}</span>
+                  <span className="mt-1 md:mt-2 block font-medium italic text-white/95">{slide.subtitle}</span>
                 </h1>
                 <p className="sr-only">{slide.title} {slide.subtitle}</p>
-                <div className="mt-3 md:mt-5 h-px w-12 md:w-16 bg-white/60 md:bg-maroon/30" />
+                <div className="mt-3 md:mt-5 h-px w-12 md:w-16 bg-white/60" />
                 {slide.description && (
-                  <p className="mt-3 md:mt-5 max-w-md font-accent text-xs sm:text-sm font-light leading-[1.6] md:leading-[1.8] tracking-wide text-white/90 drop-shadow-md md:drop-shadow-none md:text-charcoal/80 md:text-[15px]">
+                  <p className="mt-3 md:mt-5 max-w-md font-accent text-xs sm:text-sm font-light leading-[1.6] md:leading-[1.8] tracking-wide text-white/90 drop-shadow-md md:text-[15px]">
                     {slide.description}
                   </p>
                 )}
               </div>
-              <div className="mt-4 md:mt-10 flex flex-wrap gap-4 relative z-10">
+              <div className="mt-6 md:mt-10 flex flex-wrap gap-4 relative z-20">
                 <Link
                   to={slide.href}
-                  className="group relative overflow-hidden rounded-none border border-charcoal px-10 py-3.5 text-[10px] font-medium tracking-[0.25em] text-charcoal uppercase transition-all duration-500 hover:text-white md:text-[11px]"
+                  className="group relative overflow-hidden rounded-none border border-white/80 bg-white/10 px-10 py-3.5 text-[10px] font-medium tracking-[0.25em] text-white uppercase transition-all duration-500 hover:text-charcoal md:text-[11px]"
                 >
                   <span className="relative z-10">{slide.cta}</span>
-                  <div className="absolute inset-0 -z-0 h-full w-0 bg-charcoal transition-all duration-500 ease-out group-hover:w-full" />
+                  <div className="absolute inset-0 -z-0 h-full w-0 bg-white transition-all duration-500 ease-out group-hover:w-full" />
                 </Link>
                 <Link
                   to="/shop/all"
-                  className="group relative overflow-hidden rounded-none border border-transparent px-8 py-3.5 text-[10px] font-medium tracking-[0.25em] text-charcoal/90 uppercase transition-all duration-500 hover:text-charcoal md:text-[11px]"
+                  className="group relative overflow-hidden rounded-none border border-transparent px-8 py-3.5 text-[10px] font-medium tracking-[0.25em] text-white/90 uppercase transition-all duration-500 hover:text-white md:text-[11px]"
                 >
-                  <span className="relative z-10">Shop All</span>
-                  <div className="absolute bottom-2 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-charcoal transition-all duration-500 ease-out group-hover:w-1/2" />
+                  <span className="relative z-10 drop-shadow-md">Shop All</span>
+                  <div className="absolute bottom-2 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-white transition-all duration-500 ease-out group-hover:w-1/2" />
                 </Link>
               </div>
             </motion.div>

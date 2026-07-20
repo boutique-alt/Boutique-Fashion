@@ -1,8 +1,8 @@
-const teamPhoto = '/images/about/team-hero.png'
+const teamPhoto = '/images/about/team-hero.webp'
 
 export const aboutAssets = {
   hero: teamPhoto,
-  banner: '/images/assets/breadcrumbs-woo.jpg',
+  banner: '/images/assets/breadcrumbs-woo.webp',
   storyImage: teamPhoto,
   image2: teamPhoto,
 }

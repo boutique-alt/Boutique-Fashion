@@ -63,6 +63,7 @@ export interface HeroSlide {
   href: string
   bgColor: string
   objectPosition?: string
+  mobileObjectPosition?: string
 }
 
 export const heroSlides: HeroSlide[] = [
@@ -72,10 +73,11 @@ export const heroSlides: HeroSlide[] = [
     subtitle: 'Indo-Western Collection',
     description:
       'Discover breathable kurtis, elegant indo-western outfits, and ready-to-wear sarees designed for modern women.',
-    image: '/images/assets/hero-banner-1.png',
+    image: '/images/assets/hero-banner-1.webp',
     cta: 'Explore Collection',
     href: '/dress/one-piece',
     bgColor: '#e8d9d0',
+    mobileObjectPosition: '90% center',
   },
   {
     tag: 'Exclusive Collections',
@@ -83,10 +85,11 @@ export const heroSlides: HeroSlide[] = [
     subtitle: 'Handblock Shirts',
     description:
       'Premium cotton shirts with artisanal handblock prints — crafted for comfort, character, and everyday elegance.',
-    image: '/images/assets/hero-banner-2.png',
+    image: '/images/assets/hero-banner-2.webp',
     cta: 'View Collection',
     href: '/mens',
     bgColor: '#e8d9d0',
+    mobileObjectPosition: '90% center',
   },
 ]
 
@@ -107,7 +110,7 @@ export const instagramPosts = [
 ]
 
 export const brandAssets = {
-  logo: '/images/assets/logo.jpg',
-  newArrivalsBanner: '/images/assets/home-ban-2.png',
+  logo: '/images/assets/logo.webp',
+  newArrivalsBanner: '/images/assets/home-ban-2.webp',
   mensExclusiveBanner,
 }

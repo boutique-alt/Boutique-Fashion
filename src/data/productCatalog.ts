@@ -39,9 +39,9 @@ function hdImage(image: string): string {
 function galleryImages(image: string): string[] {
   if (image.startsWith('/images/')) return [image]
   const primary = hdImage(image)
-  const alt = image.includes('1-480x638') || image.includes('1.png')
+  const alt = image.includes('1-480x638') || image.includes('1.webp')
     ? primary
-    : hdImage(image.replace('-480x638', '1-480x638').replace('.png', '1.png').replace(/1\.png$/, '1-480x638.png'))
+    : hdImage(image.replace('-480x638', '1-480x638').replace('.webp', '1.webp').replace(/1\.webp$/, '1-480x638.webp'))
   if (alt === primary) return [primary]
   return [primary, alt]
 }

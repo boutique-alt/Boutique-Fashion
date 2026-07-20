@@ -4,6 +4,7 @@ import PasswordInput from '../components/ui/PasswordInput'
 import { isSupabaseConfigured } from '../config/env'
 import { getSupabase } from '../lib/supabase'
 import { updateCustomerPassword } from '../services/authService'
+import SEO from '../components/ui/SEO'
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate()
@@ -60,6 +61,7 @@ export default function ResetPasswordPage() {
   if (!isSupabaseConfigured()) {
     return (
       <main>
+        <SEO title="Reset Password" robots="noindex, nofollow" />
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-md px-4 text-center md:px-6">
             <p className="text-sm text-charcoal/60">Supabase is not configured.</p>
@@ -72,6 +74,7 @@ export default function ResetPasswordPage() {
   if (!ready) {
     return (
       <main>
+        <SEO title="Reset Password" robots="noindex, nofollow" />
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-md px-4 text-center md:px-6">
             <p className="text-sm text-charcoal/60">
@@ -88,6 +91,7 @@ export default function ResetPasswordPage() {
 
   return (
     <main>
+      <SEO title="Set New Password" robots="noindex, nofollow" />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-md px-4 md:px-6">
           <h1 className="mb-6 text-center font-serif text-2xl text-charcoal">Set New Password</h1>

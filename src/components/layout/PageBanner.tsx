@@ -17,7 +17,7 @@ export default function PageBanner({ title, breadcrumbs, image }: PageBannerProp
     <section className="relative flex h-48 items-center justify-center overflow-hidden bg-charcoal md:h-56">
       {image && (
         <>
-          <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
+          <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40"  loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 to-charcoal/80" />
         </>
       )}

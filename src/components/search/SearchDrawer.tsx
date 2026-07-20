@@ -67,7 +67,7 @@ export default function SearchDrawer() {
                         src={product.image}
                         alt={product.name}
                         className="h-16 w-12 shrink-0 object-cover"
-                      />
+                       loading="lazy" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm text-charcoal">{product.name}</p>
                         <p className="text-xs text-charcoal/50">{product.categoryLabel}</p>

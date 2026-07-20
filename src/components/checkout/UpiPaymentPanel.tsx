@@ -61,7 +61,7 @@ export default function UpiPaymentPanel({ amount, screenshotUrl, onScreenshotCha
               width={QR_SIZE}
               height={QR_SIZE}
               className="h-[300px] w-[300px] object-contain"
-            />
+             loading="lazy" />
           ) : (
             <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-100">
               <span className="text-sm text-gray-400">Generating QR...</span>

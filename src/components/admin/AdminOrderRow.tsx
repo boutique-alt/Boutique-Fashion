@@ -135,7 +135,7 @@ export default function AdminOrderRow({ order, onSaved }: AdminOrderRowProps) {
                             src={item.image}
                             alt={item.name}
                             className="h-full w-full object-cover"
-                          />
+                           loading="lazy" />
                         </div>
                       )}
                       <div className="flex-1 flex flex-col justify-center">

@@ -3,24 +3,24 @@ import { ArrowRight } from 'lucide-react'
 import { useInView } from '../../hooks/useInView'
 
 const col1Images = [
-  '/images/dresses/olive-green-mul-chanderi-boolean-work-three-piece-set-main.png',
-  '/images/dresses/maroon-heritage-handblock-cotton-midi-dress-main.png',
-  '/images/dresses/white-khadi-embroidery-dress-main.png',
-  '/images/dresses/pure-modal-kaftaan-purple-dress-main.png',
+  '/images/dresses/olive-green-mul-chanderi-boolean-work-three-piece-set-main.webp',
+  '/images/dresses/maroon-heritage-handblock-cotton-midi-dress-main.webp',
+  '/images/dresses/white-khadi-embroidery-dress-main.webp',
+  '/images/dresses/pure-modal-kaftaan-purple-dress-main.webp',
 ]
 
 const col2Images = [
-  '/images/dresses/cotton-handblock-braided-sleeve-kurti-set-main.png',
-  '/images/dresses/blue-halter-neck-cotton-dress-main.png',
-  '/images/dresses/white-begumpuri-long-a-line-dress-main.png',
-  '/images/dresses/teal-green-handpainted-inner-shrug-chanderi-silk-main.png',
+  '/images/dresses/cotton-handblock-braided-sleeve-kurti-set-main.webp',
+  '/images/dresses/blue-halter-neck-cotton-dress-main.webp',
+  '/images/dresses/white-begumpuri-long-a-line-dress-main.webp',
+  '/images/dresses/teal-green-handpainted-inner-shrug-chanderi-silk-main.webp',
 ]
 
 const col3Images = [
-  '/images/dresses/forest-inspired-tiger-handblock-print-shirt-main.png',
-  '/images/dresses/classic-maroon-square-motif-cotton-shirt-main.png',
-  '/images/dresses/brown-bagru-handblock-shirt-main.png',
-  '/images/dresses/elephant-motif-white-handblock-shirt-main.png',
+  '/images/dresses/forest-inspired-tiger-handblock-print-shirt-main.webp',
+  '/images/dresses/classic-maroon-square-motif-cotton-shirt-main.webp',
+  '/images/dresses/brown-bagru-handblock-shirt-main.webp',
+  '/images/dresses/elephant-motif-white-handblock-shirt-main.webp',
 ]
 
 export default function CeremonialEdit() {

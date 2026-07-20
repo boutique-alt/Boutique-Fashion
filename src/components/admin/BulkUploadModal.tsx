@@ -51,7 +51,7 @@ export default function BulkUploadModal({ onClose, onSuccess }: BulkUploadModalP
       'Sample Product',
       1999,
       2499,
-      'https://example.com/image.jpg',
+      'https://example.com/image.webp',
       '',
       'one-piece',
       'M, L, XL',

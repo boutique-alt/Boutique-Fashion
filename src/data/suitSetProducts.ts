@@ -1,6 +1,6 @@
 import type { Product } from './products'
 
-const IMG = (n: number) => `/images/suit-set/${String(n).padStart(2, '0')}.png`
+const IMG = (n: number) => `/images/suit-set/${String(n).padStart(2, '0')}.webp`
 
 export const suitSetCategoryImage = IMG(11)
 
@@ -61,7 +61,7 @@ export const suitSetProducts: Product[] = [
     originalPrice: 3200,
     onSale: true,
     image: IMG(8),
-    images: ["/images/suitSet/olive-green-mul-chanderi-boolean-work-three-piece-set-1.png","/images/suitSet/olive-green-mul-chanderi-boolean-work-three-piece-set-2.png"],
+    images: ["/images/suitSet/olive-green-mul-chanderi-boolean-work-three-piece-set-1.webp","/images/suitSet/olive-green-mul-chanderi-boolean-work-three-piece-set-2.webp"],
     href: 'https://boutiquefashion.shop/product/olive-green-mul-chanderi-boolean-work-three-piece-set/',
   },
   {

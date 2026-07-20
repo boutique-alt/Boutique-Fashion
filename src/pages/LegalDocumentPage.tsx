@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom'
+import SEO from '../components/ui/SEO'
 
 const documents = {
   terms: {
@@ -51,6 +52,7 @@ export default function LegalDocumentPage({ variant }: LegalDocumentPageProps) {
 
   return (
     <main>
+      <SEO title={doc.title} description={`${doc.title} for Boutique Fashion.`} />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-3xl space-y-8 px-4 md:px-6">
           {doc.sections.map((section) => (

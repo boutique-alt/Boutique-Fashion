@@ -152,7 +152,7 @@ export default function WatchAndBuyPlayer({
                   src={item.productImage}
                   alt=""
                   className="h-16 w-12 shrink-0 rounded object-cover bg-accent"
-                />
+                 loading="lazy" />
                 <div className="min-w-0 flex-1">
                   <p className="line-clamp-2 text-sm leading-snug text-white">{item.productName}</p>
                   <div className="mt-1 flex flex-wrap items-center gap-2">

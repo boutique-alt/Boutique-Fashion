@@ -1,6 +1,6 @@
 import type { Product } from './products'
 
-const IMG = (n: number) => `/images/tops-pant-skirt/${String(n).padStart(2, '0')}.png`
+const IMG = (n: number) => `/images/tops-pant-skirt/${String(n).padStart(2, '0')}.webp`
 
 export const topsPantSkirtCategoryImage = IMG(1)
 

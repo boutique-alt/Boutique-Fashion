@@ -17,18 +17,18 @@ export default function CategoryStrip() {
   })
 
   return (
-    <div className="relative w-full z-10 before:absolute before:inset-0 before:bg-accent/40 before:backdrop-blur-md before:-z-10 border-b border-charcoal/5">
+    <div className="relative w-full z-20 border-b border-charcoal/10">
       {/* Top Tabs */}
       <div className="mx-auto flex max-w-7xl justify-center gap-8 px-8 pt-3">
         {['WOMEN', 'MEN'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab as 'WOMEN' | 'MEN')}
-            className={`relative font-sans text-[10px] sm:text-[11px] font-medium tracking-[0.2em] transition-all duration-300 pb-2 ${
+            className={`relative font-sans text-[10px] sm:text-[11px] font-bold tracking-[0.2em] transition-all duration-300 pb-2 ${
               activeTab === tab
-                ? 'text-charcoal'
-                : 'text-charcoal/40 hover:text-charcoal/80'
-            } after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-0 after:-translate-x-1/2 after:bg-charcoal after:transition-all after:duration-300 ${activeTab === tab ? 'after:w-full' : 'hover:after:w-1/2'}`}
+                ? 'text-white'
+                : 'text-white/60 hover:text-white/90'
+            } after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-0 after:-translate-x-1/2 after:bg-white after:transition-all after:duration-300 ${activeTab === tab ? 'after:w-full' : 'hover:after:w-1/2'}`}
           >
             {tab}
           </button>
@@ -42,13 +42,13 @@ export default function CategoryStrip() {
           <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full border-[3px] border-[#b5db90] bg-[#fff5f5] p-1">
             <span className="font-sans text-2xl font-bold tracking-tight text-charcoal">MY</span>
           </div>
-          <span className="font-sans text-[9px] font-bold uppercase tracking-wider text-charcoal">
+          <span className="font-sans text-[9px] font-bold uppercase tracking-wider text-white drop-shadow-md">
             MY FEED
           </span>
         </div>
 
         {/* Straight Line Divider */}
-        <div className="mx-4 h-12 w-px shrink-0 bg-charcoal/10" />
+        <div className="mx-4 h-12 w-px shrink-0 bg-white/30" />
 
         {/* Dynamic Categories */}
         <div className="flex gap-6 md:gap-8">
@@ -66,7 +66,7 @@ export default function CategoryStrip() {
                   loading="lazy"
                 />
               </div>
-              <span className="max-w-[80px] text-center font-sans text-[9px] font-medium uppercase tracking-wider text-charcoal/80">
+              <span className="max-w-[80px] text-center font-sans text-[9px] font-bold uppercase tracking-wider text-white drop-shadow-md">
                 {cat.title}
               </span>
             </Link>

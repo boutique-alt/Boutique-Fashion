@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { Package } from 'lucide-react'
 import AccountSidebar from '../components/account/AccountSidebar'
+import SEO from '../components/ui/SEO'
 import ProfileForm from '../components/account/ProfileForm'
 import AccountRecentOrders from '../components/account/AccountRecentOrders'
 import AccountOrderCard from '../components/account/AccountOrderCard'
@@ -221,6 +222,7 @@ export default function AccountPage() {
 
     return (
       <main>
+        <SEO title="My Account" description="Manage your Boutique Fashion profile, shipping addresses, and account details." robots="noindex, nofollow" />
         <section className="py-12 md:py-16">
           <div className="mx-auto grid max-w-5xl gap-8 px-4 md:px-6 lg:grid-cols-3">
             <div className="lg:col-span-1">
@@ -243,6 +245,7 @@ export default function AccountPage() {
 
   return (
     <main>
+      <SEO title="My Account" description="Sign in or register for a Boutique Fashion account." robots="noindex, nofollow" />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-md px-4 md:px-6">
           {mode !== 'forgot' && (
@@ -413,6 +416,7 @@ export function AccountOrdersPage() {
 
   return (
     <main>
+      <SEO title="My Orders" description="View and track your past orders at Boutique Fashion." robots="noindex, nofollow" />
       <section className="py-12 md:py-16">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 md:px-6 lg:grid-cols-3">
           <div className="lg:col-span-1">
@@ -491,6 +495,7 @@ export function AccountReturnsPage() {
 
   return (
     <main>
+      <SEO title="Return Requests" description="View and manage your return requests at Boutique Fashion." robots="noindex, nofollow" />
       <section className="py-12 md:py-16">
         <div className="mx-auto grid max-w-5xl gap-8 px-4 md:px-6 lg:grid-cols-3">
           <div className="lg:col-span-1">

@@ -11,10 +11,6 @@ export default function AdminMediaPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    fetchMedia()
-  }, [])
-
   const fetchMedia = async () => {
     try {
       setLoading(true)
@@ -26,6 +22,10 @@ export default function AdminMediaPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchMedia()
+  }, [])
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return

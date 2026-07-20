@@ -39,7 +39,7 @@ export default function UpiScreenshotUpload({ value, onChange }: UpiScreenshotUp
             src={value}
             alt="Payment screenshot preview"
             className="h-28 w-24 shrink-0 border border-accent object-cover"
-          />
+           loading="lazy" />
         ) : (
           <div className="flex h-28 w-24 shrink-0 items-center justify-center border border-dashed border-accent bg-accent text-[10px] text-charcoal/40">
             No image

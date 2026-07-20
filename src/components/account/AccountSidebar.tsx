@@ -22,7 +22,7 @@ export default function AccountSidebar({ name, email, avatarUrl, onLogout }: Acc
       <div className="mb-6 flex items-center gap-4">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-cream-dark">
           {avatarUrl ? (
-            <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
+            <img src={avatarUrl} alt={name} className="h-full w-full object-cover"  loading="lazy" />
           ) : (
             <User size={24} className="text-maroon" />
           )}

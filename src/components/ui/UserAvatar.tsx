@@ -29,7 +29,7 @@ export default function UserAvatar({
         src={avatarUrl}
         alt={name}
         className={`shrink-0 rounded-full object-cover ${sizeClass} ${className}`}
-      />
+       loading="lazy" />
     )
   }
 

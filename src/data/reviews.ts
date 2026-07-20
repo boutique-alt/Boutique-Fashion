@@ -1,6 +1,6 @@
 export const reviewGalleryImages = Array.from({ length: 12 }, (_, i) => ({
   id: `gallery-${i + 1}`,
-  src: `/images/reviews/review-${i + 1}.png`,
+  src: `/images/reviews/review-${i + 1}.webp`,
   alt: `Happy customers at Boutique Fashion expo and showroom ${i + 1}`,
 }))
 

@@ -1,6 +1,6 @@
 import type { Product } from './products'
 
-const IMG = (n: number) => `/images/kurta-coord/${String(n).padStart(2, '0')}.png`
+const IMG = (n: number) => `/images/kurta-coord/${String(n).padStart(2, '0')}.webp`
 
 export const kurtaCoordCategoryImage = IMG(11)
 
@@ -84,7 +84,7 @@ export const kurtaCoordProducts: Product[] = [
     originalPrice: 2100,
     onSale: true,
     image: IMG(10),
-    images: ["/images/kurtaCoord/teal-green-handpainted-inner-shrug-chanderi-silk-1.png","/images/kurtaCoord/teal-green-handpainted-inner-shrug-chanderi-silk-2.png"],
+    images: ["/images/kurtaCoord/teal-green-handpainted-inner-shrug-chanderi-silk-1.webp","/images/kurtaCoord/teal-green-handpainted-inner-shrug-chanderi-silk-2.webp"],
     href: 'https://boutiquefashion.shop/product/teal-green-handpainted-inner-shrug-chanderi-silk/',
   },
   {
@@ -92,7 +92,7 @@ export const kurtaCoordProducts: Product[] = [
     name: 'Pink Floral Embroidered Kurta with Teal Trousers',
     price: 1200,
     image: IMG(11),
-    images: ["/images/kurtaCoord/cotton-handblock-braided-sleeve-kurti-set-1.png","/images/kurtaCoord/cotton-handblock-braided-sleeve-kurti-set-2.png"],
+    images: ["/images/kurtaCoord/cotton-handblock-braided-sleeve-kurti-set-1.webp","/images/kurtaCoord/cotton-handblock-braided-sleeve-kurti-set-2.webp"],
     href: 'https://boutiquefashion.shop/product/cotton-handblock-braided-sleeve-kurti-set/',
   },
   {

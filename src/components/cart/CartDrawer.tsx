@@ -51,7 +51,7 @@ export default function CartDrawer() {
               {cart.map((item) => (
                 <li key={item.key} className="flex gap-4 border-b border-accent pb-5">
                   <Link to={productPath(item.slug)} onClick={close} className="shrink-0">
-                    <img src={item.image} alt={item.name} className="h-24 w-20 object-cover" />
+                    <img src={item.image} alt={item.name} className="h-24 w-20 object-cover"  loading="lazy" />
                   </Link>
                   <div className="min-w-0 flex-1">
                     <Link

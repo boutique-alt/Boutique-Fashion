@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { CheckCircle } from 'lucide-react'
+import SEO from '../components/ui/SEO'
 import PaymentMethodSelect from '../components/checkout/PaymentMethodSelect'
 import UpiPaymentPanel from '../components/checkout/UpiPaymentPanel'
 import { useStore } from '../context/StoreContext'
@@ -143,6 +144,7 @@ export default function CheckoutPage() {
   if (placed) {
     return (
       <main>
+        <SEO title="Order Success" description="Your order has been placed successfully at Boutique Fashion." robots="noindex, nofollow" />
         <section className="flex min-h-[60vh] items-center justify-center py-20">
           <div className="px-4 text-center">
             <CheckCircle size={56} className="mx-auto text-maroon" />
@@ -172,6 +174,7 @@ export default function CheckoutPage() {
 
   return (
     <main>
+      <SEO title="Checkout" description="Secure checkout page for Boutique Fashion." robots="noindex, nofollow" />
       <section className="py-12 md:py-16">
         <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-5">
           <form onSubmit={handleSubmit} className="space-y-8 lg:col-span-3">

@@ -7,6 +7,7 @@ interface SEOProps {
   type?: string
   image?: string
   schema?: Record<string, any> | Record<string, any>[]
+  robots?: string
 }
 
 export default function SEO({ 
@@ -14,18 +15,20 @@ export default function SEO({
   description = "Boutique Fashion – Discover elegant, premium clothing.", 
   keywords = "boutique, fashion, clothing, dresses",
   type = "website",
-  image = "/images/about/team-hero.png",
-  schema
+  image = "/images/about/team-hero.webp",
+  schema,
+  robots = "index, follow"
 }: SEOProps) {
   const fullTitle = `${title} | Boutique Fashion`
   const canonicalUrl = typeof window !== 'undefined' 
-    ? `https://boutique-fashion.vercel.app${window.location.pathname}`
-    : 'https://boutique-fashion.vercel.app'
+    ? `https://boutiquefashion.shop${window.location.pathname}`
+    : 'https://boutiquefashion.shop'
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <link rel="canonical" href={canonicalUrl} />
+      <meta name="robots" content={robots} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta property="og:title" content={fullTitle} />
@@ -37,9 +40,7 @@ export default function SEO({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       {schema && (
-        <script type="application/ld+json">
-          {JSON.stringify(schema)}
-        </script>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       )}
     </Helmet>
   )
