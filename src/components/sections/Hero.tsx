@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { brandAssets, heroSlides } from '../../data/products'
+import { heroSlides } from '../../data/products'
 import CategoryStrip from './CategoryStrip'
 
 export default function Hero() {
