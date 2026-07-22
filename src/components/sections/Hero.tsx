@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { heroSlides } from '../../data/products'
-import CategoryStrip from './CategoryStrip'
 
 export default function Hero() {
   const [current, setCurrent] = useState(0)
@@ -50,9 +49,6 @@ export default function Hero() {
         className="relative w-full overflow-x-hidden transition-colors duration-700 min-h-[400px] md:min-h-[500px] md:aspect-video flex flex-col md:justify-center"
         style={{ backgroundColor: slide.bgColor }}
       >
-        <div className="absolute top-0 inset-x-0 z-30">
-          <CategoryStrip />
-        </div>
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -80,7 +76,7 @@ export default function Hero() {
 
         <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-cream to-transparent z-20 pointer-events-none" />
 
-      <div className="relative z-20 mx-auto max-w-7xl px-4 pb-6 pt-[160px] md:px-6 md:pb-14 md:pt-36 lg:pb-16 lg:pt-36 w-full">
+      <div className="relative z-20 mx-auto max-w-7xl px-4 pb-6 pt-[110px] md:px-6 md:pb-14 md:pt-36 lg:pb-16 lg:pt-36 w-full">
         <div className="grid items-center gap-10 md:grid-cols-2 md:gap-10 lg:gap-16">
           <AnimatePresence mode="wait">
             <motion.div

@@ -1,4 +1,5 @@
 import Hero from '../components/sections/Hero'
+import CategoryStrip from '../components/sections/CategoryStrip'
 import SummerSale from '../components/sections/SummerSale'
 import NewArrival from '../components/sections/NewArrival'
 import CeremonialEdit from '../components/sections/CeremonialEdit'
@@ -69,6 +70,7 @@ export default function HomePage() {
         schema={[localBusinessSchema, websiteSchema, organizationSchema]}
       />
       <Hero />
+      <CategoryStrip />
       <CoverflowCarousel />
       <SummerSale />
       <NewArrival />
