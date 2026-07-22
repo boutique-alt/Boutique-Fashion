@@ -4,11 +4,44 @@ import AboutTimeline from '../components/about/AboutTimeline'
 import AboutComfort from '../components/about/AboutComfort'
 import GoogleReviews from '../components/about/GoogleReviews'
 import SEO from '../components/ui/SEO'
+import { brand } from '../data/navigation'
 
 export default function AboutPage() {
+  const aboutPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": `About Us | ${brand.name}`,
+    "description": "Learn more about Boutique Fashion's heritage, our family story, and our commitment to premium craftsmanship.",
+    "url": "https://boutiquefashion.shop/about-us",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": brand.name,
+      "url": "https://boutiquefashion.shop"
+    }
+  }
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": brand.name,
+    "url": "https://boutiquefashion.shop",
+    "logo": "https://boutiquefashion.shop/images/about/team-hero.webp",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": brand.phone,
+      "contactType": "customer service",
+      "areaServed": "IN",
+      "availableLanguage": "en"
+    }
+  }
+
   return (
     <main>
-      <SEO title="About Us" description="Learn more about Boutique Fashion's heritage, our family story, and our commitment to premium craftsmanship." />
+      <SEO 
+        title="About Us" 
+        description="Learn more about Boutique Fashion's heritage, our family story, and our commitment to premium craftsmanship." 
+        schema={[aboutPageSchema, organizationSchema]}
+      />
       <AboutFamilyPhoto />
       <AboutStory />
       <AboutTimeline />

@@ -134,6 +134,6 @@ export const watchAndBuyVideos: WatchAndBuyItem[] = [
     productName: 'Indo-Western Top with Skirt',
     price: 1899,
     productImage: '/images/tops-pant-skirt/01.webp',
-    href: '/dress/tops-pant-skirt',
+    href: '/dress/tops-skirt',
   },
 ]

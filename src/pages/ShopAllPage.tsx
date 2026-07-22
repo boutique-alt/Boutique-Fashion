@@ -5,6 +5,8 @@ import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryT
 import { getShopPageProducts, getShopResultRange, getShopTotalPages } from '../data/shop'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import SEO from '../components/ui/SEO'
+import { brand } from '../data/navigation'
+import { slugFromHref } from '../utils/productSlug'
 
 export default function ShopAllPage() {
   const { page } = useParams<{ page?: string }>()
@@ -28,9 +30,39 @@ export default function ShopAllPage() {
     return <Navigate to="/shop/all" replace />
   }
 
+  const shopAllSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `Shop All | ${brand.name}`,
+    "description": "Browse our complete collection of premium boutique clothing.",
+    "url": `https://boutiquefashion.shop/shop/all${currentPage > 1 ? `/page/${currentPage}` : ''}`,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": brand.name,
+      "url": "https://boutiquefashion.shop"
+    },
+    ...(products.length > 0 ? {
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": products.length,
+        "itemListElement": products.map((product, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "url": `https://boutiquefashion.shop/product/${slugFromHref(product.href)}`,
+          "name": product.name,
+          "image": product.image.startsWith('http') ? product.image : `https://boutiquefashion.shop${product.image}`
+        }))
+      }
+    } : {})
+  }
+
   return (
     <main>
-      <SEO title="Shop All" description="Browse our complete collection of premium boutique clothing." />
+      <SEO 
+        title="Shop All" 
+        description="Browse our complete collection of premium boutique clothing." 
+        schema={shopAllSchema}
+      />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <h1 className="mb-6 font-serif text-3xl font-medium text-charcoal md:text-4xl">Shop All</h1>

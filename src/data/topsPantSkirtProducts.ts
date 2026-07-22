@@ -4,7 +4,9 @@ const IMG = (n: number) => `/images/tops-pant-skirt/${String(n).padStart(2, '0')
 
 export const topsPantSkirtCategoryImage = IMG(1)
 
-export const topsPantSkirtProducts: Product[] = [
+export const topsPantProducts: Product[] = []
+
+export const topsSkirtProducts: Product[] = [
   {
     id: 'tps1',
     name: 'Black Satin Shirt with Blue Geometric Dhoti Skirt',

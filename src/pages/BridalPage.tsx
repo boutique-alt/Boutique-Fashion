@@ -3,6 +3,7 @@ import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import SEO from '../components/ui/SEO'
 import { useProductCatalog } from '../hooks/useProductCatalog'
+import { brand } from '../data/navigation'
 
 const bridalSlugs = new Set(['blouse', 'three-piece', 'bridal'])
 
@@ -11,9 +12,39 @@ export default function BridalPage() {
   const bridalProducts = catalog.filter((p) => bridalSlugs.has(p.categorySlug))
   const { sorted, setSort } = useSortedProducts(bridalProducts)
 
+  const bridalPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `Bridal Collection | ${brand.name}`,
+    "description": "Discover our exquisite bridal collection for the perfect wedding dress.",
+    "url": "https://boutiquefashion.shop/bridal",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": brand.name,
+      "url": "https://boutiquefashion.shop"
+    },
+    ...(bridalProducts.length > 0 ? {
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": bridalProducts.length,
+        "itemListElement": bridalProducts.map((product, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "url": `https://boutiquefashion.shop/product/${product.slug}`,
+          "name": product.name,
+          "image": product.image.startsWith('http') ? product.image : `https://boutiquefashion.shop${product.image}`
+        }))
+      }
+    } : {})
+  }
+
   return (
     <main>
-      <SEO title="Bridal Collection" description="Discover our exquisite bridal collection for the perfect wedding dress." />
+      <SEO 
+        title="Bridal Collection" 
+        description="Discover our exquisite bridal collection for the perfect wedding dress." 
+        schema={bridalPageSchema}
+      />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="mx-auto mb-12 max-w-2xl text-center">

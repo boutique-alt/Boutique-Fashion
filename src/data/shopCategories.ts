@@ -7,12 +7,15 @@ import { mensCategoryImage } from './mensProducts'
 import type { ShopCategory } from '../types/shopCategory'
 
 const fallbackImages: Record<string, string> = {
-  'one-piece': dressCategoryImage,
-  'kurta-set': kurtaCoordCategoryImage,
-  'coord-set': kurtaCoordCategoryImage,
-  blouse: blouseCategoryImage,
-  mens: mensCategoryImage,
-  bridal: blouseCategoryImage,
+  'one-piece': '/images/dresses/01.webp',
+  'kurta-set': '/images/kurta-coord/06.webp',
+  'coord-set': '/images/kurta-coord/03.webp',
+  'tops-pant': '/images/kurta-coord/05.webp',
+  'tops-skirt': '/images/tops-pant-skirt/02.webp',
+  'three-piece': '/images/suit-set/06.webp',
+  blouse: '/images/blouse/01.webp',
+  mens: '/images/mens/01.webp',
+  bridal: '/images/blouse/01.webp',
   groom: '/images/mens/04.webp',
 }
 
@@ -21,7 +24,7 @@ export function getCategoryHref(cat: CategoryConfig): string {
 }
 
 export function getDefaultCategoryImage(cat: CategoryConfig): string {
-  return cat.products[0]?.image ?? fallbackImages[cat.slug] ?? dressCategoryImage
+  return fallbackImages[cat.slug] ?? cat.products[0]?.image ?? dressCategoryImage
 }
 
 function inSlugs(...slugs: string[]) {

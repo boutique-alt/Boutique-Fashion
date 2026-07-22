@@ -5,6 +5,7 @@ import AnimatedGrid from '../components/ui/AnimatedGrid'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets, aboutPillars } from '../data/about'
 import SEO from '../components/ui/SEO'
+import { brand } from '../data/navigation'
 
 const fabrics = [
   'Pure Cotton & Handloom',
@@ -18,9 +19,39 @@ export default function FabricPage() {
   const { products: catalog } = useProductCatalog()
   const fabricProducts = catalog.filter((p) => p.categorySlug === 'fabric')
 
+  const fabricPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `Our Fabrics | ${brand.name}`,
+    "description": "Explore the premium, sustainable fabrics used in Boutique Fashion collections.",
+    "url": "https://boutiquefashion.shop/fabric",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": brand.name,
+      "url": "https://boutiquefashion.shop"
+    },
+    ...(fabricProducts.length > 0 ? {
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": fabricProducts.length,
+        "itemListElement": fabricProducts.map((product, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "url": `https://boutiquefashion.shop/product/${product.slug}`,
+          "name": product.name,
+          "image": product.image.startsWith('http') ? product.image : `https://boutiquefashion.shop${product.image}`
+        }))
+      }
+    } : {})
+  }
+
   return (
     <main>
-      <SEO title="Our Fabrics" description="Explore the premium, sustainable fabrics used in Boutique Fashion collections." />
+      <SEO 
+        title="Our Fabrics" 
+        description="Explore the premium, sustainable fabrics used in Boutique Fashion collections." 
+        schema={fabricPageSchema}
+      />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="mx-auto mb-12 max-w-2xl text-center">

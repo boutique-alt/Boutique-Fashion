@@ -13,24 +13,52 @@ import CustomerReviews from '../components/sections/CustomerReviews'
 import InTheNews from '../components/sections/InTheNews'
 import SEO from '../components/ui/SEO'
 import CoverflowCarousel from '../components/sections/CoverflowCarousel'
+import { brand } from '../data/navigation'
 
 export default function HomePage() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Boutique Fashion",
+    "name": brand.name,
     "image": "https://boutiquefashion.shop/images/about/team-hero.webp",
     "url": "https://boutiquefashion.shop",
-    "telephone": "+918777708573",
+    "telephone": brand.phone,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "36/C, T.N.Bhiswas Road, Kolkata",
+      "streetAddress": "1st Floor, Juthika Apartment, A1, 409, Garia Station Rd, Garia",
       "addressLocality": "Kolkata",
-      "addressRegion": "WB",
-      "postalCode": "700035",
+      "addressRegion": "West Bengal",
+      "postalCode": "700084",
       "addressCountry": "IN"
     },
     "priceRange": "$$"
+  }
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": brand.name,
+    "url": "https://boutiquefashion.shop",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://boutiquefashion.shop/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": brand.name,
+    "url": "https://boutiquefashion.shop",
+    "logo": "https://boutiquefashion.shop/images/about/team-hero.webp",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": brand.phone,
+      "contactType": "customer service",
+      "areaServed": "IN",
+      "availableLanguage": "en"
+    }
   }
 
   return (
@@ -38,7 +66,7 @@ export default function HomePage() {
       <SEO 
         title="Where Comfort meets Confidence" 
         description="Discover premium boutique fashion, exclusive clothing, and accessories at Boutique Fashion." 
-        schema={localBusinessSchema}
+        schema={[localBusinessSchema, websiteSchema, organizationSchema]}
       />
       <Hero />
       <CoverflowCarousel />

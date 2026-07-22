@@ -3,11 +3,40 @@ import { ArrowUpRight } from 'lucide-react'
 import SectionHeading from '../components/ui/SectionHeading'
 import { dressCategories } from '../data/categories'
 import SEO from '../components/ui/SEO'
+import { brand } from '../data/navigation'
 
 export default function DressPage() {
+  const dressPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": `Dresses & Kurta Sets | ${brand.name}`,
+    "description": "Discover our collection of premium dresses, kurta sets, and coord sets crafted for elegance.",
+    "url": "https://boutiquefashion.shop/dress",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": brand.name,
+      "url": "https://boutiquefashion.shop"
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": dressCategories.length,
+      "itemListElement": dressCategories.map((cat, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "url": `https://boutiquefashion.shop/dress/${cat.slug}`,
+        "name": cat.title,
+        "description": cat.description
+      }))
+    }
+  }
+
   return (
     <main>
-      <SEO title="Dresses & Kurta Sets" description="Discover our collection of premium dresses, kurta sets, and coord sets crafted for elegance." />
+      <SEO 
+        title="Dresses & Kurta Sets" 
+        description="Discover our collection of premium dresses, kurta sets, and coord sets crafted for elegance." 
+        schema={dressPageSchema}
+      />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <SectionHeading

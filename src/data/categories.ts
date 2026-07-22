@@ -4,7 +4,7 @@ import { dressProducts } from './dressProducts'
 import { kurtaCoordProducts } from './kurtaCoordProducts'
 import { mensProducts } from './mensProducts'
 import { suitSetProducts } from './suitSetProducts'
-import { topsPantSkirtProducts } from './topsPantSkirtProducts'
+import { topsPantProducts, topsSkirtProducts } from './topsPantSkirtProducts'
 
 export interface CategoryConfig {
   slug: string
@@ -58,11 +58,19 @@ export const allCategories: CategoryConfig[] = [
     parent: { label: 'Collection', href: '/dress' },
   },
   {
-    slug: 'tops-pant-skirt',
-    title: 'Tops with Pant / Skirt',
-    description: 'Stylish tops paired with pants and skirts for versatile everyday and festive looks.',
-    count: topsPantSkirtProducts.length,
-    products: topsPantSkirtProducts,
+    slug: 'tops-pant',
+    title: 'Tops with Pant',
+    description: 'Stylish tops paired with pants for versatile everyday and festive looks.',
+    count: topsPantProducts.length,
+    products: topsPantProducts,
+    parent: { label: 'Collection', href: '/dress' },
+  },
+  {
+    slug: 'tops-skirt',
+    title: 'Tops with Skirt',
+    description: 'Stylish tops paired with skirts for versatile everyday and festive looks.',
+    count: topsSkirtProducts.length,
+    products: topsSkirtProducts,
     parent: { label: 'Collection', href: '/dress' },
   },
   {
@@ -113,11 +121,11 @@ export const allCategories: CategoryConfig[] = [
     products: [],
     parent: { label: 'Collection', href: '/bridal/groom' },
   },
-]
-
-export const dressCategories = allCategories.filter((c) =>
-  c.slug === 'one-piece' || c.slug === 'kurta-set' || c.slug === 'coord-set' || c.slug === 'tops-pant-skirt',
-)
+ ]
+ 
+ export const dressCategories = allCategories.filter((c) =>
+   c.slug === 'one-piece' || c.slug === 'kurta-set' || c.slug === 'coord-set' || c.slug === 'tops-pant' || c.slug === 'tops-skirt',
+ )
 
 export function getCategoryBySlug(slug: string): CategoryConfig | undefined {
   return allCategories.find((c) => c.slug === slug)
