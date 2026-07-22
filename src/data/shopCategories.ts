@@ -1,9 +1,6 @@
 import { allCategories, type CategoryConfig } from './categories'
 import type { ProductDetail } from './productCatalog'
-import { blouseCategoryImage } from './blouseProducts'
 import { dressCategoryImage } from './dressProducts'
-import { kurtaCoordCategoryImage } from './kurtaCoordProducts'
-import { mensCategoryImage } from './mensProducts'
 import type { ShopCategory } from '../types/shopCategory'
 
 const fallbackImages: Record<string, string> = {
