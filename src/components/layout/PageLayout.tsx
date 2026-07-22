@@ -40,7 +40,7 @@ export default function PageLayout() {
         <AnnouncementBar />
         <Header />
       </div>
-      <div style={{ paddingTop: headerOffset }}>
+      <div style={{ paddingTop: pathname === '/' ? '36px' : headerOffset }}>
         <Outlet />
       </div>
       <Footer />

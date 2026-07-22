@@ -27,8 +27,17 @@ function navDisplayLabel(label: string): string {
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
   const { wishlistCount, setSearchOpen } = useStore()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -117,7 +126,11 @@ export default function Header() {
   )
 
   return (
-    <header className="site-header">
+    <header className={`site-header ${
+      location.pathname === '/'
+        ? (isScrolled ? 'bg-cream/95 backdrop-blur-md shadow-sm border-b border-charcoal/10' : 'bg-transparent')
+        : 'bg-white border-b border-charcoal/10'
+    }`}>
       <div className="mx-auto max-w-7xl px-4 py-3 md:px-8 md:py-4">
         <div className="relative flex min-h-[44px] items-center justify-between md:hidden">
           <button
