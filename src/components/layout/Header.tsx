@@ -44,10 +44,16 @@ export default function Header() {
     setMobileOpen(false)
   }, [location.pathname])
 
-  const iconClass = 'text-charcoal/80 transition-colors hover:text-maroon'
+  const isTransparent = location.pathname === '/' && !isScrolled
+
+  const iconClass = `transition-colors duration-300 ${
+    isTransparent ? 'text-white hover:text-accent' : 'text-charcoal/80 hover:text-maroon'
+  }`
   const navLinkClass = (active: boolean) =>
-    `flex items-center gap-0.5 whitespace-nowrap text-[11px] uppercase tracking-widest transition-colors lg:text-xs ${
-      active ? 'text-maroon font-medium' : 'text-charcoal/80 hover:text-maroon'
+    `flex items-center gap-0.5 whitespace-nowrap text-[12px] uppercase tracking-widest transition-all duration-300 lg:text-[13px] ${
+      active
+        ? (isTransparent ? 'text-white font-semibold' : 'text-maroon font-semibold')
+        : (isTransparent ? 'text-white/90 hover:text-white' : 'text-charcoal/80 hover:text-maroon')
     }`
 
   const [logoError, setLogoError] = useState(false)
@@ -62,7 +68,9 @@ export default function Header() {
           className="h-12 w-12 shrink-0 rounded-xl border border-maroon/10 object-cover shadow-sm sm:h-16 sm:w-16 md:h-20 md:w-20"
         />
       ) : (
-        <span className="font-serif text-base sm:text-lg font-medium tracking-widest text-charcoal md:text-2xl uppercase whitespace-nowrap flex flex-col items-center">
+        <span className={`font-serif text-base sm:text-lg font-medium tracking-widest md:text-2xl uppercase whitespace-nowrap flex flex-col items-center transition-colors duration-300 ${
+          isTransparent ? 'text-white' : 'text-charcoal'
+        }`}>
           <span className="leading-tight text-center">{brand.name}</span>
         </span>
       )}
@@ -111,7 +119,7 @@ export default function Header() {
       >
         <Search size={20} strokeWidth={1.5} />
       </button>
-      <HeaderProfileLink />
+      <HeaderProfileLink className={iconClass} />
       <Link to="/wishlist" className={`relative ${iconClass}`} aria-label="Wishlist">
         <Heart size={20} strokeWidth={1.5} />
         {wishlistCount > 0 && (
@@ -121,7 +129,7 @@ export default function Header() {
         )}
       </Link>
       <span className="hidden h-5 w-px bg-accent md:block" aria-hidden />
-      <HeaderCartButton />
+      <HeaderCartButton className={iconClass} />
     </div>
   )
 
@@ -134,7 +142,7 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-4 py-3 md:px-8 md:py-4">
         <div className="relative flex min-h-[44px] items-center justify-between md:hidden">
           <button
-            className="text-charcoal"
+            className={`transition-colors duration-300 ${isTransparent ? 'text-white' : 'text-charcoal'}`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -145,7 +153,7 @@ export default function Header() {
             <button onClick={() => setSearchOpen(true)} className={iconClass} aria-label="Search">
               <Search size={20} strokeWidth={1.5} />
             </button>
-            <HeaderCartButton />
+            <HeaderCartButton className={iconClass} />
           </div>
         </div>
 

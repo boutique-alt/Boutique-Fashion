@@ -12,7 +12,7 @@ export default function HeaderCartButton({ className = '' }: HeaderCartButtonPro
     <button
       type="button"
       onClick={() => setCartOpen(true)}
-      className={`relative text-charcoal/80 transition-colors hover:text-maroon ${className}`}
+      className={`relative transition-colors ${className || 'text-charcoal/80 hover:text-maroon'}`}
       aria-label={`Cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
     >
       <ShoppingCart size={20} strokeWidth={1.5} />

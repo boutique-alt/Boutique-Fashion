@@ -21,7 +21,7 @@ export default function HeaderProfileLink({ className = '' }: HeaderProfileLinkP
   return (
     <Link
       to="/account"
-      className={`flex items-center gap-2 text-charcoal/80 transition-colors hover:text-maroon ${className}`}
+      className={`flex items-center gap-2 transition-colors ${className || 'text-charcoal/80 hover:text-maroon'}`}
       aria-label={user ? `Account, ${user.name}` : 'Sign in'}
     >
       {user ? (
