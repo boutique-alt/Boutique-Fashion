@@ -1,6 +1,6 @@
 import Hero from '../components/sections/Hero'
 import CategoryStrip from '../components/sections/CategoryStrip'
-import SummerSale from '../components/sections/SummerSale'
+import BestSelling from '../components/sections/BestSelling'
 import NewArrival from '../components/sections/NewArrival'
 import CeremonialEdit from '../components/sections/CeremonialEdit'
 import ShopByCategory from '../components/sections/ShopByCategory'
@@ -71,8 +71,8 @@ export default function HomePage() {
       />
       <Hero />
       <CategoryStrip />
+      <BestSelling />
       <CoverflowCarousel />
-      <SummerSale />
       <NewArrival />
       <CeremonialEdit />
       <ShopByCategory />

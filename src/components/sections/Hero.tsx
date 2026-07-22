@@ -115,10 +115,10 @@ export default function Hero() {
                 </Link>
                 <Link
                   to="/shop/all"
-                  className="group relative overflow-hidden rounded-none border border-transparent px-8 py-3.5 text-[10px] font-medium tracking-[0.25em] text-white/90 uppercase transition-all duration-500 hover:text-white md:text-[11px]"
+                  className="group relative overflow-hidden rounded-none border border-white/40 bg-white/5 px-10 py-3.5 text-[10px] font-medium tracking-[0.25em] text-white uppercase transition-all duration-500 hover:text-charcoal md:text-[11px]"
                 >
-                  <span className="relative z-10 drop-shadow-md">Shop All</span>
-                  <div className="absolute bottom-2 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-white transition-all duration-500 ease-out group-hover:w-1/2" />
+                  <span className="relative z-10">Shop All</span>
+                  <div className="absolute inset-0 -z-0 h-full w-0 bg-white transition-all duration-500 ease-out group-hover:w-full" />
                 </Link>
               </div>
             </motion.div>

@@ -151,7 +151,7 @@ export default function CoverflowCarousel() {
           {/* Dynamic Background Circle */}
           <div 
             className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-1000 ease-in-out md:h-[850px] md:w-[850px] lg:h-[1000px] lg:w-[1000px]"
-            style={{ backgroundColor: carouselItems[currentIndex].bgColor }}
+            style={{ backgroundColor: carouselItems[currentIndex].bgColor, opacity: 0.15 }}
           />
           
           {carouselItems.map((item, index) => {

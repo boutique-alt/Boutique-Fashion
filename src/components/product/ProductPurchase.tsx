@@ -216,6 +216,15 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
           </svg>
           Ask on WhatsApp
         </button>
+
+        {/* Made to Order Disclaimer */}
+        <div className="border border-accent/60 bg-[#FAF7F7] p-4 text-xs leading-relaxed rounded-sm text-charcoal/80">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Sparkles size={14} className="text-maroon" />
+            <span className="font-semibold text-maroon uppercase tracking-wider text-[11px]">Made to Order</span>
+          </div>
+          Many of our designs are crafted in limited quantities with artisanal precision. Please allow <strong className="font-semibold text-maroon">5–10 working days</strong> for dispatch.
+        </div>
         
         <div className="flex justify-center items-center gap-2.5 text-sm font-semibold text-maroon pt-1">
           <Truck size={18} className="shrink-0" />
