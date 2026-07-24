@@ -20,9 +20,53 @@
     <meta property="og:url" content="https://boutiquefashion.shop/" />
     <meta property="og:image" content="https://boutiquefashion.shop/images/about/team-hero.webp" />
     <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: #f8f4f4;
+      }
+      #root {
+        min-height: 100vh;
+      }
+      #app-boot {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        background: #f8f4f4;
+      }
+      #app-boot__spinner {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 9999px;
+        border: 2px solid rgba(136, 74, 77, 0.2);
+        border-top-color: #884a4d;
+        animation: app-boot-spin 0.7s linear infinite;
+      }
+      @keyframes app-boot-spin {
+        to { transform: rotate(360deg); }
+      }
+      /* Keep SEO markup for crawlers; hide from first paint */
+      #seo-content {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
   </head>
   <body>
     <div id="root">
+      <div id="app-boot" aria-busy="true" aria-label="Loading Boutique Fashion">
+        <div id="app-boot__spinner" aria-hidden="true"></div>
+      </div>
+      <div id="seo-content">
       <h1>Boutique Fashion – Where Comfort meets Confidence</h1>
       <nav>
         <a href="/">Home</a>
@@ -59,7 +103,7 @@
         Our expansive inventory includes a stunning array of dresses, kurta sets, coord sets, and bridal wear. We take immense pride in our selection of premium fabrics, ranging from breathable pure cotton and traditional handloom weaves to luxurious Chanderi, Katan silk, and intricate brocades. Every piece in our boutique is crafted with an unwavering attention to detail, ensuring that you receive garments that are not only beautiful but also durable and sustainable. We also offer beautiful handblock prints and delicate Khadi embroidery, bringing a touch of artisanal heritage to modern fashion.
       </p>
       <p>
-        Beyond our clothing, we are committed to providing an exceptional shopping experience. We offer fast shipping, secure payment options, and a dedicated customer support team ready to assist you with any inquiries or returns. Our returns centre is designed to be hassle-free, giving you peace of mind with every purchase. Explore our "In the News" section to see why top fashion influencers and celebrities love our brand, or browse through our genuine customer reviews to hear firsthand about the quality of our garments. Thank you for choosing Boutique Fashion—where every stitch is a promise of quality, and every outfit is designed to celebrate you. Discover our latest arrivals today and elevate your wardrobe to new heights.
+        Beyond our clothing, we are committed to providing an exceptional shopping experience. We offer fast shipping, secure payment options, and a dedicated customer support team ready to assist you with any inquiries or returns. Our returns centre is designed to be hassle-free, giving you peace of mind with every purchase. Explore our "In the News" section to see why top fashion influencers and celebrities love our brand, or browse through our genuine customer reviews to hear firsthand about the quality of our garments. Thank you for choosing Boutique Fashion—where every stitch is a promise of quality, and every outfit is designed to celebrate you. Discover our latest arrivals today and elevate yourwardrobe to new heights.
       </p>
       <h3>The Essence of Sustainable Fashion</h3>
       <p>
@@ -77,6 +121,7 @@
       <p>
         We invite you to join our ever-growing community of fashion enthusiasts. By signing up for our newsletter, you gain exclusive access to early product launches, special promotional discounts, and styling tips from our in-house fashion experts. Follow us on our social media platforms to stay updated on our latest arrivals, behind-the-scenes glimpses into our design process, and real-life style inspirations from our beautiful customers. At Boutique Fashion, your satisfaction is our ultimate reward. Every garment we create is a testament to our dedication to excellence, and we are thrilled to be a part of your fashion journey. From the moment you place an order to the moment you step out in one of our stunning outfits, we strive to make your experience truly unforgettable. Thank you for embracing our vision and allowing us to bring comfort, confidence, and elegance into your everyday life.
       </p>
+      </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
