@@ -46,14 +46,12 @@ export default function Header() {
 
   const isTransparent = location.pathname === '/' && !isScrolled
 
-  const iconClass = `transition-colors duration-300 ${
-    isTransparent ? 'text-white hover:text-accent drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal/80 hover:text-maroon'
-  }`
+  const iconClass = `transition-colors duration-300 ${isTransparent ? 'text-white hover:text-accent drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal/80 hover:text-maroon'
+    }`
   const navLinkClass = (active: boolean) =>
-    `flex items-center gap-0.5 whitespace-nowrap text-[13px] md:text-[14px] lg:text-[15px] uppercase tracking-widest transition-all duration-300 ${
-      active
-        ? (isTransparent ? 'text-white font-semibold drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-maroon font-semibold')
-        : (isTransparent ? 'text-white/95 hover:text-white drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal/80 hover:text-maroon')
+    `flex items-center gap-0.5 whitespace-nowrap text-[13px] md:text-[14px] lg:text-[15px] uppercase tracking-widest transition-all duration-300 ${active
+      ? (isTransparent ? 'text-white font-semibold drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-maroon font-semibold')
+      : (isTransparent ? 'text-white/95 hover:text-white drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal/80 hover:text-maroon')
     }`
 
   const [logoError, setLogoError] = useState(false)
@@ -65,14 +63,12 @@ export default function Header() {
           src={brandAssets.logo}
           alt={brand.name}
           onError={() => setLogoError(true)}
-          className={`h-12 w-12 shrink-0 rounded-xl border object-cover shadow-sm sm:h-16 sm:w-16 md:h-20 md:w-20 ${
-            isTransparent ? 'border-white/20' : 'border-maroon/10'
-          }`}
+          className={`h-12 w-auto shrink-0 object-contain sm:h-16 md:h-20 ${isTransparent ? 'opacity-90' : ''
+            }`}
         />
       ) : (
-        <span className={`font-serif text-base sm:text-lg font-medium tracking-widest md:text-2xl uppercase whitespace-nowrap flex flex-col items-center transition-colors duration-300 ${
-          isTransparent ? 'text-white drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal'
-        }`}>
+        <span className={`font-serif text-base sm:text-lg font-medium tracking-widest md:text-2xl uppercase whitespace-nowrap flex flex-col items-center transition-colors duration-300 ${isTransparent ? 'text-white drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal'
+          }`}>
           <span className="leading-tight text-center">{brand.name}</span>
         </span>
       )}
@@ -136,17 +132,15 @@ export default function Header() {
   )
 
   return (
-    <header className={`site-header ${
-      location.pathname === '/'
+    <header className={`site-header ${location.pathname === '/'
         ? (isScrolled ? 'bg-cream/95 backdrop-blur-md shadow-sm border-b border-charcoal/10' : 'bg-transparent')
         : 'bg-white border-b border-charcoal/10'
-    }`}>
+      }`}>
       <div className="mx-auto max-w-7xl px-4 py-3 md:px-8 md:py-4">
         <div className="relative flex min-h-[44px] items-center justify-between md:hidden">
           <button
-            className={`transition-all duration-300 ${
-              isTransparent ? 'text-white drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal'
-            }`}
+            className={`transition-all duration-300 ${isTransparent ? 'text-white drop-shadow-[0_1.5px_2.5px_rgba(0,0,0,0.45)]' : 'text-charcoal'
+              }`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >

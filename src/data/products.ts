@@ -110,7 +110,7 @@ export const instagramPosts = [
 ]
 
 export const brandAssets = {
-  logo: '/images/assets/logo.webp',
+  logo: '/images/assets/logo.png',
   newArrivalsBanner: '/images/assets/home-ban-2.webp',
   mensExclusiveBanner,
 }
