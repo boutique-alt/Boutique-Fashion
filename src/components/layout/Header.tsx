@@ -63,7 +63,7 @@ export default function Header() {
           src={brandAssets.logo}
           alt={brand.name}
           onError={() => setLogoError(true)}
-          className={`w-32 sm:w-40 md:w-48 lg:w-56 h-auto shrink-0 object-contain ${isTransparent ? 'opacity-90' : ''
+          className={`w-32 sm:w-40 md:w-48 lg:w-64 xl:w-72 h-auto shrink-0 object-contain ${isTransparent ? 'opacity-90' : ''
             }`}
         />
       ) : (
