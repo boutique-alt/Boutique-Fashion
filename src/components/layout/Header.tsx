@@ -63,7 +63,7 @@ export default function Header() {
           src={brandAssets.logo}
           alt={brand.name}
           onError={() => setLogoError(true)}
-          className={`h-12 w-auto shrink-0 object-contain sm:h-16 md:h-20 ${isTransparent ? 'opacity-90' : ''
+          className={`w-32 sm:w-40 md:w-48 lg:w-56 h-auto shrink-0 object-contain ${isTransparent ? 'opacity-90' : ''
             }`}
         />
       ) : (
@@ -133,8 +133,8 @@ export default function Header() {
 
   return (
     <header className={`site-header ${location.pathname === '/'
-        ? (isScrolled ? 'bg-cream/95 backdrop-blur-md shadow-sm border-b border-charcoal/10' : 'bg-transparent')
-        : 'bg-white border-b border-charcoal/10'
+      ? (isScrolled ? 'bg-cream/95 backdrop-blur-md shadow-sm border-b border-charcoal/10' : 'bg-transparent')
+      : 'bg-white border-b border-charcoal/10'
       }`}>
       <div className="mx-auto max-w-7xl px-4 py-3 md:px-8 md:py-4">
         <div className="relative flex min-h-[44px] items-center justify-between md:hidden">
