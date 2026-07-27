@@ -37,6 +37,7 @@ function notifyCatalogChanged(broadcast = true): void {
     try {
       localStorage.removeItem('bf_catalog_cache')
       localStorage.removeItem('bf_catalog_cache_v2')
+      localStorage.removeItem('bf_catalog_cache_v3')
     } catch (e) {}
   }
 }
@@ -54,6 +55,9 @@ let overridesCache: Record<string, ProductOverride> | null = null
 let lastHydrationError: string | undefined
 
 const PRODUCTS_PAGE_SIZE = 1000
+
+const CATALOG_PRODUCT_SELECT =
+  'id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, sizes, short_description, description, on_sale, is_new, is_best_seller, new_arrival_video, fabric, wash_care, product_details, addons, sku, stock_quantity, shop_category_selections, created_at, updated_at'
 
 export interface CatalogHydrationResult {
   ok: boolean
@@ -155,7 +159,7 @@ async function fetchAllProducts(): Promise<{ rows: DbProduct[]; error?: string }
   while (true) {
     const { data, error } = await client
       .from('products')
-      .select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, sku, created_at, updated_at, new_arrival_video')
+      .select(CATALOG_PRODUCT_SELECT)
       .order('created_at', { ascending: false })
       .range(from, from + PRODUCTS_PAGE_SIZE - 1)
 
@@ -183,7 +187,7 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
   }
 
   try {
-    const cached = localStorage.getItem('bf_catalog_cache_v2')
+    const cached = localStorage.getItem('bf_catalog_cache_v3')
     if (cached) {
       const { timestamp, products, deleted, overrides } = JSON.parse(cached)
       if (Date.now() - timestamp < 5 * 60 * 1000) {
@@ -231,7 +235,7 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
   lastHydrationError = undefined
 
   try {
-    localStorage.setItem('bf_catalog_cache_v2', JSON.stringify({
+    localStorage.setItem('bf_catalog_cache_v3', JSON.stringify({
       timestamp: Date.now(),
       products: productsCache,
       deleted: deletedCache,
@@ -366,6 +370,12 @@ export async function saveStaticProductOverride(slug: string, input: AdminProduc
   }
 
   const override: ProductOverride = { ...input }
+  for (const key of ['description', 'shortDescription', 'sku', 'fabric'] as const) {
+    const value = override[key]
+    if (typeof value === 'string' && !value.trim()) {
+      delete override[key]
+    }
+  }
 
   await requireAdminCloudSession()
   const { error } = await getSupabaseAdmin().from('catalog_overrides').upsert({
@@ -417,6 +427,28 @@ export const adminCategoryOptions = allCategories.map((cat) => ({
   label: adminCategoryLabels[cat.slug] ?? cat.title,
 }))
 
+export async function loadAdminProductForEdit(slug: string): Promise<AdminProduct | null> {
+  if (!isSupabaseConfigured()) return null
+
+  const client = getSupabase()
+  const { data, error } = await client
+    .from('products')
+    .select(CATALOG_PRODUCT_SELECT)
+    .eq('slug', slug)
+    .maybeSingle()
+
+  if (error || !data) return null
+
+  const product = mapProduct(data as DbProduct)
+  if (productsCache) {
+    const idx = productsCache.findIndex((p) => p.slug === slug)
+    if (idx >= 0) productsCache[idx] = product
+  }
+
+  notifyCatalogChanged(false)
+  return product
+}
+
 export async function fetchProductDetails(slugOrId: string): Promise<void> {
   if (!isSupabaseConfigured()) return
 
@@ -425,7 +457,7 @@ export async function fetchProductDetails(slugOrId: string): Promise<void> {
   
   const { data, error } = await client
     .from('products')
-    .select('id, description, short_description, sizes, fabric, wash_care, product_details, new_arrival_video')
+    .select('id, sku, description, short_description, sizes, fabric, wash_care, product_details, new_arrival_video')
     .eq(isId ? 'id' : 'slug', slugOrId)
     .maybeSingle()
 
@@ -436,6 +468,7 @@ export async function fetchProductDetails(slugOrId: string): Promise<void> {
       if (p.id === data.id || p.slug === slugOrId) {
         return {
           ...p,
+          sku: data.sku ?? p.sku,
           description: data.description ?? p.description,
           shortDescription: data.short_description ?? p.shortDescription,
           sizes: data.sizes ?? p.sizes,

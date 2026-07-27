@@ -82,6 +82,10 @@ function buildCatalog(): ProductDetail[] {
   return catalog
 }
 
+export function mapAdminProductToDetail(product: AdminProduct): ProductDetail {
+  return adminToDetail(product)
+}
+
 function adminToDetail(product: AdminProduct): ProductDetail {
   return {
     id: product.id,
@@ -117,7 +121,16 @@ function adminToDetail(product: AdminProduct): ProductDetail {
 
 function applyOverride(product: ProductDetail, override: ReturnType<typeof getProductOverrides>[string]): ProductDetail {
   if (!override) return product
-  const merged = { ...product, ...override }
+
+  const merged: ProductDetail = { ...product }
+  const preserveIfEmpty = new Set(['description', 'shortDescription', 'sku', 'fabric'])
+
+  for (const [key, value] of Object.entries(override)) {
+    if (value === undefined || value === null) continue
+    if (preserveIfEmpty.has(key) && typeof value === 'string' && !value.trim()) continue
+    ;(merged as unknown as Record<string, unknown>)[key] = value
+  }
+
   if (override.image) {
     merged.images = [override.image]
     merged.image = override.image
@@ -167,7 +180,23 @@ export function getAllProductDetails(): ProductDetail[] {
 }
 
 export function getProductBySlug(slug: string): ProductDetail | undefined {
-  return getCatalog().find((p) => p.slug === slug)
+  const catalog = getCatalog()
+  return (
+    catalog.find((p) => p.slug === slug && p.source === 'admin') ??
+    catalog.find((p) => p.slug === slug)
+  )
+}
+
+export function getProductForEdit(slug: string): ProductDetail | undefined {
+  const product = getProductBySlug(slug)
+  if (!product) return undefined
+
+  const description = (product.description || product.shortDescription || '').trim()
+  return {
+    ...product,
+    description,
+    sku: product.sku?.trim() || undefined,
+  }
 }
 
 export function getRelatedProducts(product: ProductDetail, limit = 8): ProductDetail[] {

@@ -5,13 +5,15 @@ import AdminProductCard from '../../components/admin/AdminProductCard'
 import ProductForm from '../../components/admin/ProductForm'
 import BulkUploadModal from '../../components/admin/BulkUploadModal'
 import CategoryToolbar, { useSortedProducts } from '../../components/shop/CategoryToolbar'
-import { type ProductDetail } from '../../data/productCatalog'
+import { type ProductDetail, getProductForEdit, mapAdminProductToDetail } from '../../data/productCatalog'
 import { useProductCatalog } from '../../hooks/useProductCatalog'
 import {
   createAdminProduct,
   deleteAdminProduct,
   deleteStaticProduct,
   saveStaticProductOverride,
+  fetchProductDetails,
+  loadAdminProductForEdit,
   getLastCatalogHydrationError,
   stripShopCategoriesFromOthers,
   updateAdminProduct,
@@ -52,6 +54,23 @@ export default function AdminProductsPage() {
     }
     setCatalogWarning('')
   }, [products, version])
+
+  const handleEdit = async (product: ProductDetail) => {
+    setSaveError('')
+
+    if (product.source === 'admin') {
+      const fresh = await loadAdminProductForEdit(product.slug)
+      if (fresh) {
+        setEditing(getProductForEdit(product.slug) ?? mapAdminProductToDetail(fresh))
+        setAdding(false)
+        return
+      }
+      await fetchProductDetails(product.slug)
+    }
+
+    setEditing(getProductForEdit(product.slug) ?? product)
+    setAdding(false)
+  }
 
   const handleSave = async (input: AdminProductInput) => {
     try {
@@ -141,7 +160,7 @@ export default function AdminProductsPage() {
           <AdminProductCard
             key={(product as ProductDetail).slug}
             product={product as ProductDetail}
-            onEdit={() => { setSaveError(''); setEditing(product as ProductDetail); setAdding(false) }}
+            onEdit={() => void handleEdit(product as ProductDetail)}
             onDelete={() => handleDelete(product as ProductDetail)}
           />
         ))}
