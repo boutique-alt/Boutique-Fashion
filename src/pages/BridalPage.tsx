@@ -1,7 +1,9 @@
 import { Sparkles } from 'lucide-react'
+import BridalFaq from '../components/bridal/BridalFaq'
 import ProductCard from '../components/ui/ProductCard'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import SEO from '../components/ui/SEO'
+import { buildBridalFaqSchema } from '../data/bridalFaq'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { brand } from '../data/navigation'
 
@@ -38,12 +40,14 @@ export default function BridalPage() {
     } : {})
   }
 
+  const bridalFaqSchema = buildBridalFaqSchema()
+
   return (
     <main>
       <SEO 
         title="Bridal Collection" 
         description="Discover our exquisite bridal collection for the perfect wedding dress." 
-        schema={bridalPageSchema}
+        schema={[bridalPageSchema, bridalFaqSchema]}
       />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -74,6 +78,7 @@ export default function BridalPage() {
           </p>
         </div>
       </section>
+      <BridalFaq />
     </main>
   )
 }

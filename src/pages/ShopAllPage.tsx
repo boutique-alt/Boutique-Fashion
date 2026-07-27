@@ -1,12 +1,14 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import ProductCard from '../components/ui/ProductCard'
 import AnimatedGrid from '../components/ui/AnimatedGrid'
+import FaqAccordion from '../components/ui/FaqAccordion'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getShopPageProducts, getShopResultRange, getShopTotalPages } from '../data/shop'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import SEO from '../components/ui/SEO'
 import { brand } from '../data/navigation'
 import { slugFromHref } from '../utils/productSlug'
+import { shopFaqs, buildShopFaqSchema } from '../data/shopFaq'
 
 export default function ShopAllPage() {
   const { page } = useParams<{ page?: string }>()
@@ -56,12 +58,14 @@ export default function ShopAllPage() {
     } : {})
   }
 
+  const shopFaqSchema = currentPage === 1 ? buildShopFaqSchema() : undefined
+
   return (
     <main>
       <SEO 
         title="Shop All" 
         description="Browse our complete collection of premium boutique clothing." 
-        schema={shopAllSchema}
+        schema={shopFaqSchema ? [shopAllSchema, shopFaqSchema] : shopAllSchema}
       />
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -102,6 +106,7 @@ export default function ShopAllPage() {
           </p>
         </div>
       </section>
+      {currentPage === 1 && <FaqAccordion faqs={shopFaqs} />}
     </main>
   )
 }

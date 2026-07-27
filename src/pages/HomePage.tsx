@@ -53,6 +53,17 @@ export default function HomePage() {
     "name": brand.name,
     "url": "https://boutiquefashion.shop",
     "logo": "https://boutiquefashion.shop/images/about/team-hero.webp",
+    "description": "Boutique Fashion is a Kolkata-based boutique for premium sarees, bridal wear, dresses, and fabrics.",
+    "sameAs": [
+      "https://www.instagram.com/theboutiquesarees/"
+    ],
+    "knowsAbout": [
+      "Sarees",
+      "Bridal wear",
+      "Women's dresses",
+      "Boutique fashion",
+      "Ethnic wear"
+    ],
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": brand.phone,
@@ -62,12 +73,25 @@ export default function HomePage() {
     }
   }
 
+  const homePageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": `${brand.name} | ${brand.tagline}`,
+    "url": "https://boutiquefashion.shop",
+    "description": "Shop premium sarees, bridal wear, dresses, and fabrics at Boutique Fashion in Kolkata.",
+    "about": {
+      "@type": "Organization",
+      "name": brand.name
+    },
+    "inLanguage": "en-IN"
+  }
+
   return (
     <main>
       <SEO 
         title="Where Comfort meets Confidence" 
         description="Discover premium boutique fashion, exclusive clothing, and accessories at Boutique Fashion." 
-        schema={[localBusinessSchema, websiteSchema, organizationSchema]}
+        schema={[localBusinessSchema, websiteSchema, organizationSchema, homePageSchema]}
       />
       <Hero />
       <CategoryStrip />

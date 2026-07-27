@@ -2,10 +2,12 @@ import { Link } from 'react-router-dom'
 import { Layers } from 'lucide-react'
 import ProductCard from '../components/ui/ProductCard'
 import AnimatedGrid from '../components/ui/AnimatedGrid'
+import FaqAccordion from '../components/ui/FaqAccordion'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { aboutAssets, aboutPillars } from '../data/about'
 import SEO from '../components/ui/SEO'
 import { brand } from '../data/navigation'
+import { fabricFaqs, buildFabricFaqSchema } from '../data/fabricFaq'
 
 const fabrics = [
   'Pure Cotton & Handloom',
@@ -45,12 +47,14 @@ export default function FabricPage() {
     } : {})
   }
 
+  const fabricFaqSchema = buildFabricFaqSchema()
+
   return (
     <main>
       <SEO 
         title="Our Fabrics" 
         description="Explore the premium, sustainable fabrics used in Boutique Fashion collections." 
-        schema={fabricPageSchema}
+        schema={[fabricPageSchema, fabricFaqSchema]}
       />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -114,6 +118,7 @@ export default function FabricPage() {
           </div>
         </section>
       )}
+      <FaqAccordion faqs={fabricFaqs} />
     </main>
   )
 }

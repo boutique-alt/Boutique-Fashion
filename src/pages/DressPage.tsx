@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import SectionHeading from '../components/ui/SectionHeading'
+import FaqAccordion from '../components/ui/FaqAccordion'
 import { dressCategories } from '../data/categories'
 import SEO from '../components/ui/SEO'
 import { brand } from '../data/navigation'
+import { dressFaqs, buildDressFaqSchema } from '../data/dressFaq'
 
 export default function DressPage() {
   const dressPageSchema = {
@@ -30,12 +32,14 @@ export default function DressPage() {
     }
   }
 
+  const dressFaqSchema = buildDressFaqSchema()
+
   return (
     <main>
       <SEO 
         title="Dresses & Kurta Sets" 
         description="Discover our collection of premium dresses, kurta sets, and coord sets crafted for elegance." 
-        schema={dressPageSchema}
+        schema={[dressPageSchema, dressFaqSchema]}
       />
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
@@ -80,6 +84,7 @@ export default function DressPage() {
           </p>
         </div>
       </section>
+      <FaqAccordion faqs={dressFaqs} />
     </main>
   )
 }

@@ -3,7 +3,9 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ProductGallery from '../components/product/ProductGallery'
 import ProductPurchase from '../components/product/ProductPurchase'
+import ProductFaq from '../components/product/ProductFaq'
 import SEO from '../components/ui/SEO'
+import { buildProductFaqSchema } from '../data/productFaq'
 
 import ProductCard from '../components/ui/ProductCard'
 import AnimatedGrid from '../components/ui/AnimatedGrid'
@@ -96,13 +98,15 @@ export default function ProductPage() {
     ]
   }
 
+  const faqSchema = buildProductFaqSchema()
+
   return (
     <main key={slug}>
       <SEO 
         title={product.name}
         description={product.shortDescription || `Buy ${product.name} at Boutique Fashion.`}
         image={product.image}
-        schema={[productSchema, breadcrumbSchema]}
+        schema={[productSchema, breadcrumbSchema, faqSchema]}
       />
       {(prev || next) && (
         <div className="border-b border-accent bg-cream-dark/40">
@@ -135,6 +139,8 @@ export default function ProductPage() {
           </div>
         </div>
       </section>
+
+      <ProductFaq />
 
       {related.length > 0 && (
         <section className="border-t border-accent bg-cream-dark/30 py-16 md:py-20">

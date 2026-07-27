@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import ProductCard from '../components/ui/ProductCard'
 import AnimatedGrid from '../components/ui/AnimatedGrid'
+import FaqAccordion from '../components/ui/FaqAccordion'
 import CategoryToolbar, { useSortedProducts } from '../components/shop/CategoryToolbar'
 import { getCategoryBySlug } from '../data/categories'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { CategorySchema } from '../components/seo/CategorySchema'
 import SEO from '../components/ui/SEO'
+import { buildFaqSchema } from '../data/productFaq'
+import type { FaqItem } from '../data/productFaq'
 
 interface CategoryPageProps {
   slug?: string
@@ -31,11 +34,29 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
 
   const description = `Shop our exclusive ${config?.title || 'collection'}. Discover premium boutique fashion, crafted with quality fabrics and elegant design.`
 
+  const categoryFaqs = useMemo<FaqItem[]>(() => [
+    {
+      question: `What can I find in the ${config.title} collection at Boutique Fashion?`,
+      answer: `You can explore curated ${config.title.toLowerCase()} styles designed for comfort, quality, and elegant boutique fashion. New arrivals are updated regularly based on availability.`,
+    },
+    {
+      question: `How many products are available in the ${config.title} category?`,
+      answer: `Currently, ${categoryProducts.length} products are listed in this category. You can use sorting options to quickly find your preferred style.`,
+    },
+    {
+      question: 'Does Boutique Fashion offer support for sizing and orders?',
+      answer: 'Yes. Boutique Fashion provides support for product, sizing, and order-related queries through contact channels and WhatsApp assistance.',
+    },
+  ], [config.title, categoryProducts.length])
+
+  const categoryFaqSchema = buildFaqSchema(categoryFaqs)
+
   return (
     <main>
       <SEO 
         title={config?.title || 'Collection'} 
         description={description} 
+        schema={categoryFaqSchema}
       />
       <CategorySchema category={config} />
       <div className="mx-auto max-w-7xl px-4 pt-10 text-center md:px-6">
@@ -76,6 +97,7 @@ export default function CategoryPage({ slug: slugProp }: CategoryPageProps) {
           </p>
         </div>
       </section>
+      <FaqAccordion faqs={categoryFaqs} />
     </main>
   )
 }
