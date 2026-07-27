@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, X } from 'lucide-react'
 import { useStore } from '../../context/StoreContext'
@@ -10,8 +10,8 @@ export default function SearchDrawer() {
   const { searchOpen, setSearchOpen } = useStore()
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
-  useProductCatalog()
-  const results = searchProducts(query)
+  const { version } = useProductCatalog()
+  const results = useMemo(() => searchProducts(query), [query, version])
 
   useEffect(() => {
     if (searchOpen) {

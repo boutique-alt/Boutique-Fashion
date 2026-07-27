@@ -188,21 +188,47 @@ export function getAdjacentProducts(slug: string): { prev?: ProductDetail; next?
 }
 
 export function getProductCode(product: Pick<ProductDetail, 'id' | 'sku'>): string {
-  return product.sku ?? `SKU-${product.id.toString().slice(0, 8).toUpperCase()}`
+  const sku = product.sku?.trim()
+  if (sku) return sku
+  return `SKU-${product.id.toString().slice(0, 8).toUpperCase()}`
+}
+
+function normalizeSearchCode(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '')
+    .replace(/^productcode:/, '')
+    .replace(/^sku-?/, '')
 }
 
 export function searchProducts(query: string): ProductDetail[] {
   const catalog = getCatalog()
-  const q = query.toLowerCase().trim()
-  if (!q) return []
+  const raw = query.trim()
+  if (!raw) return []
+
+  const q = raw.toLowerCase()
+  const qCode = normalizeSearchCode(raw)
+
   return catalog.filter((p) => {
-    const code = getProductCode(p).toLowerCase()
-    return (
+    const displayCode = getProductCode(p)
+    const codeLower = displayCode.toLowerCase()
+    const codeNorm = normalizeSearchCode(displayCode)
+    const idNorm = normalizeSearchCode(p.id)
+
+    const textMatch =
       p.name.toLowerCase().includes(q) ||
       p.categoryLabel.toLowerCase().includes(q) ||
-      p.shortDescription.toLowerCase().includes(q) ||
-      code.includes(q)
-    )
+      p.shortDescription.toLowerCase().includes(q)
+
+    const codeMatch =
+      codeLower.includes(q) ||
+      q.includes(codeLower) ||
+      (qCode.length > 0 && codeNorm.includes(qCode)) ||
+      (qCode.length > 0 && qCode.includes(codeNorm)) ||
+      (qCode.length >= 2 && idNorm.includes(qCode))
+
+    return textMatch || codeMatch
   })
 }
 

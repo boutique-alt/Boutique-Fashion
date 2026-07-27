@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Truck, RotateCcw, ChevronDown, ChevronUp, Mail, Phone, Sparkles, Share2, ShieldCheck, Award, Lock } from 'lucide-react'
-import type { ProductDetail } from '../../data/productCatalog'
+import { getProductCode, type ProductDetail } from '../../data/productCatalog'
 import type { ProductAddon } from '../../types/adminProduct'
 import { useStore } from '../../context/StoreContext'
 import WishlistButton from '../wishlist/WishlistButton'
@@ -89,7 +89,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
               {product.name}
             </h1>
             <p className="mt-2 text-[10px] font-semibold tracking-widest text-charcoal/40 uppercase">
-              Product Code: {product.sku ? product.sku : `SKU-${product.id.toString().slice(0, 8).toUpperCase()}`}
+              Product Code: {getProductCode(product)}
             </p>
           </div>
           <WishlistButton slug={product.slug} className="mt-1 shrink-0" />

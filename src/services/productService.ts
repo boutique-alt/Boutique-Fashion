@@ -36,6 +36,7 @@ function notifyCatalogChanged(broadcast = true): void {
     catalogChannel?.postMessage(catalogVersion)
     try {
       localStorage.removeItem('bf_catalog_cache')
+      localStorage.removeItem('bf_catalog_cache_v2')
     } catch (e) {}
   }
 }
@@ -154,7 +155,7 @@ async function fetchAllProducts(): Promise<{ rows: DbProduct[]; error?: string }
   while (true) {
     const { data, error } = await client
       .from('products')
-      .select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, created_at, updated_at, new_arrival_video')
+      .select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, sku, created_at, updated_at, new_arrival_video')
       .order('created_at', { ascending: false })
       .range(from, from + PRODUCTS_PAGE_SIZE - 1)
 
@@ -182,7 +183,7 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
   }
 
   try {
-    const cached = localStorage.getItem('bf_catalog_cache')
+    const cached = localStorage.getItem('bf_catalog_cache_v2')
     if (cached) {
       const { timestamp, products, deleted, overrides } = JSON.parse(cached)
       if (Date.now() - timestamp < 5 * 60 * 1000) {
@@ -230,7 +231,7 @@ export async function hydrateProductStore(): Promise<CatalogHydrationResult> {
   lastHydrationError = undefined
 
   try {
-    localStorage.setItem('bf_catalog_cache', JSON.stringify({
+    localStorage.setItem('bf_catalog_cache_v2', JSON.stringify({
       timestamp: Date.now(),
       products: productsCache,
       deleted: deletedCache,

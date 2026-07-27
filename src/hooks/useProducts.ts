@@ -34,7 +34,7 @@ export function useProducts(options: UseProductsOptions = {}) {
         const from = pageIndex * pageSize
         const to = from + pageSize - 1
 
-        let query = client.from('products').select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, created_at, updated_at')
+        let query = client.from('products').select('id, slug, name, price, original_price, image, additional_images, category_slug, category_label, category_path, is_new, is_best_seller, on_sale, shop_category_selections, stock_quantity, sku, created_at, updated_at')
 
         if (options.categorySlug) {
           query = query.eq('category_slug', options.categorySlug)
@@ -49,7 +49,8 @@ export function useProducts(options: UseProductsOptions = {}) {
           query = query.contains('shop_category_selections', [options.shopCategory])
         }
         if (options.searchQuery) {
-          query = query.ilike('name', `%${options.searchQuery}%`)
+          const term = options.searchQuery.trim()
+          query = query.or(`name.ilike.%${term}%,sku.ilike.%${term}%`)
         }
 
         if (options.sortBy === 'price-asc') {

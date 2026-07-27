@@ -10,7 +10,7 @@ import { buildProductFaqSchema } from '../data/productFaq'
 import ProductCard from '../components/ui/ProductCard'
 import AnimatedGrid from '../components/ui/AnimatedGrid'
 import { fetchProductDetails } from '../services/productService'
-import { getProductBySlug, getRelatedProducts, getAdjacentProducts } from '../data/productCatalog'
+import { getProductBySlug, getRelatedProducts, getAdjacentProducts, getProductCode } from '../data/productCatalog'
 import { useProductCatalog } from '../hooks/useProductCatalog'
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed'
 import { productPath } from '../utils/productSlug'
@@ -62,7 +62,7 @@ export default function ProductPage() {
     "name": product.name,
     "image": product.image.startsWith('http') ? product.image : `https://boutiquefashion.shop${product.image}`,
     "description": product.shortDescription || product.name,
-    "sku": product.sku || `SKU-${product.id}`,
+    "sku": getProductCode(product),
     "offers": {
       "@type": "Offer",
       "url": `https://boutiquefashion.shop${productPath(product.slug)}`,
