@@ -187,16 +187,23 @@ export function getAdjacentProducts(slug: string): { prev?: ProductDetail; next?
   }
 }
 
+export function getProductCode(product: Pick<ProductDetail, 'id' | 'sku'>): string {
+  return product.sku ?? `SKU-${product.id.toString().slice(0, 8).toUpperCase()}`
+}
+
 export function searchProducts(query: string): ProductDetail[] {
   const catalog = getCatalog()
   const q = query.toLowerCase().trim()
   if (!q) return []
-  return catalog.filter(
-    (p) =>
+  return catalog.filter((p) => {
+    const code = getProductCode(p).toLowerCase()
+    return (
       p.name.toLowerCase().includes(q) ||
       p.categoryLabel.toLowerCase().includes(q) ||
-      p.shortDescription.toLowerCase().includes(q),
-  )
+      p.shortDescription.toLowerCase().includes(q) ||
+      code.includes(q)
+    )
+  })
 }
 
 export function getProductsBySlugs(slugs: string[]): ProductDetail[] {

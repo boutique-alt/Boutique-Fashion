@@ -17,7 +17,7 @@ export default function HeaderSearchBar({ className = '' }: HeaderSearchBarProps
     >
       <Search size={18} className="shrink-0 text-charcoal/40" strokeWidth={1.75} />
       <span className="truncate text-sm text-charcoal/45">
-        Search dresses, fabrics, bridal &amp; more
+        Search by name or product code
       </span>
     </button>
   )

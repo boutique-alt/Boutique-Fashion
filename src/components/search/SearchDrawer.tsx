@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, X } from 'lucide-react'
 import { useStore } from '../../context/StoreContext'
-import { searchProducts } from '../../data/productCatalog'
+import { searchProducts, getProductCode } from '../../data/productCatalog'
 import { useProductCatalog } from '../../hooks/useProductCatalog'
 import { productPath } from '../../utils/productSlug'
 
@@ -41,7 +41,7 @@ export default function SearchDrawer() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search dresses, fabrics, bridal & more"
+              placeholder="Search by name or product code (e.g. MBF002)"
               className="flex-1 bg-transparent text-sm text-charcoal outline-none placeholder:text-charcoal/40"
             />
             <button onClick={close} className="text-charcoal/60 transition-colors hover:text-maroon" aria-label="Close search">
@@ -70,7 +70,9 @@ export default function SearchDrawer() {
                        loading="lazy" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm text-charcoal">{product.name}</p>
-                        <p className="text-xs text-charcoal/50">{product.categoryLabel}</p>
+                        <p className="text-xs text-charcoal/50">
+                          {product.categoryLabel} · {getProductCode(product)}
+                        </p>
                       </div>
                       <p className="shrink-0 text-sm font-medium text-charcoal">
                         ₹{product.price.toLocaleString('en-IN')}

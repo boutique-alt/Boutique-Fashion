@@ -1,13 +1,31 @@
-import { Link } from 'react-router-dom'
-import { ArrowUpRight } from 'lucide-react'
-import SectionHeading from '../components/ui/SectionHeading'
+import PageBanner from '../components/layout/PageBanner'
+import DressCategoryCard from '../components/dress/DressCategoryCard'
 import FaqAccordion from '../components/ui/FaqAccordion'
 import { dressCategories } from '../data/categories'
 import SEO from '../components/ui/SEO'
 import { brand } from '../data/navigation'
 import { dressFaqs, buildDressFaqSchema } from '../data/dressFaq'
+import { useProductCatalog } from '../hooks/useProductCatalog'
+import { useMemo } from 'react'
 
 export default function DressPage() {
+  const { products: catalog } = useProductCatalog()
+
+  const visibleCategories = useMemo(
+    () =>
+      dressCategories
+        .map((cat) => {
+          const products = catalog.filter((p) => p.categorySlug === cat.slug)
+          return {
+            ...cat,
+            count: products.length,
+            products: products.length > 0 ? products : cat.products,
+          }
+        })
+        .filter((cat) => cat.count > 0 && cat.products[0]?.image),
+    [catalog],
+  )
+
   const dressPageSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -21,8 +39,8 @@ export default function DressPage() {
     },
     "mainEntity": {
       "@type": "ItemList",
-      "numberOfItems": dressCategories.length,
-      "itemListElement": dressCategories.map((cat, index) => ({
+      "numberOfItems": visibleCategories.length,
+      "itemListElement": visibleCategories.map((cat, index) => ({
         "@type": "ListItem",
         "position": index + 1,
         "url": `https://boutiquefashion.shop/dress/${cat.slug}`,
@@ -36,52 +54,34 @@ export default function DressPage() {
 
   return (
     <main>
-      <SEO 
-        title="Dresses & Kurta Sets" 
-        description="Discover our collection of premium dresses, kurta sets, and coord sets crafted for elegance." 
+      <SEO
+        title="Dresses & Kurta Sets"
+        description="Discover our collection of premium dresses, kurta sets, and coord sets crafted for elegance."
         schema={[dressPageSchema, dressFaqSchema]}
       />
-      <section className="py-16 md:py-24">
+      <PageBanner
+        title="Dresses & Kurta Sets"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Collection' },
+        ]}
+      />
+      <section className="bg-cream py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
-          <SectionHeading
-            title="Our Collections"
-            subtitle="Dresses & Kurta Sets"
-          />
-          <p className="mx-auto mb-12 max-w-2xl text-center text-sm leading-relaxed text-charcoal/60">
-            Discover premium dresses, kurta sets, and coord sets crafted for everyday elegance and special occasions.
-          </p>
-          <div className="grid gap-6 md:grid-cols-2">
-            {dressCategories.map((cat) => (
-              <Link
-                key={cat.slug}
-                to={`/dress/${cat.slug}`}
-                className="group relative aspect-[4/3] overflow-hidden"
-              >
-                <img
-                  src={cat.products[0]?.image}
-                  alt={cat.title}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                 loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <p className="text-xs tracking-[0.2em] text-gold uppercase">{cat.count} Products</p>
-                  <h2 className="mt-1 font-serif text-3xl text-cream">{cat.title}</h2>
-                  <p className="mt-2 max-w-sm text-sm text-cream/70">{cat.description}</p>
-                  <span className="mt-4 flex items-center gap-1 text-xs tracking-widest text-cream uppercase opacity-0 transition-opacity group-hover:opacity-100">
-                    Shop Now <ArrowUpRight size={12} />
-                  </span>
-                </div>
-              </Link>
+          <div className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-maroon">Our Collection</p>
+            <h2 className="mt-3 font-serif text-2xl font-medium text-charcoal md:text-3xl">
+              Explore by Style
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-charcoal/65 md:text-base">
+              Premium dresses, kurta sets, and coord sets crafted for everyday elegance and special occasions.
+            </p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleCategories.map((cat) => (
+              <DressCategoryCard key={cat.slug} category={cat} />
             ))}
           </div>
-        </div>
-
-        {/* SEO Keyword Density Paragraph */}
-        <div className="mt-16 mx-auto max-w-5xl border-t border-accent/30 pt-10 text-center px-4">
-          <h2 className="text-lg font-serif text-charcoal mb-3">Premium Dresses, Kurta Sets & Coord Sets</h2>
-          <p className="text-[13px] text-charcoal/60 leading-relaxed font-light">
-            Elevate your everyday wardrobe with our exclusive collection of premium dresses, traditional kurta sets, and modern coord sets. Crafted with the finest materials including breathable pure cotton and handloom weaves, our dresses offer the perfect blend of comfort and confidence. Whether you are looking for a casual day outfit or a sophisticated evening look, our boutique fashion selection is meticulously curated for modern women who appreciate quality and style. Shop our versatile collections today to experience luxury fashion tailored just for you.
-          </p>
         </div>
       </section>
       <FaqAccordion faqs={dressFaqs} />
