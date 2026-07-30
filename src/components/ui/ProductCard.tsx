@@ -30,7 +30,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          void video.play().catch(() => {})
+          void video.play().catch(() => { })
         } else {
           video.pause()
         }
@@ -42,9 +42,11 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
   }, [videoSrc])
 
   const [showAlt, setShowAlt] = useState(false)
+  const castProduct = product as any
+  const secondaryImage = castProduct.additionalImages?.[0] || (product.images && product.images.length > 1 ? product.images[1] : null)
 
   useEffect(() => {
-    if (!product.images || product.images.length <= 1) return
+    if (!secondaryImage) return
 
     const delay = Math.random() * 2000
     let interval: ReturnType<typeof setInterval>
@@ -60,7 +62,7 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
       clearTimeout(timeout)
       clearInterval(interval)
     }
-  }, [product.images])
+  }, [secondaryImage])
 
   return (
     <div className="group relative">
@@ -85,21 +87,19 @@ export default function ProductCard({ product, showVideo }: ProductCardProps) {
               <img
                 src={product.image}
                 alt={product.name}
-                className={`h-full w-full object-cover object-top transition-all duration-700 ease-in-out md:group-hover:scale-[1.03] ${
-                  product.images && product.images.length > 1 
+                className={`h-full w-full object-cover object-top transition-all duration-700 ease-in-out md:group-hover:scale-[1.03] ${secondaryImage
                     ? `md:group-hover:opacity-0 ${showAlt ? 'max-md:opacity-0' : 'max-md:opacity-100'}`
                     : ''
-                }`}
+                  }`}
                 loading="lazy"
                 decoding="async"
               />
-              {product.images && product.images.length > 1 && (
+              {secondaryImage && (
                 <img
-                  src={product.images[1]}
+                  src={secondaryImage}
                   alt={`${product.name} alternate`}
-                  className={`absolute inset-0 h-full w-full object-cover object-top transition-all duration-700 ease-in-out md:opacity-0 md:group-hover:scale-[1.03] md:group-hover:opacity-100 ${
-                    showAlt ? 'max-md:opacity-100 max-md:scale-[1.03]' : 'max-md:opacity-0'
-                  }`}
+                  className={`absolute inset-0 h-full w-full object-cover object-top transition-all duration-700 ease-in-out md:opacity-0 md:group-hover:scale-[1.03] md:group-hover:opacity-100 ${showAlt ? 'max-md:opacity-100 max-md:scale-[1.03]' : 'max-md:opacity-0'
+                    }`}
                   loading="lazy"
                   decoding="async"
                 />

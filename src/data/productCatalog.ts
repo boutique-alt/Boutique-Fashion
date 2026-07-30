@@ -68,7 +68,7 @@ function buildCatalog(): ProductDetail[] {
         categorySlug: cat.slug,
         categoryLabel: cat.title,
         categoryPath,
-        images: extra.images ?? galleryImages(product.image),
+        images: extra.images ?? ((product.images && product.images.length > 0) ? product.images : galleryImages(product.image)),
         shortDescription: extra.shortDescription ?? `Premium ${product.name} crafted with quality fabrics and elegant design.`,
         description: extra.description ?? defaultDescription(product.name),
         sizes: extra.sizes ?? ['M', 'L', 'XL', '2XL'],
@@ -98,8 +98,8 @@ function adminToDetail(product: AdminProduct): ProductDetail {
     isBestSeller: product.isBestSeller,
     newArrivalVideo: product.newArrivalVideo,
     slug: product.slug,
-    images: product.additionalImages && product.additionalImages.length > 0 
-      ? [product.image, ...product.additionalImages] 
+    images: product.additionalImages && product.additionalImages.length > 0
+      ? [product.image, ...product.additionalImages]
       : [product.image],
     shortDescription: product.shortDescription,
     description: product.description,
@@ -116,6 +116,7 @@ function adminToDetail(product: AdminProduct): ProductDetail {
     shopCategorySelections: product.shopCategorySelections,
     source: 'admin',
     adminId: product.id,
+    additionalImages: product.additionalImages,
   }
 }
 
@@ -128,7 +129,7 @@ function applyOverride(product: ProductDetail, override: ReturnType<typeof getPr
   for (const [key, value] of Object.entries(override)) {
     if (value === undefined || value === null) continue
     if (preserveIfEmpty.has(key) && typeof value === 'string' && !value.trim()) continue
-    ;(merged as unknown as Record<string, unknown>)[key] = value
+      ; (merged as unknown as Record<string, unknown>)[key] = value
   }
 
   if (override.image) {
