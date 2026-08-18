@@ -47,7 +47,9 @@ export default function AccountPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirect')
-  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login')
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>(() =>
+    searchParams.get('mode') === 'register' ? 'register' : 'login'
+  )
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -110,6 +112,11 @@ export default function AccountPage() {
     setAcceptedPrivacy(false)
     setAuthLoading(false)
     setMessage('')
+    const pendingWa = sessionStorage.getItem('pendingWhatsAppUrl')
+    if (pendingWa) {
+      sessionStorage.removeItem('pendingWhatsAppUrl')
+      window.open(pendingWa, '_blank', 'noopener,noreferrer')
+    }
     if (redirectTo?.startsWith('/') && redirectTo.split('?')[0] !== '/account') {
       navigate(redirectTo, { replace: true })
     }
@@ -267,6 +274,12 @@ export default function AccountPage() {
               Register
             </button>
           </div>
+          )}
+
+          {searchParams.get('intent') === 'whatsapp' && mode !== 'forgot' && (
+            <p className="mb-4 text-sm text-charcoal/70">
+              Please create an account or log in to continue on WhatsApp.
+            </p>
           )}
 
           {mode === 'forgot' && (

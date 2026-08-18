@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Truck, RotateCcw, ChevronDown, ChevronUp, Mail, Phone, Sparkles, Share2, ShieldCheck, Award, Lock } from 'lucide-react'
 import { getProductCode, type ProductDetail } from '../../data/productCatalog'
 import type { ProductAddon } from '../../types/adminProduct'
 import { useStore } from '../../context/StoreContext'
 import WishlistButton from '../wishlist/WishlistButton'
+import SignInPromptModal from '../ui/SignInPromptModal'
 import { brand } from '../../data/navigation'
 import { trackAddToCart } from '../../utils/analytics'
 
@@ -16,6 +18,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
   const [quantity, setQuantity] = useState(1)
   const [sizeError, setSizeError] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false)
   
   // Accordion states
   const [detailsOpen, setDetailsOpen] = useState(true)
@@ -30,7 +33,8 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
     return init
   })
 
-  const { addToCart } = useStore()
+  const { addToCart, user } = useStore()
+  const navigate = useNavigate()
 
   const addons = useMemo(() => product.addons ?? [], [product.addons])
 
@@ -76,7 +80,26 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
     setSizeError(false)
   }
 
+  const getWhatsAppUrl = () => {
+    const shareUrl = `https://boutiquefashion.shop/api/share?slug=${product.slug}&name=${encodeURIComponent(product.name)}&image=${encodeURIComponent(product.image)}`
+    const greeting = user?.name ? `Hi, I'm ${user.name}.` : 'Hi,'
+    const message = encodeURIComponent(`${greeting} I have a query about this product:\n\n${product.name}\n${shareUrl}`)
+    return `https://wa.me/918334816333?text=${message}`
+  }
 
+  const goToAuth = (mode: 'login' | 'register') => {
+    sessionStorage.setItem('pendingWhatsAppUrl', getWhatsAppUrl())
+    setShowSignInPrompt(false)
+    navigate(`/account?mode=${mode}&intent=whatsapp&redirect=${encodeURIComponent(`/product/${product.slug}`)}`)
+  }
+
+  const handleWhatsApp = () => {
+    if (!user) {
+      setShowSignInPrompt(true)
+      return
+    }
+    window.open(getWhatsAppUrl(), '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <div className="flex flex-col gap-6 text-charcoal font-sans">
@@ -202,11 +225,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         </button>
         
         <button
-          onClick={() => {
-            const shareUrl = `https://boutiquefashion.shop/api/share?slug=${product.slug}&name=${encodeURIComponent(product.name)}&image=${encodeURIComponent(product.image)}`;
-            const message = encodeURIComponent(`Hi, I have a query about this product:\n\n${product.name}\n${shareUrl}`);
-            window.open(`https://wa.me/918334816333?text=${message}`, '_blank', 'noopener,noreferrer');
-          }}
+          onClick={handleWhatsApp}
           className="flex w-full items-center justify-center gap-2 bg-[#25D366] py-3.5 text-[15px] tracking-wide text-white uppercase transition-colors hover:bg-[#128C7E] rounded-sm shadow-sm font-medium"
         >
           <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
@@ -435,6 +454,13 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
 
       </div>
 
+      {showSignInPrompt && (
+        <SignInPromptModal
+          onClose={() => setShowSignInPrompt(false)}
+          onSignIn={() => goToAuth('login')}
+          onRegister={() => goToAuth('register')}
+        />
+      )}
     </div>
   )
 }
