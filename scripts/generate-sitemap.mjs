@@ -13,7 +13,7 @@ for (const f of files) {
 }
 
 const lastmod = '2026-08-26'
-const base = 'https://boutiquefashion.shop'
+const base = 'https://www.boutiquefashion.shop'
 
 function url(loc, changefreq, priority) {
   return `  <url>

@@ -12,7 +12,7 @@ interface SEOProps {
   robots?: string
 }
 
-const SITE = 'https://boutiquefashion.shop'
+const SITE = 'https://www.boutiquefashion.shop'
 
 export function pageCanonical(pathname: string) {
   const normalized = pathname.replace(/\/+$/, '')
@@ -50,7 +50,7 @@ export default function SEO({
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:image" content={image.startsWith('http') ? image : `https://boutiquefashion.shop${image.startsWith('/') ? image : `/${image}`}`} />
+      <meta property="og:image" content={image.startsWith('http') ? image : `${SITE}${image.startsWith('/') ? image : `/${image}`}`} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
