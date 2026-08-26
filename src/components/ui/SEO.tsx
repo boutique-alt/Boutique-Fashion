@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useLocation } from 'react-router-dom'
 
 interface SEOProps {
   title: string
@@ -10,6 +12,13 @@ interface SEOProps {
   robots?: string
 }
 
+const SITE = 'https://boutiquefashion.shop'
+
+export function pageCanonical(pathname: string) {
+  const normalized = pathname.replace(/\/+$/, '')
+  return normalized ? `${SITE}${normalized}` : `${SITE}/`
+}
+
 export default function SEO({ 
   title, 
   description = "Boutique Fashion – Discover elegant, premium clothing.", 
@@ -19,10 +28,16 @@ export default function SEO({
   schema,
   robots = "index, follow"
 }: SEOProps) {
+  const { pathname } = useLocation()
+  const canonicalUrl = pageCanonical(pathname)
   const fullTitle = `${title} | Boutique Fashion`
-  const canonicalUrl = typeof window !== 'undefined' 
-    ? `https://boutiquefashion.shop${window.location.pathname}`
-    : 'https://boutiquefashion.shop'
+
+  useEffect(() => {
+    const links = Array.from(document.querySelectorAll('link[rel="canonical"]'))
+    if (links.length === 0) return
+    links[0].setAttribute('href', canonicalUrl)
+    links.slice(1).forEach((el) => el.remove())
+  }, [canonicalUrl])
 
   return (
     <Helmet>

@@ -10,14 +10,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700&family=Roboto+Slab:wght@400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700&family=Whisper&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://boutiquefashion.shop/" />
+    <script>
+      (function () {
+        var path = location.pathname.replace(/\/+$/, '') || '/'
+        var url = 'https://boutiquefashion.shop' + path
+        var canonical = document.createElement('link')
+        canonical.rel = 'canonical'
+        canonical.href = url
+        document.head.appendChild(canonical)
+        var ogUrl = document.createElement('meta')
+        ogUrl.setAttribute('property', 'og:url')
+        ogUrl.content = url
+        document.head.appendChild(ogUrl)
+      })()
+    </script>
     <title>Boutique Fashion – Where Comfort meets Confidence</title>
     <meta name="description" content="Discover premium boutique fashion, exclusive clothing, and accessories at Boutique Fashion. Shop our latest collections and find your perfect style." />
     <meta name="keywords" content="boutique fashion, dresses, kurta sets, bridal wear, exclusive clothing, premium fabrics, online boutique" />
     <meta property="og:title" content="Boutique Fashion – Where Comfort meets Confidence" />
     <meta property="og:description" content="Discover premium boutique fashion, exclusive clothing, and accessories at Boutique Fashion." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://boutiquefashion.shop/" />
     <meta property="og:image" content="https://boutiquefashion.shop/images/about/team-hero.webp" />
     <meta name="twitter:card" content="summary_large_image" />
     <style>
