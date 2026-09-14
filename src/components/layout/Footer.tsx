@@ -99,6 +99,9 @@ export default function Footer() {
           <p className="text-xs tracking-wide text-cream/40">
             Copyright 2026 © {brand.name}. All rights reserved.
           </p>
+          <p className="mt-2 text-xs tracking-wide text-cream/40">
+            design and develop by <a href="https://www.pixelsolution.in/" target="_blank" rel="noopener noreferrer" className="hover:text-charcoal underline">pixel solution</a>
+          </p>
         </div>
       </div>
     </footer>
