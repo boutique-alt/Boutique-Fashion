@@ -9,6 +9,8 @@ export default function handler(req, res) {
   const productImage = image ? decodeURIComponent(image) : 'https://boutiquefashion.shop/images/about/team-hero.png';
   const fullImage = productImage.startsWith('http') ? productImage : `https://boutiquefashion.shop${productImage.startsWith('/') ? productImage : `/${productImage}`}`;
   const productUrl = `https://boutiquefashion.shop/product/${slug}`;
+  // Use the full proxy URL as canonical so Facebook and Twitter validators don't scrape the destination page instead.
+  const proxyUrl = `https://boutiquefashion.shop/api/share?slug=${slug}&name=${encodeURIComponent(productName)}&image=${encodeURIComponent(productImage)}`;
 
   const html = `
 <!DOCTYPE html>
@@ -20,14 +22,14 @@ export default function handler(req, res) {
   
   <!-- Open Graph / Facebook / WhatsApp -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="${productUrl}">
+  <meta property="og:url" content="${proxyUrl}">
   <meta property="og:title" content="${productName}">
   <meta property="og:description" content="Discover this premium product at Boutique Fashion.">
   <meta property="og:image" content="${fullImage}">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="${productUrl}">
+  <meta name="twitter:url" content="${proxyUrl}">
   <meta name="twitter:title" content="${productName}">
   <meta name="twitter:description" content="Discover this premium product at Boutique Fashion.">
   <meta name="twitter:image" content="${fullImage}">

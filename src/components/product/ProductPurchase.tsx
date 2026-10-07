@@ -80,8 +80,9 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
     setSizeError(false)
   }
 
+  const shareUrl = `https://boutiquefashion.shop/api/share?slug=${product.slug}&name=${encodeURIComponent(product.name)}&image=${encodeURIComponent(product.image)}`
+
   const getWhatsAppUrl = () => {
-    const shareUrl = `https://boutiquefashion.shop/api/share?slug=${product.slug}&name=${encodeURIComponent(product.name)}&image=${encodeURIComponent(product.image)}`
     const greeting = user?.name ? `Hi, I'm ${user.name}.` : 'Hi,'
     const message = encodeURIComponent(`${greeting} I have a query about this product:\n\n${product.name}\n${shareUrl}`)
     return `https://wa.me/918334816333?text=${message}`
@@ -253,7 +254,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         <div className="mt-3 flex items-center justify-center gap-4 border-t border-accent/40 pt-4">
           <span className="text-[11px] font-bold tracking-widest text-charcoal/60 uppercase">Share</span>
           <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-charcoal/60 hover:text-[#1877F2] transition-colors"
@@ -262,7 +263,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
           </a>
           <a
-            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('Check out this amazing ' + product.name + ' at Boutique Fashion!')}`}
+            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('Check out this amazing ' + product.name + ' at Boutique Fashion!')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-charcoal/60 hover:text-[#1DA1F2] transition-colors"
