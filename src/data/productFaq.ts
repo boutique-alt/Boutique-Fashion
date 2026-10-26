@@ -24,6 +24,17 @@ export const productFaqs: FaqItem[] = [
     answer:
       'Hand wash in cold water with a mild detergent. Dry clean is recommended for sarees. Wash inside out to prevent fading. Iron on low heat while avoiding embellishments, painting, or embroidery.',
   },
+  {
+    question: 'Are Boutique Fashion products made from 100% authentic and sustainable fabrics?',
+    answer:
+      'Yes. Boutique Fashion uses 100% authentic handloom silks, certified pure cotton, Chanderi, and organza woven by skilled Indian artisans using sustainable, skin-friendly dyes.',
+  },
+  {
+    question: 'Can I get custom sizing or alterations for my boutique dress or blouse?',
+    answer:
+      'Yes, we provide customization and size alterations. Simply contact our support on WhatsApp at +91-8334816333 right after placing your order with your specific measurements.',
+  },
+
 ]
 
 export function buildFaqSchema(faqs: FaqItem[]) {

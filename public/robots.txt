@@ -1,10 +1,34 @@
+# AEO & Search Engine Directives
 User-agent: *
 Allow: /
-
 Disallow: /cart
 Disallow: /checkout
 Disallow: /account
 Disallow: /wishlist
 Disallow: /admin
+
+# Explicit AI Search Engines Permissions for Answer Engine Optimization (AEO)
+User-agent: GPTBot
+Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /wishlist
+Disallow: /admin
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
 
 Sitemap: https://www.boutiquefashion.shop/sitemap.xml

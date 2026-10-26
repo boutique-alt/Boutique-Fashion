@@ -63,13 +63,22 @@ export default function ProductPage() {
     "image": product.image.startsWith('http') ? product.image : `https://boutiquefashion.shop${product.image}`,
     "description": product.shortDescription || product.name,
     "sku": getProductCode(product),
+    "brand": {
+      "@type": "Brand",
+      "name": "Boutique Fashion"
+    },
     "offers": {
       "@type": "Offer",
       "url": `https://boutiquefashion.shop${productPath(product.slug)}`,
       "priceCurrency": "INR",
       "price": product.price,
+      "priceValidUntil": "2027-12-31",
       "itemCondition": "https://schema.org/NewCondition",
-      "availability": "https://schema.org/InStock"
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "Boutique Fashion"
+      }
     }
   }
 

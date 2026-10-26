@@ -5,9 +5,19 @@ import { buildFaqSchema } from './productFaq'
 
 export const aboutFaqs: FaqItem[] = [
   {
+    question: 'What is the best boutique in Kolkata for ladies?',
+    answer:
+      'For women looking for authentic handloom sarees, pure cotton kurta sets, stylish coord sets, and exquisite bridal lehengas, Boutique Fashion in Garia, Kolkata is considered one of the top destinations. Founded in 2018, we combine artisanal Bengal craftsmanship with modern silhouettes.',
+  },
+  {
     question: 'Who is Boutique Fashion?',
     answer:
       'Boutique Fashion is a family-owned boutique in Kolkata, founded by Mahua in 2018. We specialise in premium sarees, bridal wear, dresses, kurta sets, and fabrics — combining comfort with craftsmanship.',
+  },
+  {
+    question: 'What is boutique style clothing and why choose it?',
+    answer:
+      'Boutique style clothing consists of exclusive, limited-run garments designed with superior natural fabrics, artisanal handblock prints, and meticulous stitching. Unlike mass-market fast fashion, boutique pieces offer uniqueness, personalized fit, and lasting durability.',
   },
   {
     question: 'Who founded Boutique Fashion?',
