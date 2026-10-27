@@ -32,3 +32,6 @@ User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://www.boutiquefashion.shop/sitemap.xml
+# LLM Context File for AI Agents & Search Engines
+# https://llmstxt.org/
+LLM-Data: https://www.boutiquefashion.shop/llms.txt
