@@ -91,10 +91,10 @@ export default function Footer() {
               {brand.email}
             </a>
             <div className="mt-6 flex flex-wrap items-center gap-3.5">
-              <a href="https://www.instagram.com/theboutiquesarees/" target="_blank" rel="noopener noreferrer" className="text-cream/50 transition-colors hover:text-[#E1306C]" aria-label="Instagram">
+              <a href="https://www.instagram.com/boutiquefashionshop?utm_source=ig_web_button_share_sheet&cnvx=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="text-cream/50 transition-colors hover:text-[#E1306C]" aria-label="Instagram">
                 <InstagramIcon />
               </a>
-              <a href="https://www.facebook.com/theboutiquesarees/" target="_blank" rel="noopener noreferrer" className="text-cream/50 transition-colors hover:text-[#1877F2]" aria-label="Facebook Page">
+              <a href="https://www.facebook.com/profile.php?id=61567332941356" target="_blank" rel="noopener noreferrer" className="text-cream/50 transition-colors hover:text-[#1877F2]" aria-label="Facebook Page">
                 <FacebookIcon />
               </a>
               <a href={`https://wa.me/918334816333?text=${encodeURIComponent('Hi, I am visiting Boutique Fashion website and would like some assistance.')}`} target="_blank" rel="noopener noreferrer" className="text-cream/50 transition-colors hover:text-[#25D366]" aria-label="Chat on WhatsApp">

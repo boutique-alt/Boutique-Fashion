@@ -11,7 +11,7 @@ export default function CelebsCorner() {
           {instagramPosts.map((post) => (
             <a
               key={post.id}
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/boutiquefashionshop?utm_source=ig_web_button_share_sheet&cnvx=ZDNlZDc0MzIxNw=="
               target="_blank"
               rel="noopener noreferrer"
               className="group relative aspect-square overflow-hidden bg-[#f4f4f4]"

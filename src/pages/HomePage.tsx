@@ -55,7 +55,8 @@ export default function HomePage() {
     "logo": "https://boutiquefashion.shop/images/about/team-hero.webp",
     "description": "Boutique Fashion is a Kolkata-based boutique for premium sarees, bridal wear, dresses, and fabrics.",
     "sameAs": [
-      "https://www.instagram.com/theboutiquesarees/"
+      "https://www.facebook.com/profile.php?id=61567332941356",
+      "https://www.instagram.com/boutiquefashionshop?utm_source=ig_web_button_share_sheet&cnvx=ZDNlZDc0MzIxNw=="
     ],
     "knowsAbout": [
       "Sarees",

@@ -46,7 +46,8 @@ export default function AboutPage() {
       "addressCountry": "IN"
     },
     "sameAs": [
-      "https://www.instagram.com/theboutiquesarees/"
+      "https://www.facebook.com/profile.php?id=61567332941356",
+      "https://www.instagram.com/boutiquefashionshop?utm_source=ig_web_button_share_sheet&cnvx=ZDNlZDc0MzIxNw=="
     ],
     "knowsAbout": [
       "Sarees",
