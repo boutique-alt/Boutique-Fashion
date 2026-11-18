@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
-import { AlertTriangle, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { AlertTriangle, Plus, X, ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { isSupabaseConfigured } from '../../config/env'
 import AdminProductCard from '../../components/admin/AdminProductCard'
 import ProductForm from '../../components/admin/ProductForm'
 import BulkUploadModal from '../../components/admin/BulkUploadModal'
 import CategoryToolbar, { useSortedProducts } from '../../components/shop/CategoryToolbar'
-import { type ProductDetail, getProductForEdit, mapAdminProductToDetail } from '../../data/productCatalog'
+import { type ProductDetail, getProductCode, getProductForEdit, mapAdminProductToDetail } from '../../data/productCatalog'
 import { useProductCatalog } from '../../hooks/useProductCatalog'
 import {
   createAdminProduct,
@@ -23,15 +24,56 @@ import type { AdminProductInput } from '../../types/adminProduct'
 const PAGE_SIZE = 24
 
 export default function AdminProductsPage() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const initialSearch = searchParams.get('search') ?? ''
+  
   const { products, version } = useProductCatalog()
+  const [searchQuery, setSearchQuery] = useState(initialSearch)
   const [editing, setEditing] = useState<ProductDetail | null>(null)
   const [adding, setAdding] = useState(false)
   const [saveError, setSaveError] = useState('')
   const [catalogWarning, setCatalogWarning] = useState('')
   const [page, setPage] = useState(1)
   const [showBulkModal, setShowBulkModal] = useState(false)
+
+  // Keep query in sync with URL if search changes
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val)
+    setPage(1)
+    if (val.trim()) {
+      setSearchParams({ search: val.trim() }, { replace: true })
+    } else {
+      setSearchParams({}, { replace: true })
+    }
+  }
+
+  // Filter products by SKU or Name
+  const filteredProducts = useMemo(() => {
+    const raw = searchQuery.trim().toLowerCase()
+    if (!raw) return products as ProductDetail[]
+
+    const rawClean = raw.replace(/\s+/g, '').replace(/^productcode:/, '').replace(/^sku-?/, '')
+
+    return (products as ProductDetail[]).filter((p) => {
+      const code = getProductCode(p).toLowerCase()
+      const codeClean = code.replace(/\s+/g, '').replace(/^sku-?/, '')
+      const idClean = p.id.toString().toLowerCase().replace(/\s+/g, '')
+
+      const matchesCode =
+        code.includes(raw) ||
+        (rawClean.length > 0 && codeClean.includes(rawClean)) ||
+        (rawClean.length > 0 && rawClean.includes(codeClean)) ||
+        (rawClean.length >= 2 && idClean.includes(rawClean))
+
+      const matchesText =
+        p.name.toLowerCase().includes(raw) ||
+        p.categoryLabel.toLowerCase().includes(raw)
+
+      return matchesCode || matchesText
+    })
+  }, [products, searchQuery])
   
-  const { sorted, setSort } = useSortedProducts(products as ProductDetail[])
+  const { sorted, setSort } = useSortedProducts(filteredProducts)
 
   useEffect(() => {
     const hydrationError = getLastCatalogHydrationError()
@@ -153,18 +195,64 @@ export default function AdminProductsPage() {
         </div>
       </div>
 
-      <CategoryToolbar total={products.length} onSortChange={(sort) => { setSort(sort); setPage(1); }} />
-
-      <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 flex-1 content-start">
-        {paginatedProducts.map((product) => (
-          <AdminProductCard
-            key={(product as ProductDetail).slug}
-            product={product as ProductDetail}
-            onEdit={() => void handleEdit(product as ProductDetail)}
-            onDelete={() => handleDelete(product as ProductDetail)}
+      {/* Search and Action Bar */}
+      <div className="mb-6 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+        <div className="relative flex-1 max-w-md">
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-charcoal/40" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search by Product Code (SKU) or Name..."
+            className="w-full bg-cream/50 border border-accent pl-10 pr-9 py-2.5 text-xs text-charcoal placeholder:text-charcoal/40 focus:outline-none focus:border-maroon focus:bg-cream transition-colors"
           />
-        ))}
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => handleSearchChange('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal/40 hover:text-charcoal p-0.5"
+              title="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        {searchQuery.trim() && (
+          <div className="text-xs text-charcoal/70 flex items-center gap-1.5 self-center">
+            Found <span className="font-semibold text-maroon">{filteredProducts.length}</span> matching product{filteredProducts.length === 1 ? '' : 's'}
+          </div>
+        )}
       </div>
+
+      <CategoryToolbar total={filteredProducts.length} onSortChange={(sort) => { setSort(sort); setPage(1); }} />
+
+      {paginatedProducts.length === 0 ? (
+        <div className="my-16 flex flex-col items-center justify-center text-center p-8 border border-dashed border-accent/60 bg-cream/30">
+          <p className="font-serif text-lg text-charcoal mb-2">No products found</p>
+          <p className="text-xs text-charcoal/60 mb-4">
+            No product matches code or name "{searchQuery}". Check the code and try again.
+          </p>
+          <button
+            type="button"
+            onClick={() => handleSearchChange('')}
+            className="text-xs uppercase font-medium tracking-wider text-maroon hover:underline"
+          >
+            Clear Search Filter
+          </button>
+        </div>
+      ) : (
+        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 flex-1 content-start">
+          {paginatedProducts.map((product) => (
+            <AdminProductCard
+              key={(product as ProductDetail).slug}
+              product={product as ProductDetail}
+              onEdit={() => void handleEdit(product as ProductDetail)}
+              onDelete={() => handleDelete(product as ProductDetail)}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Pagination Bottom */}
       {totalPages > 1 && (

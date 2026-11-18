@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, Pencil, Trash2 } from 'lucide-react'
-import type { ProductDetail } from '../../data/productCatalog'
+import { getProductCode, type ProductDetail } from '../../data/productCatalog'
 import { adminProductPreviewPath } from '../../utils/productSlug'
 
 interface AdminProductCardProps {
@@ -61,11 +61,16 @@ export default function AdminProductCard({
               </p>
             )}
           </div>
-          <p className={`text-[11px] font-medium ${
-            (product.stockQuantity ?? 0) <= 0 ? 'text-red-500' : 'text-charcoal/60'
-          }`}>
-            Stock: {product.stockQuantity ?? 10}
-          </p>
+          <div className="flex items-center justify-between gap-1 text-[11px] font-mono">
+            <span className="text-charcoal/60 bg-accent/40 px-1.5 py-0.5 rounded text-[10px]" title="Product Code (SKU)">
+              {getProductCode(product)}
+            </span>
+            <span className={`font-medium ${
+              (product.stockQuantity ?? 0) <= 0 ? 'text-red-500' : 'text-charcoal/60'
+            }`}>
+              Stock: {product.stockQuantity ?? 10}
+            </span>
+          </div>
         </div>
       </Link>
 
