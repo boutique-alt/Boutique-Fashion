@@ -26,7 +26,7 @@ export default function SEO({
   type = "website",
   image = "/images/about/team-hero.webp",
   schema,
-  robots = "index, follow"
+  robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 }: SEOProps) {
   const { pathname } = useLocation()
   const canonicalUrl = pageCanonical(pathname)
@@ -44,6 +44,8 @@ export default function SEO({
       <title>{fullTitle}</title>
       <link rel="canonical" href={canonicalUrl} />
       <meta name="robots" content={robots} />
+      <meta name="googlebot" content={robots} />
+      <meta name="bingbot" content={robots} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta property="og:title" content={fullTitle} />
